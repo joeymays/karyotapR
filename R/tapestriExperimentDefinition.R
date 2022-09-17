@@ -13,5 +13,6 @@
 .TapestriExperiment <- setClass(
     "TapestriExperiment",
     contains = "SingleCellExperiment",
-    slots = c(barcodeProbe = "character", grnaProbe = "character")
+    slots = c(barcodeProbe = "character",
+              grnaProbe = "character")
 )

@@ -5,6 +5,9 @@
 \alias{TapestriExperiment-class}
 \alias{.TapestriExperiment}
 \title{TapestriExperiment Class Definition}
+\value{
+TapestriExperiment
+}
 \description{
 TapestriExperiment Class Definition
 }
@@ -16,3 +19,6 @@ TapestriExperiment Class Definition
 \item{\code{grnaProbe}}{character.}
 }}
 
+\examples{
+x <- new("TapestriExperiment")
+}
