@@ -2,7 +2,6 @@
 #'
 #' @param h5.filename file path for .h5 file form Tapestri Pipeline output
 #' @param panel.id Tapestri panel name, CO261 and CO293 supported only.
-#' @param
 #'
 #' @return TapestriExperiment
 #' @export
@@ -12,6 +11,7 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #'
 #' @examples
+#' \dontrun{x <- CreateTapestriExperiment("myh5file.h5", "CO293")}
 CreateTapestriExperiment <- function(h5.filename, panel.id = ""){
 
     if(!panel.id %in% c("CO261", "CO293")){

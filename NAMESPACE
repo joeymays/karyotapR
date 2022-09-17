@@ -3,6 +3,8 @@
 export(.TapestriExperiment)
 export(CreateTapestriExperiment)
 exportClasses(TapestriExperiment)
+import(S4Vectors)
 import(methods)
+import(rhdf5)
 importClassesFrom(SingleCellExperiment,SingleCellExperiment)
 importFrom(SingleCellExperiment,SingleCellExperiment)

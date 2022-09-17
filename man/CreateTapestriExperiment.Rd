@@ -6,6 +6,17 @@
 \usage{
 CreateTapestriExperiment(h5.filename, panel.id = "")
 }
+\arguments{
+\item{h5.filename}{file path for .h5 file form Tapestri Pipeline output}
+
+\item{panel.id}{Tapestri panel name, CO261 and CO293 supported only.}
+}
+\value{
+TapestriExperiment
+}
 \description{
 Create TapestriExperiment object from Tapestri Pipeline output
+}
+\examples{
+\dontrun{x <- CreateTapestriExperiment("myh5file.h5", "CO293")}
 }
