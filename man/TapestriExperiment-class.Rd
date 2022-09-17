@@ -4,13 +4,27 @@
 \name{TapestriExperiment-class}
 \alias{TapestriExperiment-class}
 \alias{.TapestriExperiment}
+\alias{show,TapestriExperiment-method}
 \title{TapestriExperiment Class Definition}
+\usage{
+\S4method{show}{TapestriExperiment}(object)
+}
+\arguments{
+\item{object}{An R object}
+
+\item{TapestriExperiment}{A TapestriExperiment object}
+}
 \value{
 TapestriExperiment
 }
 \description{
 TapestriExperiment Class Definition
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{show(TapestriExperiment)}: Show method for Tapestri Experiment
+
+}}
 \section{Slots}{
 
 \describe{
