@@ -55,10 +55,10 @@ setMethod("grnaProbe<-", "TapestriExperiment", function(x, value) {
 setValidity2("TapestriExperiment", function(object) {
     msg <- NULL
 
-    if (length(grnaProbe(object)) != 1) {
+    if (length(grnaProbe(object)) > 1) {
         msg <- c(msg, "'grnaProbe' should have length equal to 1")
     }
-    if (length(barcodeProbe(object)) != 1) {
+    if (length(barcodeProbe(object)) > 1) {
         msg <- c(
             msg, "'barcodeProbe' should have length equal to 1"
         )
