@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' \dontrun{x <- CreateTapestriExperiment("myh5file.h5", "CO293")}
-CreateTapestriExperiment <- function(h5.filename, panel.id = ""){
+createTapestriExperiment <- function(h5.filename, panel.id = ""){
 
     if(!panel.id %in% c("CO261", "CO293")){
         stop(paste("panel.id", panel.id, "is not recognized. Please use CO261 or CO293."))
@@ -24,15 +24,19 @@ CreateTapestriExperiment <- function(h5.filename, panel.id = ""){
                                 ncol=length(tapestri.h5$'/assays/dna_read_counts/ca/id'),
                                 byrow = T))
 
-    sce <- SingleCellExperiment::SingleCellExperiment(list(read.counts.raw = read.counts.raw),
+    sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
                                                       colData = S4Vectors::DataFrame(cell.barcode = tapestri.h5$'/assays/dna_read_counts/ra/barcode',
                                                                                      row.names = tapestri.h5$'/assays/dna_read_counts/ra/barcode'),
                                                       rowData = S4Vectors::DataFrame(probe.id = tapestri.h5$'/assays/dna_read_counts/ca/id',
+                                                                                     chr = tapestri.h5$'/assays/dna_read_counts/ca/CHROM',
+                                                                                     start.pos = tapestri.h5$'/assays/dna_read_counts/ca/start_pos',
+                                                                                     end.pos = tapestri.h5$'/assays/dna_read_counts/ca/end_pos',
                                                                                      row.names = tapestri.h5$'/assays/dna_read_counts/ca/id'))
 
     tapestri.object <- .TapestriExperiment(sce)
 
-    #barcode and gRNA provided in function call are currently orphaned
+    SingleCellExperiment::mainExpName(tapestri.object) <- "gwCNV"
+
     if(panel.id == "CO293"){
         tapestri.object@barcodeProbe = "AMPL205334"
         tapestri.object@grnaProbe = "AMPL205666"
@@ -41,8 +45,35 @@ CreateTapestriExperiment <- function(h5.filename, panel.id = ""){
         tapestri.object@grnaProbe = NULL
     }
 
+    #variant allele frequency data
+    variant.metadata <- data.frame(
+        filtered = as.logical(tapestri.h5$'/assays/dna_variants/ca/filtered'),
+        chr = as.character(tapestri.h5$'/assays/dna_variants/ca/CHROM'),
+        position = as.numeric(tapestri.h5$'/assays/dna_variants/ca/POS'),
+        quality = as.numeric(tapestri.h5$'/assays/dna_variants/ca/QUAL'),
+        amplicon.id = as.character(tapestri.h5$'/assays/dna_variants/ca/amplicon'),
+        variant.id = as.character(tapestri.h5$'/assays/dna_variants/ca/id'),
+        ado.rate = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_rate'),
+        reference.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/REF'),
+        alternate.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/ALT'),
+        ado.gt.cells = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_gt_cells'))
+
+    variant.metadata$chr <- factor(variant.metadata$chr, unique(variant.metadata$chr))
+
+    af.matrix <- tapestri.h5$'/assays/dna_variants/layers/AF'
+
+    af.sd <- apply(af.matrix, 1, sd)
+
+    allele.frequency <- SummarizedExperiment::SummarizedExperiment(list(alleleFrequency = af.matrix),
+                                                                   rowData = S4Vectors::DataFrame(variant.metadata,
+                                                                                                  allelefreq.sd = af.sd,
+                                                                                                  row.names = variant.metadata$variant.id))
+    colnames(allele.frequency) <- tapestri.h5$'/assays/dna_read_counts/ra/barcode'
+    SingleCellExperiment::altExp(tapestri.object, "alleleFrequency") <- allele.frequency
+
+
+    #close
     rhdf5::H5Fclose(tapestri.h5)
 
     return(tapestri.object)
-
 }
