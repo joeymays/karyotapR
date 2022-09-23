@@ -8,10 +8,11 @@
 #'
 #' @import rhdf5
 #' @import S4Vectors
+#' @import SummarizedExperiment
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #'
 #' @examples
-#' \dontrun{x <- CreateTapestriExperiment("myh5file.h5", "CO293")}
+#' \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
 createTapestriExperiment <- function(h5.filename, panel.id = ""){
 
     if(!panel.id %in% c("CO261", "CO293")){

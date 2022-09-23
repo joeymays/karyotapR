@@ -15,4 +15,5 @@ Imports:
     methods,
     rhdf5,
     S4Vectors,
-    SingleCellExperiment
+    SingleCellExperiment,
+    SummarizedExperiment
