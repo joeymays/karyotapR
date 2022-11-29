@@ -2,6 +2,7 @@
 
 export(.TapestriExperiment)
 export(createTapestriExperiment)
+export(getChrOrder)
 exportClasses(TapestriExperiment)
 exportMethods(show)
 import(S4Vectors)

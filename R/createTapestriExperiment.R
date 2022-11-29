@@ -1,7 +1,7 @@
 #' Create TapestriExperiment object from Tapestri Pipeline output
 #'
-#' @param h5.filename file path for .h5 file form Tapestri Pipeline output
-#' @param panel.id Tapestri panel name, CO261 and CO293 supported only.
+#' @param h5.filename file path for .h5 file from Tapestri Pipeline output.
+#' @param panel.id Tapestri panel name, CO261 and CO293 supported only. Default NULL.
 #'
 #' @return TapestriExperiment
 #' @export
@@ -36,14 +36,24 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL){
                                 ncol=length(tapestri.h5$'/assays/dna_read_counts/ca/id'),
                                 byrow = T))
 
+    read.counts.raw.colData <- S4Vectors::DataFrame(cell.barcode = tapestri.h5$'/assays/dna_read_counts/ra/barcode',
+                                                    row.names = tapestri.h5$'/assays/dna_read_counts/ra/barcode')
+
+    read.counts.raw.rowData <- S4Vectors::DataFrame(probe.id = tapestri.h5$'/assays/dna_read_counts/ca/id',
+                                                    chr = tapestri.h5$'/assays/dna_read_counts/ca/CHROM',
+                                                    start.pos = tapestri.h5$'/assays/dna_read_counts/ca/start_pos',
+                                                    end.pos = tapestri.h5$'/assays/dna_read_counts/ca/end_pos',
+                                                    row.names = tapestri.h5$'/assays/dna_read_counts/ca/id')
+
+    chr.order <- getChrOrder(read.counts.raw.rowData$chr) #reorder amplicon metadata by chromosome order
+
+    read.counts.raw.rowData <- read.counts.raw.rowData[chr.order,]
+
+    read.counts.raw <- read.counts.raw[chr.order,]
+
     sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
-                                                      colData = S4Vectors::DataFrame(cell.barcode = tapestri.h5$'/assays/dna_read_counts/ra/barcode',
-                                                                                     row.names = tapestri.h5$'/assays/dna_read_counts/ra/barcode'),
-                                                      rowData = S4Vectors::DataFrame(probe.id = tapestri.h5$'/assays/dna_read_counts/ca/id',
-                                                                                     chr = tapestri.h5$'/assays/dna_read_counts/ca/CHROM',
-                                                                                     start.pos = tapestri.h5$'/assays/dna_read_counts/ca/start_pos',
-                                                                                     end.pos = tapestri.h5$'/assays/dna_read_counts/ca/end_pos',
-                                                                                     row.names = tapestri.h5$'/assays/dna_read_counts/ca/id'))
+                                                      colData = read.counts.raw.colData,
+                                                      rowData = read.counts.raw.rowData)
 
     tapestri.object <- .TapestriExperiment(sce)
 

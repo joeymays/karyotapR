@@ -4,12 +4,12 @@
 \alias{createTapestriExperiment}
 \title{Create TapestriExperiment object from Tapestri Pipeline output}
 \usage{
-createTapestriExperiment(h5.filename, panel.id = "")
+createTapestriExperiment(h5.filename, panel.id = NULL)
 }
 \arguments{
-\item{h5.filename}{file path for .h5 file form Tapestri Pipeline output}
+\item{h5.filename}{file path for .h5 file from Tapestri Pipeline output.}
 
-\item{panel.id}{Tapestri panel name, CO261 and CO293 supported only.}
+\item{panel.id}{Tapestri panel name, CO261 and CO293 supported only. Default NULL.}
 }
 \value{
 TapestriExperiment
