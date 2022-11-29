@@ -13,12 +13,23 @@
 #'
 #' @examples
 #' \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
-createTapestriExperiment <- function(h5.filename, panel.id = ""){
+createTapestriExperiment <- function(h5.filename, panel.id = NULL){
 
-    if(!panel.id %in% c("CO261", "CO293")){
-        stop(paste("panel.id", panel.id, "is not recognized. Please use CO261 or CO293."))
+    # read panel ID
+    if(is.null(panel.id)){
+        barcodeProbe = "not specified"
+        grnaProbe = "not specified"
+    } else if(panel.id == "CO293"){
+        barcodeProbe = "AMPL205334"
+        grnaProbe = "AMPL205666"
+    } else if(panel.id == "CO261") {
+        barcodeProbe = "not specified"
+        grnaProbe = "not specified"
+    } else {
+        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or set speciality probes manually."))
     }
 
+    #construct object
     tapestri.h5 <- rhdf5::H5Fopen(file.path(h5.filename))
 
     read.counts.raw <- t(matrix(data = tapestri.h5$"/assays/dna_read_counts/layers/read_counts",
@@ -38,13 +49,9 @@ createTapestriExperiment <- function(h5.filename, panel.id = ""){
 
     SingleCellExperiment::mainExpName(tapestri.object) <- "gwCNV"
 
-    if(panel.id == "CO293"){
-        tapestri.object@barcodeProbe = "AMPL205334"
-        tapestri.object@grnaProbe = "AMPL205666"
-    } else if(panel.id == "CO261") {
-        tapestri.object@barcodeProbe = "CO261_AMP1"
-        tapestri.object@grnaProbe = NULL
-    }
+    # apply panel ID probe shortcuts
+    tapestri.object@barcodeProbe = barcodeProbe
+    tapestri.object@grnaProbe = grnaProbe
 
     #variant allele frequency data
     variant.metadata <- data.frame(
@@ -72,8 +79,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = ""){
     colnames(allele.frequency) <- tapestri.h5$'/assays/dna_read_counts/ra/barcode'
     SingleCellExperiment::altExp(tapestri.object, "alleleFrequency") <- allele.frequency
 
-
-    #close
+    #close h5
     rhdf5::H5Fclose(tapestri.h5)
 
     return(tapestri.object)
