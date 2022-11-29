@@ -17,3 +17,5 @@ Imports:
     S4Vectors,
     SingleCellExperiment,
     SummarizedExperiment
+Depends: 
+    R (>= 2.10)
