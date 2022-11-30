@@ -6,8 +6,7 @@
 #' @return TapestriExperiment
 #' @export
 #'
-#' @import SummarizedExperiment
-#' @importFrom SingleCellExperiment SingleCellExperiment
+#' @import SingleCellExperiment
 #'
 #' @examples
 #' \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
