@@ -3,6 +3,7 @@
 export(.TapestriExperiment)
 export(createTapestriExperiment)
 export(getChrOrder)
+export(getCytobands)
 exportClasses(TapestriExperiment)
 exportMethods(show)
 import(SingleCellExperiment)

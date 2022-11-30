@@ -1,16 +1,22 @@
 #' Create TapestriExperiment object from Tapestri Pipeline output
 #'
+#' `createTapestriExperiment()` constructs a `TapestriExperiment` object from `.h5` file output by the Tapestri pipeline.
+#' Probe metadata is automatically imported by default.
+#' `panel.id` is an optional shortcut to set gRNA and barcode probe identities.
+#'
 #' @param h5.filename file path for .h5 file from Tapestri Pipeline output.
 #' @param panel.id Tapestri panel name, CO261 and CO293 supported only. Default NULL.
+#' @param get.cytobands Logical value indicating whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata.
+#' @param genome Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported.
 #'
-#' @return TapestriExperiment
+#' @return Constructed TapestriExperiment object
 #' @export
 #'
 #' @import SingleCellExperiment
 #'
 #' @examples
 #' \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
-createTapestriExperiment <- function(h5.filename, panel.id = NULL){
+createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19"){
 
     # read panel ID
     if(is.null(panel.id)){
@@ -23,7 +29,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL){
         barcodeProbe = "not specified"
         grnaProbe = "not specified"
     } else {
-        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or set speciality probes manually."))
+        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL to set speciality probes manually."))
     }
 
     #construct object
@@ -47,6 +53,8 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL){
     read.counts.raw.rowData <- read.counts.raw.rowData[chr.order,]
 
     read.counts.raw <- read.counts.raw[chr.order,]
+
+    read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr, levels = unique(read.counts.raw.rowData$chr))
 
     sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
                                                       colData = read.counts.raw.colData,
@@ -88,6 +96,13 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL){
 
     #close h5
     rhdf5::H5Fclose(tapestri.h5)
+
+    #get cytobands
+    if(get.cytobands){
+        tapestri.object <- getCytobands(tapestri.object)
+    }
+
+    show(tapestri.object)
 
     return(tapestri.object)
 }

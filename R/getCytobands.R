@@ -1,48 +1,63 @@
-# Find overlaps between cytobands and amplicon coverage
+#' Retrieve and add chromosome cytobands and chromosome arms to probe metadata of TapestriExperiment object
+#'
+#' @param tapestri.experiment.object TapestriExperiment object
+#' @param genome Character string indicating reference genome to use. Only hg19 is currently supported.
+#'
+#' @return TapestriExperiment object with rowData updated to include chromosome arms and cytobands
+#' @export
+#'
+#' @examples
+#' \dontrun{tapObject <- getCytobands(tapObject, genome = "hg19")}
+getCytobands <- function(tapestri.experiment.object, genome = "hg19"){
 
-getCytobands <- function(TapestriExperimentObject){
+    genome <- tolower(genome)
 
-    message("Adding cytobands from hg19.")
+    if(genome != "hg19"){
+        stop(paste(genome, "not found. Only hg19 is currently supported."))
+    }
 
-    amplicon.gr <- GRanges(seqnames = Rle(paste0("chr",SingleCellExperiment::rowData(TapestriExperimentObject)$chr)),
-                           ranges = IRanges(start = SingleCellExperiment::rowData(TapestriExperimentObject)$start.pos,
-                                            end = SingleCellExperiment::rowData(TapestriExperimentObject)$end.pos,
-                                            names = SingleCellExperiment::rowData(TapestriExperimentObject)$probe.id),
-                           strand = Rle(values = strand("*"),
-                                        lengths = nrow(SingleCellExperiment::rowData(TapestriExperimentObject))))
+    if(genome == "hg19"){
+        message("Adding cytobands from hg19.")
+    }
 
+    #only add chr label for arms to chrs 1-22, X, Y
+    chr.vector <- as.character(SingleCellExperiment::rowData(tapestri.experiment.object)$chr)
+    chr.vector <- ifelse(chr.vector %in% c(1:22, "X", "Y"), paste0("chr", chr.vector), chr.vector)
 
-overlap.hits <- findOverlaps(amplicon.gr, cytoband.hg19.genomicRanges)
-
-# Add cytobands as metadata for matches
-cytoband.matches <- character(length = queryLength(overlap.hits))
-cytoband.matches[] <- NA
-cytoband.matches[queryHits(overlap.hits)] <- mcols(cytoband.hg19.genomicRanges)[,"cytoband"][subjectHits(overlap.hits)]
-
-
-chromosome.arms <- paste0(decode(seqnames(amplicon.gr)), substr(amplicon.gr$cytoband, 1, 1))
-
-
-mcols(amplicon.gr)$cytoband <- cytoband.matches
-mcols(amplicon.gr)$arm <- paste0(decode(seqnames(amplicon.gr)), substr(amplicon.gr$cytoband, 1, 1))
-
-
-#make sure that amplicons are sorted correctly when applying back to rowData
-#ROW DATA STARTED Out OF ORDER CHECK THAT ****
-
-row.data <- SingleCellExperiment::rowData(TapestriExperimentObject)
-amplicon.gr.matrix <- as.data.frame(mcols(amplicon.gr)) %>% tibble::rownames_to_column("probe.id")
-
-amplicon.metadata <- merge(row.data, amplicon.gr.matrix, by = "probe.id", sort = F)
-
-amplicon.metadata$chr <- as.factor(amplicon.metadata$chr)
+    amplicon.gr <- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(chr.vector),
+                                          ranges = IRanges::IRanges(start = SingleCellExperiment::rowData(tapestri.experiment.object)$start.pos,
+                                                                    end = SingleCellExperiment::rowData(tapestri.experiment.object)$end.pos,
+                                                                    names = SingleCellExperiment::rowData(tapestri.experiment.object)$probe.id),
+                                          strand = S4Vectors::Rle(values = BiocGenerics::strand("*"),
+                                                                  lengths = nrow(SingleCellExperiment::rowData(tapestri.experiment.object))))
 
 
+    overlap.hits <- GenomicRanges::findOverlaps(amplicon.gr, cytoband.hg19.genomicRanges)
 
-amplicon.metadata$chr <- factor(amplicon.metadata$chr, levels = c(1:22, "X", "Y", "virus_ref", "virus_ref2"))
-amplicon.metadata$arm <- factor(amplicon.metadata$arm, levels = gtools::mixedsort(unique(amplicon.metadata$arm)))
+    cytoband.matches <- character(length = S4Vectors::queryLength(overlap.hits))
+    cytoband.matches[] <- NA
+    cytoband.matches[S4Vectors::queryHits(overlap.hits)] <- S4Vectors::mcols(cytoband.hg19.genomicRanges)[,"cytoband"][S4Vectors::subjectHits(overlap.hits)]
 
+    S4Vectors::mcols(amplicon.gr)$cytoband <- cytoband.matches
 
+    chromosome.arms <- ifelse(is.na(amplicon.gr$cytoband), amplicon.gr$cytoband, paste0(S4Vectors::decode(GenomicRanges::seqnames(amplicon.gr)), substr(amplicon.gr$cytoband, 1, 1)))
 
+    S4Vectors::mcols(amplicon.gr)$arm <- chromosome.arms
+    S4Vectors::mcols(amplicon.gr)$arm <- factor(chromosome.arms, unique(chromosome.arms))
 
+    row.data <- SingleCellExperiment::rowData(tapestri.experiment.object)
+    amplicon.gr.matrix <- as.data.frame(S4Vectors::mcols(amplicon.gr))
+    amplicon.gr.matrix$probe.id <- rownames(amplicon.gr.matrix)
+    rownames(amplicon.gr.matrix) <- NULL
+
+    amplicon.metadata <- merge(row.data, amplicon.gr.matrix, by = "probe.id", sort = F)
+
+    if(any(amplicon.metadata$probe.id != rowData(tapestri.experiment.object)$probe.id)){
+        stop("Something wrong. rowData and new metadata don't line up.")
+    }
+
+    SummarizedExperiment::rowData(tapestri.experiment.object)$cytoband <- amplicon.metadata$cytoband
+    SummarizedExperiment::rowData(tapestri.experiment.object)$arm <- amplicon.metadata$arm
+
+    return(tapestri.experiment.object)
 }
