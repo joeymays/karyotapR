@@ -12,6 +12,7 @@ RoxygenNote: 7.2.1
 URL: https://github.com/joeymays/weaver
 BugReports: https://github.com/joeymays/weaver/issues
 Imports: 
+    gtools,
     methods,
     rhdf5,
     S4Vectors,

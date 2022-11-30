@@ -6,8 +6,6 @@
 #' @return TapestriExperiment
 #' @export
 #'
-#' @import rhdf5
-#' @import S4Vectors
 #' @import SummarizedExperiment
 #' @importFrom SingleCellExperiment SingleCellExperiment
 #'
@@ -80,7 +78,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL){
 
     af.matrix <- tapestri.h5$'/assays/dna_variants/layers/AF'
 
-    af.sd <- apply(af.matrix, 1, sd)
+    af.sd <- apply(af.matrix, 1, stats::sd)
 
     allele.frequency <- SummarizedExperiment::SummarizedExperiment(list(alleleFrequency = af.matrix),
                                                                    rowData = S4Vectors::DataFrame(variant.metadata,

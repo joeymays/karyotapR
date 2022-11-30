@@ -52,7 +52,7 @@ setMethod("grnaProbe<-", "TapestriExperiment", function(x, value) {
 })
 
 
-setValidity2("TapestriExperiment", function(object) {
+S4Vectors::setValidity2("TapestriExperiment", function(object) {
     msg <- NULL
 
     if (length(grnaProbe(object)) > 1) {
