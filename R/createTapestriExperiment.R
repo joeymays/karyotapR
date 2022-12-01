@@ -67,7 +67,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
     tapestri.object <- .TapestriExperiment(sce)
 
-    SingleCellExperiment::mainExpName(tapestri.object) <- "gwCNV"
+    SingleCellExperiment::mainExpName(tapestri.object) <- "CNV"
 
     # apply panel ID probe shortcuts
     tapestri.object@barcodeProbe = barcodeProbe
@@ -92,7 +92,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
     af.sd <- apply(af.matrix, 1, stats::sd)
 
-    allele.frequency <- SummarizedExperiment::SummarizedExperiment(list(alleleFrequency = af.matrix),
+    allele.frequency <- SingleCellExperiment::SingleCellExperiment(list(alleleFrequency = af.matrix),
                                                                    rowData = S4Vectors::DataFrame(variant.metadata,
                                                                                                   allelefreq.sd = af.sd,
                                                                                                   row.names = variant.metadata$variant.id))

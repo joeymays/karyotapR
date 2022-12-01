@@ -17,11 +17,11 @@ createTapestriExperiment(
 
 \item{panel.id}{Tapestri panel name, CO261 and CO293 supported only. Default NULL.}
 
-\item{get.cytobands}{Logical value indicating whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata.}
+\item{get.cytobands}{Logical value indicating whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default TRUE.}
 
-\item{genome}{Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported.}
+\item{genome}{Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported. Default "hg19".}
 
-\item{move.non.genome.probes}{Chr vector indicating non-genomic probes to move counts and metadata to altExp slots.}
+\item{move.non.genome.probes}{Chr vector indicating non-genomic probes to move counts and metadata to altExp slots. Default c("grna", "sample.barcode", "Y").}
 }
 \value{
 Constructed TapestriExperiment object

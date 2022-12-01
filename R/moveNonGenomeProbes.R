@@ -25,7 +25,7 @@ moveNonGenomeProbes <- function(tapestri.experiment.object, move.non.genome.prob
         stop(paste(move.non.genome.probes, "<- Non-genomic probes not recognized. Use a combination of 'grna', 'sample.barcode', and/or 'Y'."))
     }
 
-    feature.type <- rep("normal", nrow(tapestri.experiment.object))
+    feature.type <- rep("CNV", nrow(tapestri.experiment.object))
 
     barcodeProbe <- tapestri.experiment.object@barcodeProbe
     grnaProbe <- tapestri.experiment.object@grnaProbe
@@ -68,11 +68,11 @@ moveNonGenomeProbes <- function(tapestri.experiment.object, move.non.genome.prob
         }
     }
 
-    if(all(feature.type == "normal")){
+    if(all(feature.type == "CNV")){
         stop("No non-genomic probe IDs found. Aborting.")
     }
 
-    tapestri.experiment.object <- SingleCellExperiment::splitAltExps(tapestri.experiment.object, feature.type, ref = "normal")
+    tapestri.experiment.object <- SingleCellExperiment::splitAltExps(tapestri.experiment.object, feature.type, ref = "CNV")
 
     return(tapestri.experiment.object)
 }
