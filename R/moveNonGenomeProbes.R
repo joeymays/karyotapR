@@ -1,10 +1,10 @@
-#' Move specialty probe counts to alternative experiment slots
+#' Move non-genome probe counts and metadata to alternative experiment slots
 #'
-#' `splitSpecialtyProbes()` takes the probe IDs corresponding to `grnaProbe` and `barcodeProbe` slots of the `TapestriExperiment` object, as well as probes on chrY, and moves them to their own `altExp` (alternative experiment) slots in the object.
+#' `moveNonGenomeProbes()` takes the probe IDs corresponding to `grnaProbe` and `barcodeProbe` slots of the `TapestriExperiment` object, as well as probes on chrY, and moves them to their own `altExp` (alternative experiment) slots in the object.
 #' This allows those counts and associated metadata to be manipulated separately without interfering with the other probes in the panel.
 #'
 #' @param tapestri.experiment.object TapestriExperiment object
-#' @param separate.specialty.probes Chr vector including a combination of "grna", "sample.barcode", and or "Y" (default), or FALSE.
+#' @param move.non.genome.probes Chr vector including a combination of "grna", "sample.barcode", and or "Y" (default), or FALSE.
 #'
 #' @return A `TapestriExperiment` with `altExp` slots filled with counts and metadata for the specified probes.
 #' @export
@@ -12,17 +12,17 @@
 #' @seealso [SingleCellExperiment::splitAltExps()] for manual specification of probes to move to `altExp` slots.
 #'
 #' @examples
-#' \dontrun{tapObject <- splitSpecialtyProbes(tapObject)}
-splitSpecialtyProbes <- function(tapestri.experiment.object, separate.specialty.probes = c("grna", "sample.barcode", "Y")){
+#' \dontrun{tapObject <- moveNonGenomeProbes(tapObject)}
+moveNonGenomeProbes <- function(tapestri.experiment.object, move.non.genome.probes = c("grna", "sample.barcode", "Y")){
 
-    if(identical(separate.specialty.probes, F)){
-        stop("No specialty probes specified.")
+    if(identical(move.non.genome.probes, F)){
+        stop("No non-genomic probes specified.")
     }
 
-    separate.specialty.probes <- tolower(separate.specialty.probes)
+    move.non.genome.probes <- tolower(move.non.genome.probes)
 
-    if(any(!separate.specialty.probes %in% c("grna", "sample.barcode", "y"))){
-        stop(paste(separate.specialty.probes, "<- Specialty probes not recognized. Use a combination of 'grna', 'sample.barcode', and/or 'Y'."))
+    if(any(!move.non.genome.probes %in% c("grna", "sample.barcode", "y"))){
+        stop(paste(move.non.genome.probes, "<- Non-genomic probes not recognized. Use a combination of 'grna', 'sample.barcode', and/or 'Y'."))
     }
 
     feature.type <- rep("normal", nrow(tapestri.experiment.object))
@@ -30,7 +30,7 @@ splitSpecialtyProbes <- function(tapestri.experiment.object, separate.specialty.
     barcodeProbe <- tapestri.experiment.object@barcodeProbe
     grnaProbe <- tapestri.experiment.object@grnaProbe
 
-    if("grna" %in% separate.specialty.probes && grnaProbe != "not specified"){
+    if("grna" %in% move.non.genome.probes && grnaProbe != "not specified"){
 
         probe.index <- which(rownames(tapestri.experiment.object) == grnaProbe)
 
@@ -42,7 +42,7 @@ splitSpecialtyProbes <- function(tapestri.experiment.object, separate.specialty.
         }
     }
 
-    if("sample.barcode" %in% separate.specialty.probes && barcodeProbe != "not specified"){
+    if("sample.barcode" %in% move.non.genome.probes && barcodeProbe != "not specified"){
 
         probe.index <- which(rownames(tapestri.experiment.object) == barcodeProbe)
 
@@ -55,7 +55,7 @@ splitSpecialtyProbes <- function(tapestri.experiment.object, separate.specialty.
         }
     }
 
-    if("y" %in% separate.specialty.probes){
+    if("y" %in% move.non.genome.probes){
 
         probe.index <- which(rowData(tapestri.experiment.object)$chr == "Y")
 
@@ -69,7 +69,7 @@ splitSpecialtyProbes <- function(tapestri.experiment.object, separate.specialty.
     }
 
     if(all(feature.type == "normal")){
-        stop("No specialty probe IDs found. Aborting.")
+        stop("No non-genomic probe IDs found. Aborting.")
     }
 
     tapestri.experiment.object <- SingleCellExperiment::splitAltExps(tapestri.experiment.object, feature.type, ref = "normal")

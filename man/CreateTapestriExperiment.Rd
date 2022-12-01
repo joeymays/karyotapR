@@ -9,7 +9,7 @@ createTapestriExperiment(
   panel.id = NULL,
   get.cytobands = TRUE,
   genome = "hg19",
-  separate.specialty.probes = c("grna", "sample.barcode", "Y")
+  move.non.genome.probes = c("grna", "sample.barcode", "Y")
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ createTapestriExperiment(
 
 \item{genome}{Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported.}
 
-\item{separate.specialty.probes}{Chr vector indicating specialty probes to move to altExp slots.}
+\item{move.non.genome.probes}{Chr vector indicating non-genomic probes to move counts and metadata to altExp slots.}
 }
 \value{
 Constructed TapestriExperiment object
@@ -30,12 +30,12 @@ Constructed TapestriExperiment object
 \code{createTapestriExperiment()} constructs a \code{TapestriExperiment} object from \code{.h5} file output by the Tapestri pipeline.
 Probe metadata is automatically imported by default.
 \code{panel.id} is an optional shortcut to set gRNA and barcode probe identities.
-\code{separate.specialty.probes} moves the specified probes to altExp (alternative experiment) slots in the TapestriExperiment object.
+\code{move.non.genome.probes} moves the specified probes to altExp (alternative experiment) slots in the TapestriExperiment object.
 Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, and probes on ChrY are moved by default.
 }
 \examples{
 \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
 }
 \seealso{
-\code{\link[=splitSpecialtyProbes]{splitSpecialtyProbes()}}, \code{\link[=getCytobands]{getCytobands()}} which are run as part of this function for convenience.
+\code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, \code{\link[=getCytobands]{getCytobands()}} which are run as part of this function for convenience.
 }
