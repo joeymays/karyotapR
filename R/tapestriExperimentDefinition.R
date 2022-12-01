@@ -28,7 +28,7 @@ setMethod("show", "TapestriExperiment", function(object) {
     callNextMethod()
     cat(
         "barcodeProbe: ", object@barcodeProbe, "\n",
-        "grnaProbe: ", object@grnaProbe,
+        "grnaProbe: ", object@grnaProbe, "\n",
         sep = ""
     )
 })
