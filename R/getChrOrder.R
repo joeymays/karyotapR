@@ -1,4 +1,4 @@
-#' get chromosome order from a string of chromosome/contig names
+#' Get chromosome order from a string of chromosome/contig names
 #'
 #' `getChrOrder()` takes a string of chromosome or contig names and returns the indices of the string in typical chromosome order, i.e. 1 through 22, X, Y.
 #' Contig names that do not match 1:22, X, or Y are sorted numerically and alphabetically with numbers coming first, and added to the end of the order.

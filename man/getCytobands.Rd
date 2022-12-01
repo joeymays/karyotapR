@@ -4,10 +4,10 @@
 \alias{getCytobands}
 \title{Retrieve and add chromosome cytobands and chromosome arms to probe metadata of TapestriExperiment object}
 \usage{
-getCytobands(TapestriExperimentObject, genome = "hg19")
+getCytobands(tapestri.experiment.object, genome = "hg19")
 }
 \arguments{
-\item{TapestriExperimentObject}{TapestriExperiment object}
+\item{tapestri.experiment.object}{TapestriExperiment object}
 
 \item{genome}{Character string indicating reference genome to use. Only hg19 is currently supported.}
 }

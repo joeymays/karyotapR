@@ -3,20 +3,25 @@
 #' `createTapestriExperiment()` constructs a `TapestriExperiment` object from `.h5` file output by the Tapestri pipeline.
 #' Probe metadata is automatically imported by default.
 #' `panel.id` is an optional shortcut to set gRNA and barcode probe identities.
+#' `separate.specialty.probes` moves the specified probes to altExp (alternative experiment) slots in the TapestriExperiment object.
+#' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, and probes on ChrY are moved by default.
 #'
 #' @param h5.filename file path for .h5 file from Tapestri Pipeline output.
 #' @param panel.id Tapestri panel name, CO261 and CO293 supported only. Default NULL.
 #' @param get.cytobands Logical value indicating whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata.
 #' @param genome Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported.
+#' @param separate.specialty.probes Chr vector indicating specialty probes to move to altExp slots.
 #'
 #' @return Constructed TapestriExperiment object
 #' @export
 #'
 #' @import SingleCellExperiment
 #'
+#' @seealso [splitSpecialtyProbes()], [getCytobands()] which are run as part of this function for convenience.
+#'
 #' @examples
 #' \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
-createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19"){
+createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", separate.specialty.probes = c("grna", "sample.barcode", "Y")){
 
     # read panel ID
     if(is.null(panel.id)){
@@ -100,6 +105,11 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     #get cytobands
     if(get.cytobands){
         tapestri.object <- getCytobands(tapestri.object)
+    }
+
+    #separate specialty probes
+    if(!identical(separate.specialty.probes, F)){
+        tapestri.object <- splitSpecialtyProbes(tapestri.object, separate.specialty.probes)
     }
 
     show(tapestri.object)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/getChrOrder.R
 \name{getChrOrder}
 \alias{getChrOrder}
-\title{get chromosome order from a string of chromosome/contig names}
+\title{Get chromosome order from a string of chromosome/contig names}
 \usage{
 getChrOrder(chr.vector)
 }
