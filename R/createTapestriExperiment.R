@@ -37,9 +37,18 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
         stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL to set speciality probes manually."))
     }
 
-    #construct object
+    # import data
     tapestri.h5 <- rhdf5::H5Fopen(file.path(h5.filename))
 
+    # report data
+    message(paste("sample name:", tapestri.h5$"/assays/dna_read_counts/metadata/sample_name"))
+    message(paste("pipeline panel name:", tapestri.h5$"/assays/dna_read_counts/metadata/panel_name"))
+    message(paste("pipeline version:", tapestri.h5$"/assays/dna_read_counts/metadata/pipeline_version"))
+    message(paste("number of cells:", tapestri.h5$"/assays/dna_read_counts/metadata/n_cells"))
+    message(paste("number of amplicons:", tapestri.h5$"/assays/dna_read_counts/metadata/n_amplicons"))
+    message(paste("date created:", tapestri.h5$"/metadata/date_created"))
+
+    # construct object
     read.counts.raw <- t(matrix(data = tapestri.h5$"/assays/dna_read_counts/layers/read_counts",
                                 ncol=length(tapestri.h5$'/assays/dna_read_counts/ca/id'),
                                 byrow = T))
