@@ -3,7 +3,7 @@
 #' `moveNonGenomeProbes()` takes the probe IDs corresponding to `grnaProbe` and `barcodeProbe` slots of the `TapestriExperiment` object, as well as probes on chrY, and moves them to their own `altExp` (alternative experiment) slots in the object.
 #' This allows those counts and associated metadata to be manipulated separately without interfering with the other probes in the panel.
 #'
-#' @param tapestri.experiment.object TapestriExperiment object
+#' @param TapestriExperiment TapestriExperiment object
 #' @param move.non.genome.probes Chr vector including a combination of "grna", "sample.barcode", and or "Y" (default), or FALSE.
 #'
 #' @return A `TapestriExperiment` with `altExp` slots filled with counts and metadata for the specified probes.
@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{tapObject <- moveNonGenomeProbes(tapObject)}
-moveNonGenomeProbes <- function(tapestri.experiment.object, move.non.genome.probes = c("grna", "sample.barcode", "Y")){
+moveNonGenomeProbes <- function(TapestriExperiment, move.non.genome.probes = c("grna", "sample.barcode", "Y")){
 
     if(identical(move.non.genome.probes, F)){
         stop("No non-genomic probes specified.")
@@ -25,46 +25,46 @@ moveNonGenomeProbes <- function(tapestri.experiment.object, move.non.genome.prob
         stop(paste(move.non.genome.probes, "<- Non-genomic probes not recognized. Use a combination of 'grna', 'sample.barcode', and/or 'Y'."))
     }
 
-    feature.type <- rep("CNV", nrow(tapestri.experiment.object))
+    feature.type <- rep("CNV", nrow(TapestriExperiment))
 
-    barcodeProbe <- tapestri.experiment.object@barcodeProbe
-    grnaProbe <- tapestri.experiment.object@grnaProbe
+    barcodeProbe <- TapestriExperiment@barcodeProbe
+    grnaProbe <- TapestriExperiment@grnaProbe
 
     if("grna" %in% move.non.genome.probes && grnaProbe != "not specified"){
 
-        probe.index <- which(rownames(tapestri.experiment.object) == grnaProbe)
+        probe.index <- which(rownames(TapestriExperiment) == grnaProbe)
 
         if(S4Vectors::isEmpty(probe.index)){
             message("gRNA probe ID not found in TapestriExperiment object.")
         } else {
             feature.type[probe.index] <- "grnaCounts"
-            message(paste("Moving gRNA probe", rownames(tapestri.experiment.object)[probe.index], "to altExp slot 'grnaCounts'."))
+            message(paste("Moving gRNA probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'grnaCounts'."))
         }
     }
 
     if("sample.barcode" %in% move.non.genome.probes && barcodeProbe != "not specified"){
 
-        probe.index <- which(rownames(tapestri.experiment.object) == barcodeProbe)
+        probe.index <- which(rownames(TapestriExperiment) == barcodeProbe)
 
         if(S4Vectors::isEmpty(probe.index)){
             message("Sample Barcode probe ID not found in TapestriExperiment object.")
         } else {
 
             feature.type[probe.index] <- "sampleBarcodeCounts"
-            message(paste("Moving sample barcode probe", rownames(tapestri.experiment.object)[probe.index], "to altExp slot 'sampleBarcodeCounts'."))
+            message(paste("Moving sample barcode probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'sampleBarcodeCounts'."))
         }
     }
 
     if("y" %in% move.non.genome.probes){
 
-        probe.index <- which(rowData(tapestri.experiment.object)$chr == "Y")
+        probe.index <- which(rowData(TapestriExperiment)$chr == "Y")
 
         if(S4Vectors::isEmpty(probe.index)){
             message("ChrY probe ID(s) not found in TapestriExperiment object.")
         } else {
 
             feature.type[probe.index] <- "chrYCounts"
-            message(paste("Moving chrY probe(s)", paste(rownames(tapestri.experiment.object)[probe.index], collapse = ", "), "to altExp slot 'chrYCounts'."))
+            message(paste("Moving chrY probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'chrYCounts'."))
         }
     }
 
@@ -72,7 +72,7 @@ moveNonGenomeProbes <- function(tapestri.experiment.object, move.non.genome.prob
         stop("No non-genomic probe IDs found. Aborting.")
     }
 
-    tapestri.experiment.object <- SingleCellExperiment::splitAltExps(tapestri.experiment.object, feature.type, ref = "CNV")
+    TapestriExperiment <- SingleCellExperiment::splitAltExps(TapestriExperiment, feature.type, ref = "CNV")
 
-    return(tapestri.experiment.object)
+    return(TapestriExperiment)
 }

@@ -5,12 +5,12 @@
 \title{Move non-genome probe counts and metadata to alternative experiment slots}
 \usage{
 moveNonGenomeProbes(
-  tapestri.experiment.object,
+  TapestriExperiment,
   move.non.genome.probes = c("grna", "sample.barcode", "Y")
 )
 }
 \arguments{
-\item{tapestri.experiment.object}{TapestriExperiment object}
+\item{TapestriExperiment}{TapestriExperiment object}
 
 \item{move.non.genome.probes}{Chr vector including a combination of "grna", "sample.barcode", and or "Y" (default), or FALSE.}
 }
