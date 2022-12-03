@@ -3,7 +3,7 @@
 #' @param bam.file Chr string indicating file path of BAM file. `.bai` BAM index file must be in the same location.
 #' @param barcode.lookup data.frame where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
 #' @param cell.barcode.tag Character string of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".
-#' @param contig Chr string of contig or chromosome name for search.
+#' @param contig Chr string of contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.
 #' @param max.mismatch The maximum and minimum number of mismatching letters allowed. See [Biostrings::matchPattern()].
 #' @param with.indels If TRUE then indels are allowed. See [Biostrings::matchPattern()].
 #'
@@ -47,16 +47,33 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
         as.logical(Biostrings::vcountPattern(pattern = x, subject = bam.filter$seq, max.mismatch = max.mismatch, with.indels = with.indels))
     })
 
-    # match barcoded reads to cell barcodes, count, combine
-    n <- names(sequence.matches)
-    names(n) <- names(sequence.matches)
+    # match barcoded reads to cell barcodes and count. Returns NULL if no matches.
+    sequence.match.ids <- names(sequence.matches)
+    names(sequence.match.ids) <- names(sequence.matches)
 
-    sequence.match.counts <- lapply(n, function(x){
-        counts <- as.data.frame(table(bam.filter$tag[sequence.matches[[x]]]))
+    sequence.match.counts <- lapply(sequence.match.ids, function(x){
+
+        bam.matches <- bam.filter$tag[sequence.matches[[x]]]
+
+        if(S4Vectors::isEmpty(bam.matches)){
+            message(paste0("No read matches found for ID '", x,"'."))
+            return(NULL)
+        }
+
+        counts <- as.data.frame(table(bam.matches))
         colnames(counts) <- c("cell.barcode", x)
         return(counts)
     })
 
+    # stop if no matches
+    if(all(sapply(sequence.match.counts, is.null))){
+        stop("No matches found for any barcode IDs.")
+    }
+
+    # remove NULL items from sequence.match.counts, removes barcode IDs with no matches
+    sequence.match.counts <- sequence.match.counts[!sapply(sequence.match.counts, is.null)]
+
+    # combine count tables
     sequence.match.counts <- Reduce(function(x, y) merge(x, y, by="cell.barcode", all = T), sequence.match.counts)
     rownames(sequence.match.counts) <- sequence.match.counts$cell.barcode
     sequence.match.counts[is.na(sequence.match.counts)] <- 0
@@ -67,32 +84,102 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' Parse Barcoded Reads
 #'
 #' `parseBarcodedReads()` and `parseBarcodedReadsFromContig()` match exogenous DNA barcode sequences from plasmid transduction to their associated cell barcodes and outputs them as a table of counts.
-#' `parseBarcodedReads()` is a shortcut for `parseBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode'.
+#' `parseBarcodedReads()` is a shortcut for `parseBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode', and assign the result to the input object..
 #'
 #' @param bam.file Chr string indicating file path of BAM file. `.bai` BAM index file must be in the same location.
 #' @param barcode.lookup data.frame where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
-#' @param probe Chr string, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts alternative experiments, respectively.
+#' @param probe.tag Chr string, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts alternative experiments, respectively.
 #' @param ... Arguments to pass on to `parseBarcodedReadsFromContig()`.
-#' @param tapestri.experiment.object TapestriExperiment
+#' @param TapestriExperiment TapestriExperiment object
+#' @param save.to.experiment If TRUE, saves the read counts to experiment colData (cell barcode metadata), one column per barcode identifier. Return value is updated TapestriExperiment (supersedes return.table). Default FALSE.
+#' @param return.table If TRUE, returns table of read counts per barcode. If FALSE, returns TapestriExperiment. Default FALSE.
 #'
-#' @return A data.frame of read counts for each specified barcode
+#' @return An updated TapestriExperiment object with read counts added to the colData slot, or a data.frame of read counts for each specified barcode.
 #' @export
 #'
 #' @examples
-#' \dontrun{counts <- parseBarcodedReads(tapestri.experiment.object,
+#' \dontrun{counts <- parseBarcodedReads(TapestriExperiment,
 #' bam.file, barcode.lookup, "gRNA")}
-parseBarcodedReads <- function(tapestri.experiment.object, bam.file, barcode.lookup, probe, ...){
+parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, save.to.experiment = F, return.table = F, ...){
 
-    probe <- tolower(probe)
+    probe.tag <- tolower(probe.tag)
 
-    if(probe == "grna"){
-        contig <- as.character(rowData(altExp(tapestri.experiment.object, "grnaCounts"))[grnaProbe(tapestri.experiment.object),"chr"])
-    } else if(probe == "sample.barcode"){
-        contig <- as.character(rowData(altExp(tapestri.experiment.object, "sampleBarcodeCounts"))[barcodeProbe(tapestri.experiment.object),"chr"])
+    if(probe.tag == "grna"){
+        contig <- as.character(rowData(altExp(TapestriExperiment, "grnaCounts"))[grnaProbe(TapestriExperiment),"chr"])
+    } else if(probe.tag == "sample.barcode"){
+        contig <- as.character(rowData(altExp(TapestriExperiment, "sampleBarcodeCounts"))[barcodeProbe(TapestriExperiment),"chr"])
     } else {
-        stop("Probe not recognized. Try probe = 'grna' or 'sample.barcode'.")
+        stop(paste0("Probe tag '", probe.tag, "' not recognized. Try probe = 'grna' or 'sample.barcode'."))
     }
 
-    parseBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, ...)
+    result <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, ...)
 
+    if(save.to.experiment){
+
+        # get and merge colData
+        cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
+        updated.cell.data <- merge(cell.data, result, all.x = T, sort = F)
+
+        # set NAs to 0
+        ids <- setdiff(colnames(result), "cell.barcode")
+        updated.cell.data[,ids][is.na(updated.cell.data[,ids])] <- 0
+        rownames(updated.cell.data) <- updated.cell.data$cell.barcode
+
+        # update TapestriExperiment
+        SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
+
+        return(TapestriExperiment)
+    }
+
+    if(return.table){
+        return(result)
+    } else {
+        return(TapestriExperiment)
+    }
 }
+
+#' Call sample labels based on metadata counts.
+#'
+#' `callSampleLables()` determines sample labels by comparing auxiliary count data, most likely generated from barcoded reads (see[parseBarcodedReads()]).
+#' Labels are dictated by whichever `coldata.labels` element has the highest number of counts.
+#' By default, ties are broken by choosing whichever label has the lowest index position (`ties.method = "first"`).
+#' Samples with 0 counts for all labels are labeled "none".
+#'
+#' @param TapestriExperiment A TapestriExperiment object.
+#' @param coldata.labels A chr vector of column labels corresponding to colData.
+#' @param method A chr string indicating call method. Only "max" currently supported, calls based on whichever label has the most counts.
+#' @param ties.method A chr string passed to `max.col()` indicating how to break ties. Default "first".
+#'
+#' @return A chr vectpr of sample labels.
+#' @export
+#'
+#' @examples
+#' \dontrun{sample.calls <- determineSampleLables(TapestriExperiment, c("g7", "gNC"))}
+callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max", ties.method = "first"){
+
+    if(method != "max"){
+        stop("Method not recognized. Only 'max' currently supported.")
+    } else {
+
+        # check for missing colData labels
+        if(any(!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment)))){
+            stop(paste0(coldata.labels[!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData."))
+        }
+
+        # subset colData
+        coldata.subset <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment)[,coldata.labels])
+
+        # check if numeric
+        if(any(!apply(coldata.subset, 2, is.numeric))){
+            stop("Selected coldata.labels are not numeric.")
+        }
+
+        # make calls
+        sample.calls <- coldata.labels[max.col(coldata.subset, ties.method = ties.method)]
+        names(sample.calls) <- rownames(coldata.subset)
+        sample.calls[rowSums(coldata.subset) == 0] <- "none"
+
+        return(sample.calls)
+    }
+}
+

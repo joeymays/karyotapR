@@ -15,10 +15,12 @@ parseBarcodedReadsFromContig(
 )
 
 parseBarcodedReads(
-  tapestri.experiment.object,
+  TapestriExperiment,
   bam.file,
   barcode.lookup,
-  probe,
+  probe.tag,
+  save.to.experiment = F,
+  return.table = F,
   ...
 )
 }
@@ -27,7 +29,7 @@ parseBarcodedReads(
 
 \item{barcode.lookup}{data.frame where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.}
 
-\item{contig}{Chr string of contig or chromosome name for search.}
+\item{contig}{Chr string of contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.}
 
 \item{cell.barcode.tag}{Character string of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".}
 
@@ -35,23 +37,27 @@ parseBarcodedReads(
 
 \item{with.indels}{If TRUE then indels are allowed. See \code{\link[Biostrings:matchPattern]{Biostrings::matchPattern()}}.}
 
-\item{tapestri.experiment.object}{TapestriExperiment}
+\item{TapestriExperiment}{TapestriExperiment object}
 
-\item{probe}{Chr string, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts alternative experiments, respectively.}
+\item{probe.tag}{Chr string, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts alternative experiments, respectively.}
+
+\item{save.to.experiment}{If TRUE, saves the read counts to experiment colData (cell barcode metadata), one column per barcode identifier. Return value is updated TapestriExperiment (supersedes return.table). Default FALSE.}
+
+\item{return.table}{If TRUE, returns table of read counts per barcode. If FALSE, returns TapestriExperiment. Default FALSE.}
 
 \item{...}{Arguments to pass on to \code{parseBarcodedReadsFromContig()}.}
 }
 \value{
 A data.frame of read counts for each specified barcode.
 
-A data.frame of read counts for each specified barcode
+An updated TapestriExperiment object with read counts added to the colData slot, or a data.frame of read counts for each specified barcode.
 }
 \description{
 \code{parseBarcodedReads()} and \code{parseBarcodedReadsFromContig()} match exogenous DNA barcode sequences from plasmid transduction to their associated cell barcodes and outputs them as a table of counts.
-\code{parseBarcodedReads()} is a shortcut for \code{parseBarcodedReadsFromContig()}, allowing the user to specify 'gRNA' or 'sample.barcode'.
+\code{parseBarcodedReads()} is a shortcut for \code{parseBarcodedReadsFromContig()}, allowing the user to specify 'gRNA' or 'sample.barcode', and assign the result to the input object..
 }
 \examples{
 \dontrun{counts <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
-\dontrun{counts <- parseBarcodedReads(tapestri.experiment.object,
+\dontrun{counts <- parseBarcodedReads(TapestriExperiment,
 bam.file, barcode.lookup, "gRNA")}
 }
