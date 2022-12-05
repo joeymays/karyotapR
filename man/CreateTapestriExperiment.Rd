@@ -32,6 +32,8 @@ Probe metadata is automatically imported by default.
 \code{panel.id} is an optional shortcut to set gRNA and barcode probe identities.
 \code{move.non.genome.probes} moves the specified probes to altExp (alternative experiment) slots in the TapestriExperiment object.
 Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, and probes on ChrY are moved by default.
+Basic QC stats (e.g. total number of reads per probe) are added to either the object's colData or rowData.
+Basic metadata is automatically to the \code{metadata} slot.
 }
 \examples{
 \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}

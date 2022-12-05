@@ -6,6 +6,7 @@
 #' `move.non.genome.probes` moves the specified probes to altExp (alternative experiment) slots in the TapestriExperiment object.
 #' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, and probes on ChrY are moved by default.
 #' Basic QC stats (e.g. total number of reads per probe) are added to either the object's colData or rowData.
+#' Basic metadata is automatically to the `metadata` slot.
 #'
 #' @param h5.filename file path for .h5 file from Tapestri Pipeline output.
 #' @param panel.id Tapestri panel name, CO261 and CO293 supported only. Default NULL.
@@ -46,7 +47,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     message(paste("pipeline panel name:", tapestri.h5$"/assays/dna_read_counts/metadata/panel_name"))
     message(paste("pipeline version:", tapestri.h5$"/assays/dna_read_counts/metadata/pipeline_version"))
     message(paste("number of cells:", tapestri.h5$"/assays/dna_read_counts/metadata/n_cells"))
-    message(paste("number of amplicons:", tapestri.h5$"/assays/dna_read_counts/metadata/n_amplicons"))
+    message(paste("number of probes:", tapestri.h5$"/assays/dna_read_counts/metadata/n_amplicons"))
     message(paste("date created:", tapestri.h5$"/metadata/date_created"))
 
     # construct object
@@ -71,11 +72,12 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
     read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr, levels = unique(read.counts.raw.rowData$chr))
 
-    #basic metrics
+    # basic metrics
     read.counts.raw.colData$total.reads <- colSums(read.counts.raw) #total reads per cell
     read.counts.raw.rowData$total.reads <- rowSums(read.counts.raw) #total reads per probe
     read.counts.raw.rowData$median.reads <- rowSums(read.counts.raw) #median reads per probe
-    message(paste("mean reads per cell per probe:", round(mean(colMeans(read.counts.raw)), 2))) #mean reads/cell/probe(or amplicon)
+    mean.reads <- round(mean(colMeans(read.counts.raw)), 2) #mean reads/cell/probe(or amplicon)
+    message(paste("mean reads per cell per probe:", mean.reads))
 
     sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
                                                       colData = read.counts.raw.colData,
@@ -84,6 +86,15 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     tapestri.object <- .TapestriExperiment(sce)
 
     SingleCellExperiment::mainExpName(tapestri.object) <- "CNV"
+
+    # save experiment metadata
+    S4Vectors::metadata(tapestri.object)$sample.name <- as.character(tapestri.h5$"/assays/dna_read_counts/metadata/sample_name")
+    S4Vectors::metadata(tapestri.object)$pipeline.panel.name <- as.character(tapestri.h5$"/assays/dna_read_counts/metadata/panel_name")
+    S4Vectors::metadata(tapestri.object)$pipeline.version <- as.character(tapestri.h5$"/assays/dna_read_counts/metadata/pipeline_version")
+    S4Vectors::metadata(tapestri.object)$number.of.cells <- as.character(tapestri.h5$"/assays/dna_read_counts/metadata/n_cells")
+    S4Vectors::metadata(tapestri.object)$number.of.probes <- as.character(tapestri.h5$"/assays/dna_read_counts/metadata/n_amplicons")
+    S4Vectors::metadata(tapestri.object)$date.h5.created <- as.character(tapestri.h5$"/metadata/date_created")
+    S4Vectors::metadata(tapestri.object)$mean.reads.per.cell.per.probe <- as.character(mean.reads)
 
     # apply panel ID probe shortcuts
     tapestri.object@barcodeProbe = barcodeProbe
