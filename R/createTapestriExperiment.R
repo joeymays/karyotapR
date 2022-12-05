@@ -5,6 +5,7 @@
 #' `panel.id` is an optional shortcut to set gRNA and barcode probe identities.
 #' `move.non.genome.probes` moves the specified probes to altExp (alternative experiment) slots in the TapestriExperiment object.
 #' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, and probes on ChrY are moved by default.
+#' Basic QC stats (e.g. total number of reads per probe) are added to either the object's colData or rowData.
 #'
 #' @param h5.filename file path for .h5 file from Tapestri Pipeline output.
 #' @param panel.id Tapestri panel name, CO261 and CO293 supported only. Default NULL.
@@ -69,6 +70,12 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     read.counts.raw <- read.counts.raw[chr.order,]
 
     read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr, levels = unique(read.counts.raw.rowData$chr))
+
+    #basic metrics
+    read.counts.raw.colData$total.reads <- colSums(read.counts.raw) #total reads per cell
+    read.counts.raw.rowData$total.reads <- rowSums(read.counts.raw) #total reads per probe
+    read.counts.raw.rowData$median.reads <- rowSums(read.counts.raw) #median reads per probe
+    message(paste("mean reads per cell per probe:", round(mean(colMeans(read.counts.raw)), 2))) #mean reads/cell/probe(or amplicon)
 
     sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
                                                       colData = read.counts.raw.colData,
