@@ -61,6 +61,7 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
         }
 
         counts <- as.data.frame(table(bam.matches))
+        counts$bam.matches <- as.character(counts$bam.matches)
         colnames(counts) <- c("cell.barcode", x)
         return(counts)
     })
@@ -83,7 +84,7 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 
 #' Parse Barcoded Reads
 #'
-#' `parseBarcodedReads()` and `parseBarcodedReadsFromContig()` match exogenous DNA barcode sequences from plasmid transduction to their associated cell barcodes and outputs them as a table of counts.
+#' `parseBarcodedReads()` and `parseBarcodedReadsFromContig()` match exogenous DNA barcode sequences to their associated cell barcodes and saves them to the colData (cell barcode metadata) of the input TapestriExperiment object.
 #' `parseBarcodedReads()` is a shortcut for `parseBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode', and assign the result to the input object..
 #'
 #' @param bam.file Chr string indicating file path of BAM file. `.bai` BAM index file must be in the same location.
@@ -91,16 +92,15 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @param probe.tag Chr string, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts alternative experiments, respectively.
 #' @param ... Arguments to pass on to `parseBarcodedReadsFromContig()`.
 #' @param TapestriExperiment TapestriExperiment object
-#' @param save.to.experiment If TRUE, saves the read counts to experiment colData (cell barcode metadata), one column per barcode identifier. Return value is updated TapestriExperiment (supersedes return.table). Default FALSE.
 #' @param return.table If TRUE, returns table of read counts per barcode. If FALSE, returns TapestriExperiment. Default FALSE.
 #'
-#' @return An updated TapestriExperiment object with read counts added to the colData slot, or a data.frame of read counts for each specified barcode.
+#' @return An updated TapestriExperiment object with read counts added to the colData slot. If `return.table == TRUE`, a data.frame of read counts for each specified barcode.
 #' @export
 #'
 #' @examples
 #' \dontrun{counts <- parseBarcodedReads(TapestriExperiment,
 #' bam.file, barcode.lookup, "gRNA")}
-parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, save.to.experiment = F, return.table = F, ...){
+parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, return.table = F, ...){
 
     probe.tag <- tolower(probe.tag)
 
@@ -114,8 +114,9 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 
     result <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, ...)
 
-    if(save.to.experiment){
-
+    if(return.table){
+        return(result)
+    } else {
         # get and merge colData
         cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
         updated.cell.data <- merge(cell.data, result, all.x = T, sort = F)
@@ -128,12 +129,6 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
         # update TapestriExperiment
         SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
 
-        return(TapestriExperiment)
-    }
-
-    if(return.table){
-        return(result)
-    } else {
         return(TapestriExperiment)
     }
 }
