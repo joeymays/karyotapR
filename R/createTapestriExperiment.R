@@ -7,12 +7,15 @@
 #' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, and probes on ChrY are moved by default.
 #' Basic QC stats (e.g. total number of reads per probe) are added to either the object's colData or rowData.
 #' Basic metadata is automatically to the `metadata` slot.
+#' `filter.variants == TRUE` only loads variants that have passed filters in the Tapestri Pipeline.
+#' This greatly reduces the number of variants to a smaller number of useful ones.
 #'
 #' @param h5.filename file path for .h5 file from Tapestri Pipeline output.
 #' @param panel.id Tapestri panel name, CO261 and CO293 supported only. Default NULL.
 #' @param get.cytobands Logical value indicating whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default TRUE.
 #' @param genome Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported. Default "hg19".
 #' @param move.non.genome.probes Chr vector indicating non-genomic probes to move counts and metadata to altExp slots. Default c("grna", "sample.barcode", "Y").
+#' @param filter.variants Logical. If TRUE, only loads variants that have passed Tapestri Pipeline filters. Default TRUE.
 #'
 #' @return Constructed TapestriExperiment object
 #' @export
@@ -23,7 +26,8 @@
 #'
 #' @examples
 #' \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
-createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y")){
+createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y"),
+                                     filter.variants = T){
 
     # read panel ID
     if(is.null(panel.id)){
@@ -100,23 +104,48 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     tapestri.object@barcodeProbe = barcodeProbe
     tapestri.object@grnaProbe = grnaProbe
 
-    #variant allele frequency data
-    variant.metadata <- data.frame(
-        filtered = as.logical(tapestri.h5$'/assays/dna_variants/ca/filtered'),
-        chr = as.character(tapestri.h5$'/assays/dna_variants/ca/CHROM'),
-        position = as.numeric(tapestri.h5$'/assays/dna_variants/ca/POS'),
-        quality = as.numeric(tapestri.h5$'/assays/dna_variants/ca/QUAL'),
-        amplicon.id = as.character(tapestri.h5$'/assays/dna_variants/ca/amplicon'),
-        variant.id = as.character(tapestri.h5$'/assays/dna_variants/ca/id'),
-        ado.rate = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_rate'),
-        reference.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/REF'),
-        alternate.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/ALT'),
-        ado.gt.cells = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_gt_cells'))
+    # if keeping only variants that passed thresholds
+    if(filter.variants == T){
+
+        # variant filtering; filtered == TRUE in h5 object means "filtered out".
+        filtered.variants <- as.logical(tapestri.h5$'/assays/dna_variants/ca/filtered')
+        filtered.variants <- !filtered.variants
+
+        # variant allele frequency data
+        variant.metadata <- data.frame(
+            filtered = as.logical(tapestri.h5$'/assays/dna_variants/ca/filtered')[filtered.variants],
+            chr = as.character(tapestri.h5$'/assays/dna_variants/ca/CHROM')[filtered.variants],
+            position = as.numeric(tapestri.h5$'/assays/dna_variants/ca/POS')[filtered.variants],
+            quality = as.numeric(tapestri.h5$'/assays/dna_variants/ca/QUAL')[filtered.variants],
+            amplicon.id = as.character(tapestri.h5$'/assays/dna_variants/ca/amplicon')[filtered.variants],
+            variant.id = as.character(tapestri.h5$'/assays/dna_variants/ca/id')[filtered.variants],
+            ado.rate = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_rate')[filtered.variants],
+            reference.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/REF')[filtered.variants],
+            alternate.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/ALT')[filtered.variants],
+            ado.gt.cells = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_gt_cells')[filtered.variants])
+
+        af.matrix <- tapestri.h5$'/assays/dna_variants/layers/AF'[filtered.variants,]
+
+    } else {
+
+        # variant allele frequency data, no filtering, keep all variants
+        variant.metadata <- data.frame(
+            filtered = as.logical(tapestri.h5$'/assays/dna_variants/ca/filtered'),
+            chr = as.character(tapestri.h5$'/assays/dna_variants/ca/CHROM'),
+            position = as.numeric(tapestri.h5$'/assays/dna_variants/ca/POS'),
+            quality = as.numeric(tapestri.h5$'/assays/dna_variants/ca/QUAL'),
+            amplicon.id = as.character(tapestri.h5$'/assays/dna_variants/ca/amplicon'),
+            variant.id = as.character(tapestri.h5$'/assays/dna_variants/ca/id'),
+            ado.rate = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_rate'),
+            reference.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/REF'),
+            alternate.allele = as.character(tapestri.h5$'/assays/dna_variants/ca/ALT'),
+            ado.gt.cells = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_gt_cells'))
+
+        af.matrix <- tapestri.h5$'/assays/dna_variants/layers/AF'
+
+    }
 
     variant.metadata$chr <- factor(variant.metadata$chr, unique(variant.metadata$chr))
-
-    af.matrix <- tapestri.h5$'/assays/dna_variants/layers/AF'
-
     af.sd <- apply(af.matrix, 1, stats::sd)
 
     allele.frequency <- SingleCellExperiment::SingleCellExperiment(list(alleleFrequency = af.matrix),
