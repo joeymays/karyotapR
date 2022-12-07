@@ -9,7 +9,8 @@ createTapestriExperiment(
   panel.id = NULL,
   get.cytobands = TRUE,
   genome = "hg19",
-  move.non.genome.probes = c("grna", "sample.barcode", "Y")
+  move.non.genome.probes = c("grna", "sample.barcode", "Y"),
+  filter.variants = T
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ createTapestriExperiment(
 \item{genome}{Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported. Default "hg19".}
 
 \item{move.non.genome.probes}{Chr vector indicating non-genomic probes to move counts and metadata to altExp slots. Default c("grna", "sample.barcode", "Y").}
+
+\item{filter.variants}{Logical. If TRUE, only loads variants that have passed Tapestri Pipeline filters. Default TRUE.}
 }
 \value{
 Constructed TapestriExperiment object
@@ -34,6 +37,8 @@ Probe metadata is automatically imported by default.
 Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, and probes on ChrY are moved by default.
 Basic QC stats (e.g. total number of reads per probe) are added to either the object's colData or rowData.
 Basic metadata is automatically to the \code{metadata} slot.
+\code{filter.variants == TRUE} only loads variants that have passed filters in the Tapestri Pipeline.
+This greatly reduces the number of variants to a smaller number of useful ones.
 }
 \examples{
 \dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
