@@ -14,12 +14,14 @@ BugReports: https://github.com/joeymays/weaver/issues
 Imports: 
     BiocGenerics,
     GenomicRanges,
+    ggplot2,
     gtools,
     IRanges,
     methods,
     rhdf5,
     S4Vectors,
-    SummarizedExperiment
+    SummarizedExperiment,
+    umap
 Depends: 
     R (>= 2.10),
     SingleCellExperiment

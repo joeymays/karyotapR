@@ -23,4 +23,10 @@ bam.matches <- bam.filter$tag[sequence.matches[[x]]]
 
 coldata.labels <- c("g7x1", "gNC")
 
+library(devtools)
+load_all()
+tap.file <- "~/Documents/data-and-analyses/tapestri/data/20220331-CO293/20220331-CO293-reference20220419.dna.h5"
+
 tap <- createTapestriExperiment(tap.file, "CO293")
+tap1 <- runPCA(tap, sd.min.threshold = 35)
+tap2 <- runUMAP(tap1, input.dims = 1:3)
