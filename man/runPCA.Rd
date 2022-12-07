@@ -17,7 +17,7 @@ runPCA(
 
 \item{feature.set}{Chr string identifying the altExp feature set to perform PCA on. Default "alleleFrequency".}
 
-\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on more variable dimensions. Default 0.}
+\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Default 0.}
 
 \item{center}{Logical, whether the variables should be shifted to be zero centered. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
 

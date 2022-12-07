@@ -28,5 +28,7 @@ load_all()
 tap.file <- "~/Documents/data-and-analyses/tapestri/data/20220331-CO293/20220331-CO293-reference20220419.dna.h5"
 
 tap <- createTapestriExperiment(tap.file, "CO293")
-tap1 <- runPCA(tap, sd.min.threshold = 35)
+tap1 <- runPCA(tap, sd.min.threshold = 10)
+PCAKneePlot(tap1)
 tap2 <- runUMAP(tap1, input.dims = 1:3)
+reducedDimPlot(tap2, "umap")

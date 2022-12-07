@@ -4,7 +4,7 @@
 #'
 #' @param TapestriExperiment TapestriExperiment object
 #' @param feature.set Chr string identifying the altExp feature set to perform PCA on. Default "alleleFrequency".
-#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on more variable dimensions. Default 0.
+#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Default 0.
 #' @param center Logical, whether the variables should be shifted to be zero centered. See [stats::prcomp()].
 #' @param scale. Logical, whether the variables should be scaled to have unit variance before the analysis takes place. See [stats::prcomp()].
 #'
@@ -123,4 +123,49 @@ runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca
     TapestriExperiment <- SingleCellExperiment::swapAltExp(TapestriExperiment, name = main.exp.name)
 
     return(TapestriExperiment)
+}
+
+#' Scatter plot for reduced dimensions
+#'
+#' @param TapestriExperiment TapestriExperiment object
+#' @param plot.reduction Chr, which dimension reduction to plot, either "PCA" or "UMAP".
+#' @param pc.x Numeric, if `plot.reduction == "PCA"`, index of PC to plot. Default 1 for PC1.
+#' @param pc.y Numeric, if `plot.reduction == "PCA"`, index of PC to plot. Default 2 for PC2.
+#' @param feature.set Chr string identifying the altExp feature set to plot. Default "alleleFrequency".
+#'
+#' @return ggplot scatter plot
+#' @export
+#'
+#' @examples
+#' \dontrun{reducedDimPlot(TapestriExperiment, plot.reduction = "pca")}
+reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 2, feature.set = "alleleFrequency"){
+
+    plot.reduction <- toupper(plot.reduction)
+
+    if(plot.reduction == "PCA" ){
+
+        to.plot <- reducedDim(altExp(TapestriExperiment, feature.set), "PCA")
+
+        g1 <- simpleScatterPlot(x = to.plot[,pc.x],
+                                y = to.plot[,pc.y],
+                                labs.x = paste0("PC", pc.x),
+                                labs.y = paste0("PC", pc.y),
+                                labs.title = "PCA")
+
+    } else if(plot.reduction == "UMAP"){
+
+        to.plot <- reducedDim(altExp(TapestriExperiment, feature.set), "UMAP")
+
+        g1 <- simpleScatterPlot(x = to.plot[,1],
+                                y = to.plot[,2],
+                                labs.x = "UMAP1",
+                                labs.y = "UMAP2",
+                                labs.title = "UMAP")
+
+    } else {
+        stop(paste0("plot.reduction", plot.reduction, "not found in object"))
+    }
+
+    return(g1)
+
 }
