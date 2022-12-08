@@ -6,7 +6,7 @@
 \usage{
 reducedDimPlot(
   TapestriExperiment,
-  plot.reduction,
+  dim.reduction,
   pc.x = 1,
   pc.y = 2,
   feature.set = "alleleFrequency",
@@ -16,11 +16,11 @@ reducedDimPlot(
 \arguments{
 \item{TapestriExperiment}{TapestriExperiment object}
 
-\item{plot.reduction}{Chr, which dimension reduction to plot, either "PCA" or "UMAP".}
+\item{dim.reduction}{Chr, which dimension reduction to plot, either "PCA" or "UMAP".}
 
-\item{pc.x}{Numeric, if \code{plot.reduction == "PCA"}, index of PC to plot. Default 1 for PC1.}
+\item{pc.x}{Numeric, if \code{dim.reduction == "PCA"}, index of PC to plot. Default 1 for PC1.}
 
-\item{pc.y}{Numeric, if \code{plot.reduction == "PCA"}, index of PC to plot. Default 2 for PC2.}
+\item{pc.y}{Numeric, if \code{dim.reduction == "PCA"}, index of PC to plot. Default 2 for PC2.}
 
 \item{feature.set}{Chr string identifying the altExp feature set to plot. Default "alleleFrequency".}
 
@@ -33,5 +33,5 @@ ggplot scatter plot
 Scatter plot for reduced dimensions
 }
 \examples{
-\dontrun{reducedDimPlot(TapestriExperiment, plot.reduction = "pca")}
+\dontrun{reducedDimPlot(TapestriExperiment, dim.reduction = "pca")}
 }

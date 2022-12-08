@@ -15,45 +15,28 @@
 #' \dontrun{TapestriExperiment <- runPCA(TapestriExperiment, sd.min.threshold = 35)}
 runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.threshold = 0, center = T, scale. = T){
 
-    # if feature.set not main exp, search in alt exp and switch
-    # if(feature.set == "main" || feature.set == mainExpName(TapestriExperiment)){
-    #     message("Running PCA on Main Experiment")
-    # } else {
-    #
-    #     if(!feature.set %in% altExpNames(TapestriExperiment)){
-    #         stop("feature.set not found in main experiment or alternative experiments.")
-    #     }
-    #     message(paste0("Running PCA on Alt Experiment: ", feature.set))
-    #     TapestriExperiment <- SingleCellExperiment::swapAltExp(TapestriExperiment, name = feature.set)
-    # }
-
-    main.exp.name <- SingleCellExperiment::mainExpName(TapestriExperiment)
-
     if(!feature.set %in% altExpNames(TapestriExperiment)){
         stop("feature.set not found in alternative experiments.")
     }
     message(paste0("Running PCA on Alt Experiment: ", feature.set))
-    TapestriExperiment <- SingleCellExperiment::swapAltExp(TapestriExperiment, name = feature.set)
 
     # filter by sd.min.threshold
-    feature.set.filter <- SingleCellExperiment::rowData(TapestriExperiment)$allelefreq.sd >= sd.min.threshold
+    feature.set.filter <- SingleCellExperiment::rowData(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"))$allelefreq.sd >= sd.min.threshold
 
     if(all(!feature.set.filter)){
         stop("All features filtered out. Reduce threshold.")
     }
 
-    TapestriExperiment.subset <- TapestriExperiment[feature.set.filter,]
+    pca.assay <- SummarizedExperiment::assay(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"), feature.set, withDimnames = T)
+    pca.assay <- pca.assay[feature.set.filter,] #subset data
+    pca.assay <- t(pca.assay) #transpose matrix
 
     # run PCA
-    pca.assay <- t(SummarizedExperiment::assay(TapestriExperiment.subset))
     pca.result <- stats::prcomp(pca.assay, center = center, scale. = scale.)
 
     # save PCA to object
-    SingleCellExperiment::reducedDim(TapestriExperiment, "PCA") <- pca.result$x
-    S4Vectors::metadata(TapestriExperiment)$pca.proportion.of.variance <- summary(pca.result)$importance["Proportion of Variance", ]
-
-    # switch back to main experiment
-    TapestriExperiment <- SingleCellExperiment::swapAltExp(TapestriExperiment, name = main.exp.name)
+    SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"), "PCA", withDimnames = T) <- pca.result$x
+    S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"))$pca.proportion.of.variance <- summary(pca.result)$importance["Proportion of Variance", ]
 
     return(TapestriExperiment)
 }
@@ -96,17 +79,14 @@ PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", pcs
 #' \dontrun{TapestriExperiment <- runUMAP(TapestriExperiment, input.dims = 1:3)}
 runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca.dims = T, input.dims = NULL, ...){
 
-    main.exp.name <- SingleCellExperiment::mainExpName(TapestriExperiment)
-
     if(!feature.set %in% altExpNames(TapestriExperiment)){
         stop("feature.set not found in alternative experiments.")
     }
     message(paste0("Running UMAP on Alt Experiment: ", feature.set))
-    TapestriExperiment <- SingleCellExperiment::swapAltExp(TapestriExperiment, name = feature.set)
 
     # subset dims
     if(use.pca.dims){
-    umap.assay <- SingleCellExperiment::reducedDim(TapestriExperiment, type = "PCA")[,input.dims]
+    umap.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, feature.set), type = "PCA")[,input.dims]
     } else {
         stop(paste0("Set use.pca.dims to TRUE, nothing else currently supported."))
     }
@@ -117,10 +97,7 @@ runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca
     colnames(umap.embeddings) <- c("umap.1", "umap.2")
 
     # save UMAP to object
-    SingleCellExperiment::reducedDim(TapestriExperiment, "UMAP") <- umap.embeddings
-
-    # switch back to main experiment
-    TapestriExperiment <- SingleCellExperiment::swapAltExp(TapestriExperiment, name = main.exp.name)
+    SingleCellExperiment::reducedDim(altExp(TapestriExperiment, feature.set), "UMAP", withDimnames = T) <- umap.embeddings
 
     return(TapestriExperiment)
 }
@@ -128,9 +105,9 @@ runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca
 #' Scatter plot for reduced dimensions
 #'
 #' @param TapestriExperiment TapestriExperiment object
-#' @param plot.reduction Chr, which dimension reduction to plot, either "PCA" or "UMAP".
-#' @param pc.x Numeric, if `plot.reduction == "PCA"`, index of PC to plot. Default 1 for PC1.
-#' @param pc.y Numeric, if `plot.reduction == "PCA"`, index of PC to plot. Default 2 for PC2.
+#' @param dim.reduction Chr, which dimension reduction to plot, either "PCA" or "UMAP".
+#' @param pc.x Numeric, if `dim.reduction == "PCA"`, index of PC to plot. Default 1 for PC1.
+#' @param pc.y Numeric, if `dim.reduction == "PCA"`, index of PC to plot. Default 2 for PC2.
 #' @param feature.set Chr string identifying the altExp feature set to plot. Default "alleleFrequency".
 #' @param group.label Chr string indicating colData column for coloring samples. Default NULL.
 #'
@@ -138,10 +115,10 @@ runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca
 #' @export
 #'
 #' @examples
-#' \dontrun{reducedDimPlot(TapestriExperiment, plot.reduction = "pca")}
-reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 2, feature.set = "alleleFrequency", group.label = NULL){
+#' \dontrun{reducedDimPlot(TapestriExperiment, dim.reduction = "pca")}
+reducedDimPlot <- function(TapestriExperiment, dim.reduction, pc.x = 1, pc.y = 2, feature.set = "alleleFrequency", group.label = NULL){
 
-    plot.reduction <- toupper(plot.reduction)
+    dim.reduction <- toupper(dim.reduction)
 
     if(!is.null(group.label)){
 
@@ -152,7 +129,7 @@ reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 
         }
     }
 
-    if(plot.reduction == "PCA"){
+    if(dim.reduction == "PCA"){
 
         to.plot <- reducedDim(altExp(TapestriExperiment, feature.set), "PCA")
 
@@ -162,7 +139,7 @@ reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 
                                 labs.y = paste0("PC", pc.y),
                                 labs.title = "PCA")
 
-    } else if(plot.reduction == "UMAP"){
+    } else if(dim.reduction == "UMAP"){
 
         to.plot <- reducedDim(altExp(TapestriExperiment, feature.set), "UMAP")
 
@@ -174,11 +151,63 @@ reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 
                                 group.label = group.label)
 
     } else {
-        stop(paste0("plot.reduction", plot.reduction, "not found in object"))
+        stop(paste0("dim.reduction", dim.reduction, "not found in object"))
     }
 
     return(g1)
 
 }
 
+#' Cluster data
+#'
+#' Cluster data using dbscan method. Uses UMAP reduced dimensions to partition data into clusters and saves the clusters to colData.
+#'
+#' @param TapestriExperiment TapestriExperiment object
+#' @param feature.set Chr string identifying the altExp feature set to use Default "alleleFrequency".
+#' @param dim.reduction Chr string indicating the reduced dimension set to use. Default "UMAP".
+#' @param eps Numeric, dbscan eps parameter. Change to adjust cluster granularity. See [`dbscan::dbscan()`]. Default 0.8.
+#' @param ... Additional parameters to pass to `dbscan::dbscan()`.
+#'
+#' @return TapestriExperiment object with updated colData
+#' @export
+#'
+#' @seealso [`dbscan::dbscan()`].
+#'
+#' @examples
+#' \dontrun{TapestriExperiment <- getClusters(TapestriExperiment, dim.reduction = "UMAP", eps = 0.8)}
+getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim.reduction = "UMAP", eps = 0.8, ...){
+
+    dim.reduction <- toupper(dim.reduction)
+
+    if(dim.reduction != "UMAP"){
+        stop("dim.reduction currently only supports UMAP.")
+    }
+
+    if(!feature.set %in% altExpNames(TapestriExperiment)){
+        stop("feature.set not found in alternative experiments.")
+    }
+    message(paste0("Finding clusters with ", dim.reduction, " using Alt Experiment: ", feature.set))
+
+    dbscan.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"), "UMAP")
+
+    dbscan.result <- dbscan::dbscan(dbscan.assay, eps = eps, ...)
+
+    dbscan.result.clusters <- data.frame(cell.barcode = rownames(dbscan.assay), cluster = as.factor(dbscan.result$cluster))
+
+    # get and merge colData in main
+    cell.data <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment))
+    updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
+
+    # get and merge colData in altExp
+    if(ncol(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set))) == 0){
+        SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(dbscan.result.clusters)
+    }
+    cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)))
+    updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(updated.cell.data)
+
+    return(TapestriExperiment)
+
+}
 
