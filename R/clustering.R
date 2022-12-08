@@ -132,17 +132,27 @@ runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca
 #' @param pc.x Numeric, if `plot.reduction == "PCA"`, index of PC to plot. Default 1 for PC1.
 #' @param pc.y Numeric, if `plot.reduction == "PCA"`, index of PC to plot. Default 2 for PC2.
 #' @param feature.set Chr string identifying the altExp feature set to plot. Default "alleleFrequency".
+#' @param group.label Chr string indicating colData column for coloring samples. Default NULL.
 #'
 #' @return ggplot scatter plot
 #' @export
 #'
 #' @examples
 #' \dontrun{reducedDimPlot(TapestriExperiment, plot.reduction = "pca")}
-reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 2, feature.set = "alleleFrequency"){
+reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 2, feature.set = "alleleFrequency", group.label = NULL){
 
     plot.reduction <- toupper(plot.reduction)
 
-    if(plot.reduction == "PCA" ){
+    if(!is.null(group.label)){
+
+        if(group.label %in% colnames(colData(TapestriExperiment))){
+            group.label <- colData(TapestriExperiment)[,group.label]
+        } else {
+            stop(paste0("group.label '", group.label, "' not found in colData."))
+        }
+    }
+
+    if(plot.reduction == "PCA"){
 
         to.plot <- reducedDim(altExp(TapestriExperiment, feature.set), "PCA")
 
@@ -160,7 +170,8 @@ reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 
                                 y = to.plot[,2],
                                 labs.x = "UMAP1",
                                 labs.y = "UMAP2",
-                                labs.title = "UMAP")
+                                labs.title = "UMAP",
+                                group.label = group.label)
 
     } else {
         stop(paste0("plot.reduction", plot.reduction, "not found in object"))
@@ -169,3 +180,5 @@ reducedDimPlot <- function(TapestriExperiment, plot.reduction, pc.x = 1, pc.y = 
     return(g1)
 
 }
+
+
