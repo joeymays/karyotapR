@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' \dontrun{simpleLinePlot(x, y)}
-simpleLinePlot <- function(x, y, labs.x, labs.y, labs.title, xlim, ylim){
+simpleLinePlot <- function(x, y, labs.x ="", labs.y ="", labs.title ="", xlim, ylim){
 
     input.data <- data.frame(x = x, y = y)
 
@@ -49,13 +49,21 @@ simpleLinePlot <- function(x, y, labs.x, labs.y, labs.title, xlim, ylim){
 #'
 #' @examples
 #' \dontrun{simpleScatterPlot(x, y)}
-simpleScatterPlot <- function(x, y, labs.x, labs.y, labs.title){
+simpleScatterPlot <- function(x, y, group.label = NULL, labs.x ="", labs.y ="", labs.title =""){
 
     input.data <- data.frame(x = x, y = y)
-    g1 <- ggplot2::ggplot(data = input.data, aes(x = x, y = y)) +
+
+    if(!is.null(group.label)){
+        input.data$group.label <- group.label
+        g1 <- ggplot2::ggplot(data = input.data, aes(x = x, y = y, color = group.label))
+    } else {
+        g1 <- ggplot2::ggplot(data = input.data, aes(x = x, y = y))
+    }
+
+    g2 <- g1 +
         geom_point(size = 1, alpha = 0.7) +
         labs(x = labs.x, y = labs.y, title = labs.title) +
         theme_bw()
 
-    return(g1)
+    return(g2)
 }

@@ -9,7 +9,8 @@ reducedDimPlot(
   plot.reduction,
   pc.x = 1,
   pc.y = 2,
-  feature.set = "alleleFrequency"
+  feature.set = "alleleFrequency",
+  group.label = NULL
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ reducedDimPlot(
 \item{pc.y}{Numeric, if \code{plot.reduction == "PCA"}, index of PC to plot. Default 2 for PC2.}
 
 \item{feature.set}{Chr string identifying the altExp feature set to plot. Default "alleleFrequency".}
+
+\item{group.label}{Chr string indicating colData column for coloring samples. Default NULL.}
 }
 \value{
 ggplot scatter plot

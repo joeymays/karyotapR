@@ -155,8 +155,8 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     colnames(allele.frequency) <- tapestri.h5$'/assays/dna_read_counts/ra/barcode'
 
     allele.frequency <- .TapestriExperiment(allele.frequency)
-    allele.frequency@barcodeProbe = barcodeProbe
-    allele.frequency@grnaProbe = grnaProbe
+    allele.frequency@barcodeProbe <- barcodeProbe
+    allele.frequency@grnaProbe <- grnaProbe
 
     SingleCellExperiment::altExp(tapestri.object, "alleleFrequency") <- allele.frequency
 
