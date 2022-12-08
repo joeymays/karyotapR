@@ -63,6 +63,7 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
         counts <- as.data.frame(table(bam.matches))
         counts$bam.matches <- as.character(counts$bam.matches)
         colnames(counts) <- c("cell.barcode", x)
+        message(paste0(sum(counts[,2]), " read matches found for ID '", x,"'."))
         return(counts)
     })
 
@@ -144,13 +145,14 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @param coldata.labels A chr vector of column labels corresponding to colData.
 #' @param method A chr string indicating call method. Only "max" currently supported, calls based on whichever label has the most counts.
 #' @param ties.method A chr string passed to `max.col()` indicating how to break ties. Default "first".
+#' @param neg.label A chr string indicating what to label samples with no counts. Default NA.
 #'
 #' @return A chr vectpr of sample labels.
 #' @export
 #'
 #' @examples
 #' \dontrun{sample.calls <- determineSampleLables(TapestriExperiment, c("g7", "gNC"))}
-callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max", ties.method = "first"){
+callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max", ties.method = "first", neg.label = NA){
 
     if(method != "max"){
         stop("Method not recognized. Only 'max' currently supported.")
@@ -158,7 +160,7 @@ callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max",
 
         # check for missing colData labels
         if(any(!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment)))){
-            stop(paste0(coldata.labels[!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData."))
+            stop(paste0(coldata.labels[!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData.\n"))
         }
 
         # subset colData
@@ -172,7 +174,8 @@ callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max",
         # make calls
         sample.calls <- coldata.labels[max.col(coldata.subset, ties.method = ties.method)]
         names(sample.calls) <- rownames(coldata.subset)
-        sample.calls[rowSums(coldata.subset) == 0] <- "none"
+        sample.calls[rowSums(coldata.subset) == 0] <- neg.label # set label if no call is made
+        sample.calls <- as.factor(sample.calls)
 
         return(sample.calls)
     }

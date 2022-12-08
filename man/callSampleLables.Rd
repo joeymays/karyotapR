@@ -8,7 +8,8 @@ callSampleLables(
   TapestriExperiment,
   coldata.labels,
   method = "max",
-  ties.method = "first"
+  ties.method = "first",
+  neg.label = NA
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ callSampleLables(
 \item{method}{A chr string indicating call method. Only "max" currently supported, calls based on whichever label has the most counts.}
 
 \item{ties.method}{A chr string passed to \code{max.col()} indicating how to break ties. Default "first".}
+
+\item{neg.label}{A chr string indicating what to label samples with no counts. Default NA.}
 }
 \value{
 A chr vectpr of sample labels.
