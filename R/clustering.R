@@ -119,11 +119,12 @@ runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca
 reducedDimPlot <- function(TapestriExperiment, dim.reduction, pc.x = 1, pc.y = 2, feature.set = "alleleFrequency", group.label = NULL){
 
     dim.reduction <- toupper(dim.reduction)
+    group.label.data <- NULL
 
     if(!is.null(group.label)){
 
         if(group.label %in% colnames(colData(TapestriExperiment))){
-            group.label <- colData(TapestriExperiment)[,group.label]
+            group.label.data <- colData(TapestriExperiment)[,group.label]
         } else {
             stop(paste0("group.label '", group.label, "' not found in colData."))
         }
@@ -148,7 +149,8 @@ reducedDimPlot <- function(TapestriExperiment, dim.reduction, pc.x = 1, pc.y = 2
                                 labs.x = "UMAP1",
                                 labs.y = "UMAP2",
                                 labs.title = "UMAP",
-                                group.label = group.label)
+                                group.label = group.label.data,
+                                group.label.legend = group.label)
 
     } else {
         stop(paste0("dim.reduction", dim.reduction, "not found in object"))

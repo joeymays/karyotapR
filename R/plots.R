@@ -49,7 +49,7 @@ simpleLinePlot <- function(x, y, labs.x ="", labs.y ="", labs.title ="", xlim, y
 #'
 #' @examples
 #' \dontrun{simpleScatterPlot(x, y)}
-simpleScatterPlot <- function(x, y, group.label = NULL, labs.x ="", labs.y ="", labs.title =""){
+simpleScatterPlot <- function(x, y, group.label = NULL, labs.x ="", labs.y ="", labs.title ="", group.label.legend = ""){
 
     input.data <- data.frame(x = x, y = y)
 
@@ -62,7 +62,7 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x ="", labs.y ="", 
 
     g2 <- g1 +
         geom_point(size = 1, alpha = 0.7) +
-        labs(x = labs.x, y = labs.y, title = labs.title) +
+        labs(x = labs.x, y = labs.y, title = labs.title, color = group.label.legend) +
         theme_bw()
 
     return(g2)
