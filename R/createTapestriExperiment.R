@@ -125,6 +125,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
             ado.gt.cells = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_gt_cells')[filtered.variants])
 
         af.matrix <- tapestri.h5$'/assays/dna_variants/layers/AF'[filtered.variants,]
+        dimnames(af.matrix) <- list(variant.metadata$variant.id, tapestri.h5$'/assays/dna_read_counts/ra/barcode')
 
     } else {
 
@@ -142,23 +143,23 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
             ado.gt.cells = as.numeric(tapestri.h5$'/assays/dna_variants/ca/ado_gt_cells'))
 
         af.matrix <- tapestri.h5$'/assays/dna_variants/layers/AF'
+        dimnames(af.matrix) <- list(variant.metadata$variant.id, tapestri.h5$'/assays/dna_read_counts/ra/barcode')
 
     }
 
     variant.metadata$chr <- factor(variant.metadata$chr, unique(variant.metadata$chr))
-    af.sd <- apply(af.matrix, 1, stats::sd)
+    variant.metadata$allelefreq.sd <- apply(af.matrix, 1, stats::sd)
+    rownames(variant.metadata) <- variant.metadata$variant.id
 
     allele.frequency <- SingleCellExperiment::SingleCellExperiment(list(alleleFrequency = af.matrix),
-                                                                   rowData = S4Vectors::DataFrame(variant.metadata,
-                                                                                                  allelefreq.sd = af.sd,
-                                                                                                  row.names = variant.metadata$variant.id))
-    colnames(allele.frequency) <- tapestri.h5$'/assays/dna_read_counts/ra/barcode'
+                                                                   rowData = S4Vectors::DataFrame(variant.metadata),
+                                                                   colData = S4Vectors::DataFrame(cell.barcode = colnames(af.matrix)))
 
     allele.frequency <- .TapestriExperiment(allele.frequency)
     allele.frequency@barcodeProbe <- barcodeProbe
     allele.frequency@grnaProbe <- grnaProbe
 
-    SingleCellExperiment::altExp(tapestri.object, "alleleFrequency") <- allele.frequency
+    SingleCellExperiment::altExp(tapestri.object, "alleleFrequency", withDimnames = T) <- allele.frequency
 
     #close h5
     rhdf5::H5Fclose(tapestri.h5)

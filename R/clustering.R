@@ -189,28 +189,23 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
     message(paste0("Finding clusters with ", dim.reduction, " using Alt Experiment: ", feature.set))
 
     dbscan.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"), "UMAP")
-
     dbscan.result <- dbscan::dbscan(dbscan.assay, eps = eps, ...)
-
     dbscan.result.clusters <- data.frame(cell.barcode = rownames(dbscan.assay), cluster = as.factor(dbscan.result$cluster))
 
     # get and merge colData in main
     cell.data <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment))
     updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
     rownames(updated.cell.data) <- updated.cell.data$cell.barcode
+    updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)),]
     SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
 
     # get and merge colData in altExp
-    if(ncol(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set))) == 0){
-        rownames(dbscan.result.clusters) <- dbscan.result.clusters$cell.barcode
-        SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(dbscan.result.clusters)
-    }
     cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)))
     updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
     rownames(updated.cell.data) <- updated.cell.data$cell.barcode
+    updated.cell.data <- updated.cell.data[rownames(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set))),]
     SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(updated.cell.data)
 
     return(TapestriExperiment)
-
 }
 

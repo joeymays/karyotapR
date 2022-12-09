@@ -87,6 +87,7 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #'
 #' `parseBarcodedReads()` and `parseBarcodedReadsFromContig()` match exogenous DNA barcode sequences to their associated cell barcodes and saves them to the colData (cell barcode metadata) of the input TapestriExperiment object.
 #' `parseBarcodedReads()` is a shortcut for `parseBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode', and assign the result to the input object..
+#' The entries in the `barcode.lookup` table do not have to be present in the sample, allowing users to keep one master table/file of available barcode sequences to use for all experiments.
 #'
 #' @param bam.file Chr string indicating file path of BAM file. `.bai` BAM index file must be in the same location.
 #' @param barcode.lookup data.frame where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
@@ -105,6 +106,7 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 
     probe.tag <- tolower(probe.tag)
 
+    # get contig
     if(probe.tag == "grna"){
         contig <- as.character(rowData(altExp(TapestriExperiment, "grnaCounts"))[grnaProbe(TapestriExperiment),"chr"])
     } else if(probe.tag == "sample.barcode"){
@@ -120,12 +122,15 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
     } else {
         # get and merge colData
         cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
-        updated.cell.data <- merge(cell.data, result, all.x = T, sort = F)
+        updated.cell.data <- merge(cell.data, result, by = "cell.barcode", all.x = T, sort = F)
 
         # set NAs to 0
         ids <- setdiff(colnames(result), "cell.barcode")
         updated.cell.data[,ids][is.na(updated.cell.data[,ids])] <- 0
+
+        # reorder to match colData
         rownames(updated.cell.data) <- updated.cell.data$cell.barcode
+        updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)),]
 
         # update TapestriExperiment
         SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
