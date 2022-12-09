@@ -24,26 +24,12 @@ getCytobands <- function(TapestriExperiment, genome = "hg19"){
     chr.vector <- as.character(SingleCellExperiment::rowData(TapestriExperiment)$chr)
     chr.vector <- ifelse(chr.vector %in% c(1:22, "X", "Y"), paste0("chr", chr.vector), chr.vector)
 
-    amplicon.gr <- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(chr.vector),
-                                          ranges = IRanges::IRanges(start = SingleCellExperiment::rowData(TapestriExperiment)$start.pos,
-                                                                    end = SingleCellExperiment::rowData(TapestriExperiment)$end.pos,
-                                                                    names = SingleCellExperiment::rowData(TapestriExperiment)$probe.id),
-                                          strand = S4Vectors::Rle(values = BiocGenerics::strand("*"),
-                                                                  lengths = nrow(SingleCellExperiment::rowData(TapestriExperiment))))
+    amplicon.df <- data.frame(seqnames = chr.vector,
+                              start = SingleCellExperiment::rowData(TapestriExperiment)$start.pos,
+                              end = SingleCellExperiment::rowData(TapestriExperiment)$end.pos,
+                              id = SingleCellExperiment::rowData(TapestriExperiment)$probe.id)
 
-
-    overlap.hits <- GenomicRanges::findOverlaps(amplicon.gr, cytoband.hg19.genomicRanges)
-
-    cytoband.matches <- character(length = S4Vectors::queryLength(overlap.hits))
-    cytoband.matches[] <- NA
-    cytoband.matches[S4Vectors::queryHits(overlap.hits)] <- S4Vectors::mcols(cytoband.hg19.genomicRanges)[,"cytoband"][S4Vectors::subjectHits(overlap.hits)]
-
-    S4Vectors::mcols(amplicon.gr)$cytoband <- cytoband.matches
-
-    chromosome.arms <- ifelse(is.na(amplicon.gr$cytoband), amplicon.gr$cytoband, paste0(S4Vectors::decode(GenomicRanges::seqnames(amplicon.gr)), substr(amplicon.gr$cytoband, 1, 1)))
-
-    S4Vectors::mcols(amplicon.gr)$arm <- chromosome.arms
-    S4Vectors::mcols(amplicon.gr)$arm <- factor(chromosome.arms, unique(chromosome.arms))
+    amplicon.gr <- getCytobands.df(amplicon.df, return.genomic.ranges = T)
 
     row.data <- SingleCellExperiment::rowData(TapestriExperiment)
     amplicon.gr.matrix <- as.data.frame(S4Vectors::mcols(amplicon.gr))
@@ -60,4 +46,33 @@ getCytobands <- function(TapestriExperiment, genome = "hg19"){
     SummarizedExperiment::rowData(TapestriExperiment)$arm <- amplicon.metadata$arm
 
     return(TapestriExperiment)
+}
+
+getCytobands.df <- function(input.df, return.genomic.ranges = F){
+
+    amplicon.gr <- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(input.df$seqnames),
+                                          ranges = IRanges::IRanges(start = input.df$start,
+                                                                    end = input.df$end,
+                                                                    names = input.df$id),
+                                          strand = S4Vectors::Rle(values = BiocGenerics::strand("*"),
+                                                                  lengths = nrow(input.df)))
+
+    overlap.hits <- GenomicRanges::findOverlaps(amplicon.gr, cytoband.hg19.genomicRanges)
+
+    cytoband.matches <- character(length = S4Vectors::queryLength(overlap.hits))
+    cytoband.matches[] <- NA
+    cytoband.matches[S4Vectors::queryHits(overlap.hits)] <- S4Vectors::mcols(cytoband.hg19.genomicRanges)[,"cytoband"][S4Vectors::subjectHits(overlap.hits)]
+
+    S4Vectors::mcols(amplicon.gr)$cytoband <- cytoband.matches
+
+    chromosome.arms <- ifelse(is.na(amplicon.gr$cytoband), amplicon.gr$cytoband, paste0(S4Vectors::decode(GenomicRanges::seqnames(amplicon.gr)), substr(amplicon.gr$cytoband, 1, 1)))
+
+    S4Vectors::mcols(amplicon.gr)$arm <- chromosome.arms
+    S4Vectors::mcols(amplicon.gr)$arm <- factor(chromosome.arms, unique(chromosome.arms))
+
+    if(return.genomic.ranges){
+        return(amplicon.gr)
+    } else {
+        return(as.data.frame(amplicon.gr))
+    }
 }
