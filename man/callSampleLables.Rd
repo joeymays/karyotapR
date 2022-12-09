@@ -7,9 +7,11 @@
 callSampleLables(
   TapestriExperiment,
   coldata.labels,
+  sample.label = "sample.call",
+  return.table = F,
+  neg.label = NA,
   method = "max",
-  ties.method = "first",
-  neg.label = NA
+  ties.method = "first"
 )
 }
 \arguments{
@@ -17,14 +19,18 @@ callSampleLables(
 
 \item{coldata.labels}{A chr vector of column labels corresponding to colData.}
 
+\item{sample.label}{A chr string indicating the column name to use for the sample call. Default "sample.call".}
+
+\item{return.table}{Logical, if TRUE returns a data.frame of the sample.calls. Otherwise returns updatedTapestriExperiment object. Default FALSE.}
+
+\item{neg.label}{A chr string indicating what to label samples with no counts. Default NA.}
+
 \item{method}{A chr string indicating call method. Only "max" currently supported, calls based on whichever label has the most counts.}
 
 \item{ties.method}{A chr string passed to \code{max.col()} indicating how to break ties. Default "first".}
-
-\item{neg.label}{A chr string indicating what to label samples with no counts. Default NA.}
 }
 \value{
-A chr vectpr of sample labels.
+A TapestriExperiment object with sample calls added to ColData. If \code{return.table == TRUE}, a data.frame of sample calls.
 }
 \description{
 \code{callSampleLables()} determines sample labels by comparing auxiliary count data, most likely generated from barcoded reads (see\code{\link[=parseBarcodedReads]{parseBarcodedReads()}}).
@@ -33,5 +39,5 @@ By default, ties are broken by choosing whichever label has the lowest index pos
 Samples with 0 counts for all labels are labeled "none".
 }
 \examples{
-\dontrun{sample.calls <- determineSampleLables(TapestriExperiment, c("g7", "gNC"))}
+\dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"), sample.label = "sample.grna")}
 }

@@ -157,7 +157,8 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @export
 #'
 #' @examples
-#' \dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"), sample.label = "sample.grna")}
+#' \dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"),
+#' sample.label = "sample.grna")}
 callSampleLables <- function(TapestriExperiment, coldata.labels, sample.label = "sample.call", return.table = F, neg.label = NA, method = "max", ties.method = "first"){
 
     if(method != "max"){
