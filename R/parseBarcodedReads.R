@@ -30,7 +30,6 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
                     e$message <- paste0(e$message, "\nBAM index .bai file needs to be in the same directory as .bam file.",
                                         "\nRun `Rsamtools::indexBam(bam.filename)` to generate BAM index file if it cannot be found.")
                 }
-
                  stop(e$message)
              })
 
@@ -151,13 +150,15 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @param method A chr string indicating call method. Only "max" currently supported, calls based on whichever label has the most counts.
 #' @param ties.method A chr string passed to `max.col()` indicating how to break ties. Default "first".
 #' @param neg.label A chr string indicating what to label samples with no counts. Default NA.
+#' @param sample.label A chr string indicating the column name to use for the sample call. Default "sample.call".
+#' @param return.table Logical, if TRUE returns a data.frame of the sample.calls. Otherwise returns updatedTapestriExperiment object. Default FALSE.
 #'
-#' @return A chr vectpr of sample labels.
+#' @return A TapestriExperiment object with sample calls added to ColData. If `return.table == TRUE`, a data.frame of sample calls.
 #' @export
 #'
 #' @examples
-#' \dontrun{sample.calls <- determineSampleLables(TapestriExperiment, c("g7", "gNC"))}
-callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max", ties.method = "first", neg.label = NA){
+#' \dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"), sample.label = "sample.grna")}
+callSampleLables <- function(TapestriExperiment, coldata.labels, sample.label = "sample.call", return.table = F, neg.label = NA, method = "max", ties.method = "first"){
 
     if(method != "max"){
         stop("Method not recognized. Only 'max' currently supported.")
@@ -169,7 +170,8 @@ callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max",
         }
 
         # subset colData
-        coldata.subset <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment)[,coldata.labels])
+        cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
+        coldata.subset <- cell.data[,coldata.labels]
 
         # check if numeric
         if(any(!apply(coldata.subset, 2, is.numeric))){
@@ -178,11 +180,28 @@ callSampleLables <- function(TapestriExperiment, coldata.labels, method = "max",
 
         # make calls
         sample.calls <- coldata.labels[max.col(coldata.subset, ties.method = ties.method)]
-        names(sample.calls) <- rownames(coldata.subset)
-        sample.calls[rowSums(coldata.subset) == 0] <- neg.label # set label if no call is made
-        sample.calls <- as.factor(sample.calls)
+        sample.calls <- data.frame(cell.barcode = rownames(coldata.subset), sample.call = sample.calls)
+        sample.calls[rowSums(coldata.subset) == 0, "sample.call"] <- neg.label # set label if no call is made
+        sample.calls$sample.call <- as.factor(sample.calls$sample.call)
+        rownames(sample.calls) <- sample.calls$cell.barcode
+        colnames(sample.calls)[2] <- sample.label
 
-        return(sample.calls)
+        if(return.table){
+            return(sample.calls)
+        } else {
+
+            #add back into ColData
+            updated.cell.data <- merge(cell.data, sample.calls, by = "cell.barcode", all.x = T, sort = F)
+
+            # reorder to match colData
+            rownames(updated.cell.data) <- updated.cell.data$cell.barcode
+            updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)),]
+
+            # update TapestriExperiment
+            SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
+
+            return(TapestriExperiment)
+        }
     }
 }
 

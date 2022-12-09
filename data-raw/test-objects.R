@@ -48,7 +48,7 @@ coldata.labels <- c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3")
 
 tap <- createTapestriExperiment(tap.file, "CO293")
 tap <- parseBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe.tag = "grna")
-colData(tap)$sample.grna <- callSampleLables(tap, coldata.labels = c("g7x3", "gNC"))
+tap <- callSampleLables(tap, coldata.labels = c("g7x3", "gNC"), sample.label = "sample.grna")
 tap <- runPCA(tap, sd.min.threshold = 40)
 PCAKneePlot(tap)
 tap <- runUMAP(tap, input.dims = 1:2)

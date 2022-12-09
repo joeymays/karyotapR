@@ -52,6 +52,7 @@ An updated TapestriExperiment object with read counts added to the colData slot.
 \description{
 \code{parseBarcodedReads()} and \code{parseBarcodedReadsFromContig()} match exogenous DNA barcode sequences to their associated cell barcodes and saves them to the colData (cell barcode metadata) of the input TapestriExperiment object.
 \code{parseBarcodedReads()} is a shortcut for \code{parseBarcodedReadsFromContig()}, allowing the user to specify 'gRNA' or 'sample.barcode', and assign the result to the input object..
+The entries in the \code{barcode.lookup} table do not have to be present in the sample, allowing users to keep one master table/file of available barcode sequences to use for all experiments.
 }
 \examples{
 \dontrun{counts <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
