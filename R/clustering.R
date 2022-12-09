@@ -197,14 +197,17 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
     # get and merge colData in main
     cell.data <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment))
     updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    rownames(updated.cell.data) <- updated.cell.data$cell.barcode
     SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
 
     # get and merge colData in altExp
     if(ncol(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set))) == 0){
+        rownames(dbscan.result.clusters) <- dbscan.result.clusters$cell.barcode
         SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(dbscan.result.clusters)
     }
     cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)))
     updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    rownames(updated.cell.data) <- updated.cell.data$cell.barcode
     SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(updated.cell.data)
 
     return(TapestriExperiment)
