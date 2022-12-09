@@ -43,7 +43,7 @@ reducedDimPlot(tap2, "umap", group.label = "sample.grna")
 
 tap.file <- "~/Documents/data-and-analyses/tapestri/data/Exp003-20220808-CO293/run20220808-02-panelCO293-ref20220419.dna.h5"
 bam.file <- "~/Documents/data-and-analyses/tapestri/data/Exp003-20220808-CO293/run20220808-02-panelCO293-ref20220419.tube1.cells.bam"
-barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3"),nsequences = c("TGGATATATGGACCGCATTG", "ACGGAGGCTAAGCGTCGCAA", "TATTTACAGGGACAATACCG", "CGGTAGAATAAGCTGTACCG", "ACTCTTGCTGTGGCATTTTC"))
+barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3"), sequences = c("TGGATATATGGACCGCATTG", "ACGGAGGCTAAGCGTCGCAA", "TATTTACAGGGACAATACCG", "CGGTAGAATAAGCTGTACCG", "ACTCTTGCTGTGGCATTTTC"))
 coldata.labels <- c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3")
 
 tap <- createTapestriExperiment(tap.file, "CO293")
@@ -56,4 +56,5 @@ reducedDimPlot(tap, "umap")
 tap <- getClusters(tap, eps = 0.9)
 reducedDimPlot(tap, "umap", group.label = "cluster")
 reducedDimPlot(tap, "umap", group.label = "sample.grna")
-umap.dbscan <- dbscan::dbscan(reducedDim(altExp(tap, "alleleFrequency"), "UMAP"), eps = 0.9)
+
+

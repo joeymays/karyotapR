@@ -31,14 +31,14 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
     # read panel ID
     if(is.null(panel.id)){
-        barcodeProbe = "not specified"
-        grnaProbe = "not specified"
+        barcodeProbe <- "not specified"
+        grnaProbe <- "not specified"
     } else if(panel.id == "CO293"){
-        barcodeProbe = "AMPL205334"
-        grnaProbe = "AMPL205666"
+        barcodeProbe <- "AMPL205334"
+        grnaProbe <- "AMPL205666"
     } else if(panel.id == "CO261") {
-        barcodeProbe = "not specified"
-        grnaProbe = "not specified"
+        barcodeProbe <- "not specified"
+        grnaProbe <- "not specified"
     } else {
         stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL to set speciality probes manually."))
     }
@@ -101,8 +101,8 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     S4Vectors::metadata(tapestri.object)$mean.reads.per.cell.per.probe <- as.character(mean.reads)
 
     # apply panel ID probe shortcuts
-    tapestri.object@barcodeProbe = barcodeProbe
-    tapestri.object@grnaProbe = grnaProbe
+    tapestri.object@barcodeProbe <- barcodeProbe
+    tapestri.object@grnaProbe <- grnaProbe
 
     # if keeping only variants that passed thresholds
     if(filter.variants == T){
