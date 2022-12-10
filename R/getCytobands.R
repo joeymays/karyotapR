@@ -29,21 +29,18 @@ getCytobands <- function(TapestriExperiment, genome = "hg19"){
                               end = SingleCellExperiment::rowData(TapestriExperiment)$end.pos,
                               id = SingleCellExperiment::rowData(TapestriExperiment)$probe.id)
 
-    amplicon.gr <- getCytobands.df(amplicon.df, return.genomic.ranges = T)
+    cytoband.data <- getCytobands.df(amplicon.df, return.genomic.ranges = T)
+    cytoband.data <- as.data.frame(cytoband.data)
+    rownames(cytoband.data) <- cytoband.data$probe.id #overwrite to prevent loss
 
-    row.data <- SingleCellExperiment::rowData(TapestriExperiment)
-    amplicon.gr.matrix <- as.data.frame(S4Vectors::mcols(amplicon.gr))
-    amplicon.gr.matrix$probe.id <- rownames(amplicon.gr.matrix)
-    rownames(amplicon.gr.matrix) <- NULL
+    existing.amplicon.data <- as.data.frame(SingleCellExperiment::rowData(TapestriExperiment)) #get existing row data
 
-    amplicon.metadata <- merge(row.data, amplicon.gr.matrix, by = "probe.id", sort = F)
+    #reorder cytoband data
+    cytoband.data <- cytoband.data[rownames(existing.amplicon.data),]
 
-    if(any(amplicon.metadata$probe.id != rowData(TapestriExperiment)$probe.id)){
-        stop("Something wrong. rowData and new metadata don't line up.")
-    }
-
-    SummarizedExperiment::rowData(TapestriExperiment)$cytoband <- amplicon.metadata$cytoband
-    SummarizedExperiment::rowData(TapestriExperiment)$arm <- amplicon.metadata$arm
+    #add to row data
+    SummarizedExperiment::rowData(TapestriExperiment)$cytoband <- cytoband.data$cytoband
+    SummarizedExperiment::rowData(TapestriExperiment)$arm <- cytoband.data$arm
 
     return(TapestriExperiment)
 }
@@ -69,6 +66,7 @@ getCytobands.df <- function(input.df, return.genomic.ranges = F){
 
     S4Vectors::mcols(amplicon.gr)$arm <- chromosome.arms
     S4Vectors::mcols(amplicon.gr)$arm <- factor(chromosome.arms, unique(chromosome.arms))
+    S4Vectors::mcols(amplicon.gr)$probe.id <- names(amplicon.gr)
 
     if(return.genomic.ranges){
         return(amplicon.gr)
