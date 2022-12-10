@@ -119,9 +119,14 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
     if(return.table){
         return(result)
     } else {
-        # get and merge colData
-        cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
-        updated.cell.data <- merge(cell.data, result, by = "cell.barcode", all.x = T, sort = F)
+        # get existing colData
+        existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
+
+        # drop columns if already exist to allow overwriting
+        existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != colnames(result)[colnames(result) != "cell.barcode"])]
+
+        # merge result and existing colData
+        updated.cell.data <- merge(existing.cell.data, result, by = "cell.barcode", all.x = T, sort = F)
 
         # set NAs to 0
         ids <- setdiff(colnames(result), "cell.barcode")
@@ -171,8 +176,8 @@ callSampleLables <- function(TapestriExperiment, coldata.labels, sample.label = 
         }
 
         # subset colData
-        cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
-        coldata.subset <- cell.data[,coldata.labels]
+        existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
+        coldata.subset <- existing.cell.data[,coldata.labels]
 
         # check if numeric
         if(any(!apply(coldata.subset, 2, is.numeric))){
@@ -191,8 +196,11 @@ callSampleLables <- function(TapestriExperiment, coldata.labels, sample.label = 
             return(sample.calls)
         } else {
 
-            #add back into ColData
-            updated.cell.data <- merge(cell.data, sample.calls, by = "cell.barcode", all.x = T, sort = F)
+            # drop from existing data if already exist to allow overwriting
+            existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != colnames(sample.calls)[colnames(sample.calls) != "cell.barcode"])]
+
+            # merge result and existing colData
+            updated.cell.data <- merge(existing.cell.data, sample.calls, by = "cell.barcode", all.x = T, sort = F)
 
             # reorder to match colData
             rownames(updated.cell.data) <- updated.cell.data$cell.barcode

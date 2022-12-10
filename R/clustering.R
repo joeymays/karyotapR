@@ -194,18 +194,38 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
     dbscan.result <- dbscan::dbscan(dbscan.assay, eps = eps, ...)
     dbscan.result.clusters <- data.frame(cell.barcode = rownames(dbscan.assay), cluster = as.factor(dbscan.result$cluster))
 
+    ##
     # get and merge colData in main
-    cell.data <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment))
-    updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    existing.cell.data <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment))
+
+    # drop existing clusters if they exist to allow overwriting
+    existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != "cluster"), drop = F]
+
+    # merge result and existing colData
+    updated.cell.data <- merge(existing.cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+
+    # reorder to match colData
     rownames(updated.cell.data) <- updated.cell.data$cell.barcode
     updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)),]
+
+    # update TapestriExperiment
     SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
 
+    ##
     # get and merge colData in altExp
-    cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)))
-    updated.cell.data <- merge(cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    existing.cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)))
+
+    # drop existing clusters if they exist to allow overwriting
+    existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != "cluster"), drop = F]
+
+    # merge result and existing colData
+    updated.cell.data <- merge(existing.cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+
+    # reorder to match colData
     rownames(updated.cell.data) <- updated.cell.data$cell.barcode
     updated.cell.data <- updated.cell.data[rownames(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set))),]
+
+    # update TapestriExperiment
     SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(updated.cell.data)
 
     return(TapestriExperiment)

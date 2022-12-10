@@ -39,5 +39,6 @@ By default, ties are broken by choosing whichever label has the lowest index pos
 Samples with 0 counts for all labels are labeled "none".
 }
 \examples{
-\dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"), sample.label = "sample.grna")}
+\dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"),
+sample.label = "sample.grna")}
 }
