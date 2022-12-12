@@ -79,7 +79,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     # basic metrics
     read.counts.raw.colData$total.reads <- colSums(read.counts.raw) #total reads per cell
     read.counts.raw.rowData$total.reads <- rowSums(read.counts.raw) #total reads per probe
-    read.counts.raw.rowData$median.reads <- rowSums(read.counts.raw) #median reads per probe
+    read.counts.raw.rowData$median.reads <- apply(read.counts.raw, 1, median) #median reads per probe
     mean.reads <- round(mean(colMeans(read.counts.raw)), 2) #mean reads/cell/probe(or amplicon)
     message(paste("mean reads per cell per probe:", mean.reads))
 
