@@ -62,8 +62,12 @@ reducedDimPlot(exp3.subset, "umap", group.label = "cluster")
 colData(exp3.subset)$cluster <- fct_recode(colData(exp3.subset)$cluster, RPE = "1", L1 = "2", L2 = "3")
 colData(exp3.subset)$cluster <- fct_drop(colData(exp3.subset)$cluster)
 fct_count(colData(exp3.subset)$cluster)
-exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #0 filtered for exp 3
+summary(rowData(exp3.subset)$median.reads > 0)
+exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #1 probe filtered for exp 3
 exp3.subset <- normalizeCounts(exp3.subset)
+control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE")
+control.ploidy["chr10q", "ploidy"] <- 3
+exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, coldata.set = "cluster")
 
 # automatically filter out control medians == 0?
 
