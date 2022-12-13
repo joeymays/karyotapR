@@ -21,6 +21,7 @@ Imports:
     magrittr,
     methods,
     rhdf5,
+    rlang,
     S4Vectors,
     SummarizedExperiment,
     tibble,

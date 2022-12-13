@@ -105,6 +105,8 @@ getPloidy <- function(TapestriExperiment, control.ploidy, coldata.set = "cluster
 #' @param TapestriExperiment TapestriExperiment object.
 #' @param method Chr string indicating smoothing method. Supports median (default) or mean.
 #'
+#' @importFrom rlang .data
+#'
 #' @return TapestriExperiment object with smoothed ploidy values in altExp slot
 #' @export
 #'
@@ -128,11 +130,11 @@ smoothPloidy <- function(TapestriExperiment, method = "median"){
         tidyr::pivot_longer(cols = !tidyr::matches("probe.id"), names_to = "cell.barcode", values_to = "ploidy") %>%
         dplyr::left_join(as.data.frame(SummarizedExperiment::rowData(TapestriExperiment)[,c("probe.id", "chr", "arm")]), by = "probe.id")
 
-    smoothed.ploidy.chr <- ploidy.tidy %>% dplyr::group_by(cell.barcode, chr) %>% dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
-        tidyr::pivot_wider(id_cols = .data$chr, values_from = .data$smooth.ploidy, names_from = .data$cell.barcode) %>% tibble::column_to_rownames("chr")
+    smoothed.ploidy.chr <- ploidy.tidy %>% dplyr::group_by(.data$cell.barcode, .data$chr) %>% dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
+        tidyr::pivot_wider(id_cols = dplyr::all_of("chr"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>% tibble::column_to_rownames("chr")
 
     smoothed.ploidy.arm <- ploidy.tidy %>% dplyr::group_by(.data$cell.barcode, .data$arm) %>% dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
-        tidyr::pivot_wider(id_cols = .data$arm, values_from = .data$smooth.ploidy, names_from = .data$cell.barcode) %>% tibble::column_to_rownames("arm")
+        tidyr::pivot_wider(id_cols = dplyr::all_of("arm"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>% tibble::column_to_rownames("arm")
 
     discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
     discrete.ploidy.arm <- round(smoothed.ploidy.arm, 0)
