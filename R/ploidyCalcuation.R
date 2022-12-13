@@ -95,3 +95,85 @@ getPloidy <- function(TapestriExperiment, control.ploidy, coldata.set = "cluster
 
     return(TapestriExperiment)
 }
+
+#' Smooth Ploidy Values by Chromosome and Chromosome Arm
+#'
+#' `smoothPloidy()` takes ploidy values across probes and smooths them by median (default) for each chromosome and chromosome arm, resulting in one ploidy value per chromosome/arm per cell barcode.
+#' Values are then discretized into integers by conventional rounding.
+#' Results are stored as alternate experiments in the TapestriObject, with smoothPloidy and DiscretePloidy assays.
+#'
+#' @param TapestriExperiment TapestriExperiment object.
+#' @param method Chr string indicating smoothing method. Supports median (default) or mean.
+#'
+#' @return TapestriExperiment object with smoothed ploidy values in altExp slot
+#' @export
+#'
+#' @examples
+#' \dontrun{TapestriExperiment <- smoothPloidy(TapestriExperiment)}
+smoothPloidy <- function(TapestriExperiment, method = "median"){
+
+    method <- tolower(method)
+
+    if(method == "median"){
+        smooth.func <- stats::median
+    } else if(method == "mean"){
+        smooth.func <- mean
+    } else {
+        stop(paste0("method '", method, "' not recognized. Please use mean or median."))
+    }
+
+    ploidy.counts <- SummarizedExperiment::assay(TapestriExperiment, "ploidy")
+
+    ploidy.tidy <- ploidy.counts %>% as.data.frame() %>% tibble::rownames_to_column("probe.id")  %>%
+        tidyr::pivot_longer(cols = !tidyr::matches("probe.id"), names_to = "cell.barcode", values_to = "ploidy") %>%
+        dplyr::left_join(as.data.frame(SummarizedExperiment::rowData(TapestriExperiment)[,c("probe.id", "chr", "arm")]), by = "probe.id")
+
+    smoothed.ploidy.chr <- ploidy.tidy %>% dplyr::group_by(cell.barcode, chr) %>% dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
+        tidyr::pivot_wider(id_cols = .data$chr, values_from = .data$smooth.ploidy, names_from = .data$cell.barcode) %>% tibble::column_to_rownames("chr")
+
+    smoothed.ploidy.arm <- ploidy.tidy %>% dplyr::group_by(.data$cell.barcode, .data$arm) %>% dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
+        tidyr::pivot_wider(id_cols = .data$arm, values_from = .data$smooth.ploidy, names_from = .data$cell.barcode) %>% tibble::column_to_rownames("arm")
+
+    discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
+    discrete.ploidy.arm <- round(smoothed.ploidy.arm, 0)
+
+
+    smoothed.ploidy.chr <- SingleCellExperiment::SingleCellExperiment(list(smoothPloidy = smoothed.ploidy.chr,
+                                                                           DiscretePloidy = discrete.ploidy.chr))
+
+    smoothed.ploidy.arm <- SingleCellExperiment::SingleCellExperiment(list(smoothPloidy = smoothed.ploidy.arm,
+                                                                           DiscretePloidy = discrete.ploidy.arm))
+
+    smoothed.ploidy.chr <- .TapestriExperiment(smoothed.ploidy.chr)
+    smoothed.ploidy.arm <- .TapestriExperiment(smoothed.ploidy.arm)
+
+    SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByChrom", withDimnames = T) <- smoothed.ploidy.chr
+    SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByArm", withDimnames = T) <- smoothed.ploidy.arm
+
+    return(TapestriExperiment)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

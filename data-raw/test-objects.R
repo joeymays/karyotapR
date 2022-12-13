@@ -59,13 +59,13 @@ reducedDimPlot(exp3, "umap", group.label = "sample.grna")
 fct_count(colData(exp3)$cluster)
 exp3.subset <- exp3[,colData(exp3)$cluster %in% 1:3]
 reducedDimPlot(exp3.subset, "umap", group.label = "cluster")
-colData(exp3.subset)$cluster <- fct_recode(colData(exp3.subset)$cluster, RPE = "1", L1 = "2", L2 = "3")
+colData(exp3.subset)$cluster <- fct_recode(colData(exp3.subset)$cluster, RPE1 = "1", cellline1 = "2", cellline2 = "3")
 colData(exp3.subset)$cluster <- fct_drop(colData(exp3.subset)$cluster)
 fct_count(colData(exp3.subset)$cluster)
 summary(rowData(exp3.subset)$median.reads > 0)
 exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #1 probe filtered for exp 3
 exp3.subset <- normalizeCounts(exp3.subset)
-control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE")
+control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE1")
 control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, coldata.set = "cluster")
 
