@@ -59,14 +59,14 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
                                 ncol=length(tapestri.h5$'/assays/dna_read_counts/ca/id'),
                                 byrow = T))
 
-    read.counts.raw.colData <- S4Vectors::DataFrame(cell.barcode = tapestri.h5$'/assays/dna_read_counts/ra/barcode',
-                                                    row.names = tapestri.h5$'/assays/dna_read_counts/ra/barcode')
+    read.counts.raw.colData <- S4Vectors::DataFrame(cell.barcode = as.character(tapestri.h5$'/assays/dna_read_counts/ra/barcode'),
+                                                    row.names = as.character(tapestri.h5$'/assays/dna_read_counts/ra/barcode'))
 
-    read.counts.raw.rowData <- S4Vectors::DataFrame(probe.id = tapestri.h5$'/assays/dna_read_counts/ca/id',
+    read.counts.raw.rowData <- S4Vectors::DataFrame(probe.id = as.character(tapestri.h5$'/assays/dna_read_counts/ca/id'),
                                                     chr = tapestri.h5$'/assays/dna_read_counts/ca/CHROM',
-                                                    start.pos = tapestri.h5$'/assays/dna_read_counts/ca/start_pos',
-                                                    end.pos = tapestri.h5$'/assays/dna_read_counts/ca/end_pos',
-                                                    row.names = tapestri.h5$'/assays/dna_read_counts/ca/id')
+                                                    start.pos = as.numeric(tapestri.h5$'/assays/dna_read_counts/ca/start_pos'),
+                                                    end.pos = as.numeric(tapestri.h5$'/assays/dna_read_counts/ca/end_pos'),
+                                                    row.names = as.character(tapestri.h5$'/assays/dna_read_counts/ca/id'))
 
     chr.order <- getChrOrder(read.counts.raw.rowData$chr) #reorder amplicon metadata by chromosome order
 
