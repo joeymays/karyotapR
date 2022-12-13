@@ -21,5 +21,8 @@ getTidyPloidy <- function(TapestriExperiment){
 
     ploidy.tidy <- ploidy.tidy %>% dplyr::left_join(as.data.frame(SummarizedExperiment::rowData(TapestriExperiment)), by = "probe.id")
 
+    #order factor by probe.id order for plotting
+    ploidy.tidy$probe.id <- factor(ploidy.tidy$probe.id, levels = SummarizedExperiment::rowData(TapestriExperiment)$probe.id)
+
     return(ploidy.tidy)
 }

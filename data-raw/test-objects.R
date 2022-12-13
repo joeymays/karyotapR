@@ -69,8 +69,6 @@ control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE")
 control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, coldata.set = "cluster")
 
-# automatically filter out control medians == 0?
-
 
 
 
