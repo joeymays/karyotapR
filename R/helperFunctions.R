@@ -12,14 +12,14 @@ corner <- function(input.mat){
 
 getTidyPloidy <- function(TapestriExperiment){
 
-    ploidy.tidy <- assay(TapestriExperiment, "ploidy")
+    ploidy.tidy <- SummarizedExperiment::assay(TapestriExperiment, "ploidy")
 
-    ploidy.tidy <- ploidy.tidy %>% as.data.frame() %>% rownames_to_column("probe.id") %>% as_tibble() %>%
-        pivot_longer(cols = !matches("probe.id"), names_to = "cell.barcode", values_to = "ploidy")
+    ploidy.tidy <- as.data.frame(ploidy.tidy) %>% tibble::rownames_to_column("probe.id") %>% dplyr::as_tibble() %>%
+        tidyr::pivot_longer(cols = !tidyr::matches("probe.id"), names_to = "cell.barcode", values_to = "ploidy")
 
-    ploidy.tidy <- ploidy.tidy %>% left_join(as.data.frame(colData(TapestriExperiment)), by = "cell.barcode")
+    ploidy.tidy <- ploidy.tidy %>% dplyr::left_join(as.data.frame(SummarizedExperiment::colData(TapestriExperiment)), by = "cell.barcode")
 
-    ploidy.tidy <- ploidy.tidy %>% left_join(as.data.frame(rowData(TapestriExperiment)), by = "probe.id")
+    ploidy.tidy <- ploidy.tidy %>% dplyr::left_join(as.data.frame(SummarizedExperiment::rowData(TapestriExperiment)), by = "probe.id")
 
     return(ploidy.tidy)
 }
