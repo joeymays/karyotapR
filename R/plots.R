@@ -131,3 +131,68 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", l
 }
 
 
+#' Generate Assay Heatmap
+#'
+#' Use to create a heatmap of matrix data in a TapestriObject.
+#' Heatmaps are generated as transposed representations of the matrix.
+#'
+#' @param TapestriExperiment TapestriExperiment object
+#' @param alt.exp Chr string indicating altExp slot to pull from. `NULL` (default) pulls from top-level/main experiment.
+#' @param assay Chr string indicating assay slot to pull from. `NULL` (default) pulls from first-indexed assay (often "counts").
+#' @param split.col.by Chr string indicating RowData field to split columns by, usually "chr" or "arm". Default NULL.
+#' @param split.row.by Chr sting indicating ColData field
+#'
+#' @return A ComplexHeatmap object
+#' @export
+#'
+#' @examples
+#' \dontrun{assayHeatmap(TapestriExperiment, alt.exp = "smoothedPloidyByArm",
+#' assay = "discretePloidy", split.row.by = "cluster")}
+assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL){
+
+    assay <- .SelectAssay(TapestriExperiment, alt.exp, assay) #check call validity
+
+    tidy.data <- getTidyData(TapestriExperiment, alt.exp, assay)
+
+    hm.matrix <- tidy.data %>% dplyr::select("feature.id", "cell.barcode", {{ assay }}) %>%
+        tidyr::pivot_wider(id_cols = "feature.id", names_from = "cell.barcode", values_from = {{ assay }}) %>%
+        tibble::column_to_rownames("feature.id")
+
+    if(is.null(split.col.by)){
+        show.column.names <- T
+        column.split <- NULL
+    } else {
+        show.column.names <- F
+        column.split <- tidy.data %>% dplyr::select("feature.id", {{split.col.by}}) %>% dplyr::distinct() %>% dplyr::pull({{split.col.by}})
+    }
+
+    if(is.null(split.row.by)){
+        row.split <- NULL
+    } else {
+        row.split <- tidy.data %>% dplyr::select("cell.barcode", {{split.row.by}}) %>% dplyr::distinct() %>% dplyr::pull({{split.row.by}})
+    }
+
+    hm <- ComplexHeatmap::Heatmap(matrix = t(hm.matrix),
+                                  cluster_rows = T,
+                                  cluster_row_slices = F,
+                                  show_row_names = F,
+                                  show_row_dend = F,
+                                  row_split = row.split,
+                                  row_title_gp = grid::gpar(fontsize = 10),
+                                  #
+                                  cluster_columns = F,
+                                  show_column_names = show.column.names,
+                                  column_names_side = "top",
+                                  show_column_dend = F,
+                                  column_split = column.split,
+                                  column_title_gp = grid::gpar(fontsize = 8),
+                                  column_names_gp = grid::gpar(fontsize = 10),
+                                  column_title_rot = 90,
+                                  column_gap = unit(0, "mm"),
+                                  #
+                                  name = assay,
+                                  border = T)
+
+    return(hm)
+
+}
