@@ -4,7 +4,12 @@
 \alias{getTidyData}
 \title{Get tidy-style data from TapestriExperiment objects}
 \usage{
-getTidyData(TapestriExperiment, alt.exp = NULL, assay = NULL)
+getTidyData(
+  TapestriExperiment,
+  alt.exp = NULL,
+  assay = NULL,
+  feature.id.as.factor = T
+)
 }
 \arguments{
 \item{TapestriExperiment}{A TapestriExperiment object}
@@ -12,6 +17,8 @@ getTidyData(TapestriExperiment, alt.exp = NULL, assay = NULL)
 \item{alt.exp}{Chr string indicating altExp slot to pull from. \code{NULL} (default) pulls from top-level/main experiment.}
 
 \item{assay}{Chr string indicating assay slot to pull from. \code{NULL} (default) pulls from first-indexed assay (often "counts").}
+
+\item{feature.id.as.factor}{Logical indicating whether feature.id column should be coerced into a factor. In practice, used to preserve order for downstream plotting. Default T.}
 }
 \value{
 A tibble of tidy data with corresponding metadata from colData and rowData.
@@ -20,6 +27,7 @@ A tibble of tidy data with corresponding metadata from colData and rowData.
 \code{getTidyData()} pulls the matrix from the indicated assay and/or altExp slot(s), and morphs it into tidy format.
 ColData from the top-level/main experiment is merged.
 RowData from the indicated assay and/or altExp slot(s) is merged.
+Attempts are made to sort by "chr" and "start.pos" columns if they are present in order to
 }
 \examples{
 \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}

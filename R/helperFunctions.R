@@ -26,16 +26,18 @@ corner <- function(input.mat){
 #' `getTidyData()` pulls the matrix from the indicated assay and/or altExp slot(s), and morphs it into tidy format.
 #' ColData from the top-level/main experiment is merged.
 #' RowData from the indicated assay and/or altExp slot(s) is merged.
+#' Attempts are made to sort by "chr" and "start.pos" columns if they are present in order to
 #'
 #' @param TapestriExperiment A TapestriExperiment object
 #' @param alt.exp Chr string indicating altExp slot to pull from. `NULL` (default) pulls from top-level/main experiment.
 #' @param assay Chr string indicating assay slot to pull from. `NULL` (default) pulls from first-indexed assay (often "counts").
+#' @param feature.id.as.factor Logical indicating whether feature.id column should be coerced into a factor. In practice, used to preserve order for downstream plotting. Default T.
 #'
 #' @return A tibble of tidy data with corresponding metadata from colData and rowData.
 #' @export
 #'
 #' @examples \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}
-getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL){
+getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, feature.id.as.factor = T){
 
     if(is.null(alt.exp)){
         target.exp <- TapestriExperiment
@@ -63,6 +65,18 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL){
     tidy.data <- tidy.data %>% dplyr::left_join(rowdata.to.join,
                                                 by = "feature.id",
                                                 suffix = c(".bc", ".feature"))
+
+    # attempt to sort by chr and start.pos if present
+    if(all(c("chr", "start.pos") %in% colnames(tidy.data))){
+        tidy.data <- tidy.data %>% dplyr::arrange(.data$chr, .data$start.pos)
+    } else if("chr" %in% colnames(tidy.data)){
+        tidy.data <- tidy.data %>% dplyr::arrange(.data$chr)
+    }
+
+    # make feature.id a factor to enable sorting in visualization
+    if(feature.id.as.factor){
+        tidy.data$feature.id <- factor(tidy.data$feature.id, levels = unique(tidy.data$feature.id))
+    }
 
     return(tidy.data)
 }

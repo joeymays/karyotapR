@@ -41,6 +41,7 @@ reducedDimPlot(tap2, "umap", group.label = "sample.grna")
 
 
 library(tidyverse)
+load_all()
 tap.file <- "~/Documents/data-and-analyses/tapestri/data/Exp003-20220808-CO293/run20220808-02-panelCO293-ref20220419.dna.h5"
 bam.file <- "~/Documents/data-and-analyses/tapestri/data/Exp003-20220808-CO293/run20220808-02-panelCO293-ref20220419.tube1.cells.bam"
 barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3"), sequences = c("TGGATATATGGACCGCATTG", "ACGGAGGCTAAGCGTCGCAA", "TATTTACAGGGACAATACCG", "CGGTAGAATAAGCTGTACCG", "ACTCTTGCTGTGGCATTTTC"))
@@ -69,6 +70,21 @@ control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE1")
 control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, coldata.set = "cluster")
 exp3.subset <- smoothPloidy(exp3.subset)
+
+
+getTidyData(exp3.subset)
+getTidyData(exp3.subset, alt.exp = "alleleFrequency")
+getTidyData(exp3.subset, alt.exp = "chrYCounts")
+getTidyData(exp3.subset, alt.exp = "smoothedPloidyByChrom")
+
+
+
+
+
+
+
+
+
 
 
 
