@@ -21,19 +21,48 @@ corner <- function(input.mat){
     print(input.mat[1:row.out, 1:col.out])
 }
 
-getTidyPloidy <- function(TapestriExperiment){
+#' Get tidy-style data from TapestriExperiment objects
+#'
+#' `getTidyData()` pulls the matrix from the indicated assay and/or altExp slot(s), and morphs it into tidy format.
+#' ColData from the top-level/main experiment is merged.
+#' RowData from the indicated assay and/or altExp slot(s) is merged.
+#'
+#' @param TapestriExperiment A TapestriExperiment object
+#' @param alt.exp Chr string indicating altExp slot to pull from. `NULL` (default) pulls from top-level/main experiment.
+#' @param assay Chr string indicating assay slot to pull from. `NULL` (default) pulls from first-indexed assay (often "counts").
+#'
+#' @return A tibble of tidy data with corresponding metadata from colData and rowData.
+#' @export
+#'
+#' @examples \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}
+getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL){
 
-    ploidy.tidy <- SummarizedExperiment::assay(TapestriExperiment, "ploidy")
+    if(is.null(alt.exp)){
+        target.exp <- TapestriExperiment
+    } else {
+        target.exp <- altExp(TapestriExperiment, alt.exp)
+    }
 
-    ploidy.tidy <- as.data.frame(ploidy.tidy) %>% tibble::rownames_to_column("probe.id") %>% dplyr::as_tibble() %>%
-        tidyr::pivot_longer(cols = !tidyr::matches("probe.id"), names_to = "cell.barcode", values_to = "ploidy")
+    if(is.null(assay)){
+        assay <- SummarizedExperiment::assayNames(target.exp)[1]
+    } else if(!assay %in% SummarizedExperiment::assayNames(target.exp)){
+        stop(paste0("assay '", assay, "' not found. Available assays are:\n",
+                    paste0(SummarizedExperiment::assayNames(target.exp), collapse = ", ")))
+    }
 
-    ploidy.tidy <- ploidy.tidy %>% dplyr::left_join(as.data.frame(SummarizedExperiment::colData(TapestriExperiment)), by = "cell.barcode")
+    tidy.data <- SummarizedExperiment::assay(target.exp, assay)
 
-    ploidy.tidy <- ploidy.tidy %>% dplyr::left_join(as.data.frame(SummarizedExperiment::rowData(TapestriExperiment)), by = "probe.id")
+    tidy.data <- as.data.frame(tidy.data) %>% tibble::rownames_to_column("feature.id") %>% dplyr::as_tibble() %>%
+        tidyr::pivot_longer(cols = !tidyr::matches("feature.id"), names_to = "cell.barcode", values_to = assay)
 
-    #order factor by probe.id order for plotting
-    ploidy.tidy$probe.id <- factor(ploidy.tidy$probe.id, levels = SummarizedExperiment::rowData(TapestriExperiment)$probe.id)
+    tidy.data <- tidy.data %>% dplyr::left_join(as.data.frame(SummarizedExperiment::colData(TapestriExperiment)), by = "cell.barcode")
 
-    return(ploidy.tidy)
+    # get rowdata and add rownames as a column to target for join with feature.id
+    rowdata.to.join <- as.data.frame(SummarizedExperiment::rowData(target.exp)) %>% tibble::rownames_to_column("feature.id")
+
+    tidy.data <- tidy.data %>% dplyr::left_join(rowdata.to.join,
+                                                by = "feature.id",
+                                                suffix = c(".bc", ".feature"))
+
+    return(tidy.data)
 }

@@ -68,7 +68,7 @@ exp3.subset <- normalizeCounts(exp3.subset)
 control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE1")
 control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, coldata.set = "cluster")
-
+exp3.subset <- smoothPloidy(exp3.subset)
 
 
 
