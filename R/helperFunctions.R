@@ -80,3 +80,24 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
 
     return(tidy.data)
 }
+
+.SelectAssay <- function(TapestriExperiment, alt.exp = NULL, assay = NULL){
+
+    if(is.null(alt.exp)){
+        target.exp <- TapestriExperiment
+    } else {
+        target.exp <- altExp(TapestriExperiment, alt.exp)
+    }
+
+    if(is.null(assay)){
+        assay <- SummarizedExperiment::assayNames(target.exp)[1]
+    } else if(!assay %in% SummarizedExperiment::assayNames(target.exp)){
+        stop(paste0("assay '", assay, "' not found. Available assays are:\n",
+                    paste0(SummarizedExperiment::assayNames(target.exp), collapse = ", ")))
+    }
+
+    return(assay)
+}
+
+
+
