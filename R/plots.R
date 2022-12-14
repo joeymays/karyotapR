@@ -85,9 +85,9 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x ="", labs.y ="", 
 #' @import ggplot2
 #'
 #' @examples
-#'\dontrun{countBoxPlot(TapestriExperiment, "chrYCounts", assay = "counts",
+#'\dontrun{assayBoxPlot(TapestriExperiment, "chrYCounts", assay = "counts",
 #'split.features = T, coldata.set = "cluster")}
-countBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", log.y = T, split.features = F, coldata.set = NULL){
+assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", log.y = T, split.features = F, coldata.set = NULL){
 
     if(is.null(alt.exp)){
         counts.to.plot <- SummarizedExperiment::assay(TapestriExperiment, assay)
@@ -129,4 +129,5 @@ countBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", l
     return(g1)
 
 }
+
 
