@@ -1,3 +1,14 @@
+#' Glimpse the top corner of a matrix
+#'
+#' Outputs up to 5 rows and columns of the input matrix object to get a quick look without filling the console.
+#'
+#' @param input.mat a matrix-like object
+#'
+#' @return matrix-like object matching input class
+#' @export
+#'
+#' @examples
+#' \dontrun{corner(assay(TapestriObject))}
 corner <- function(input.mat){
     if(nrow(input.mat) > 4){
         row.out = 5
