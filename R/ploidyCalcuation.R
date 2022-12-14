@@ -140,11 +140,11 @@ smoothPloidy <- function(TapestriExperiment, method = "median"){
     discrete.ploidy.arm <- round(smoothed.ploidy.arm, 0)
 
 
-    smoothed.ploidy.chr <- SingleCellExperiment::SingleCellExperiment(list(smoothPloidy = smoothed.ploidy.chr,
-                                                                           DiscretePloidy = discrete.ploidy.chr))
+    smoothed.ploidy.chr <- SingleCellExperiment::SingleCellExperiment(list(smoothedPloidy = smoothed.ploidy.chr,
+                                                                           discretePloidy = discrete.ploidy.chr))
 
-    smoothed.ploidy.arm <- SingleCellExperiment::SingleCellExperiment(list(smoothPloidy = smoothed.ploidy.arm,
-                                                                           DiscretePloidy = discrete.ploidy.arm))
+    smoothed.ploidy.arm <- SingleCellExperiment::SingleCellExperiment(list(smoothedPloidy = smoothed.ploidy.arm,
+                                                                           discretePloidy = discrete.ploidy.arm))
 
     smoothed.ploidy.chr <- .TapestriExperiment(smoothed.ploidy.chr)
     smoothed.ploidy.arm <- .TapestriExperiment(smoothed.ploidy.arm)
