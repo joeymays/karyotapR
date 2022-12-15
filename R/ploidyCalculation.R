@@ -59,7 +59,7 @@ getPloidy <- function(TapestriExperiment, control.ploidy, coldata.set = "cluster
     }
 
     if(any(!unique(control.ploidy$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[,coldata.set]))){
-        stop(paste0("control.ploidy sample.label elements not found in colData. Check control.ploidy for errors."))
+        stop(paste0("control.ploidy sample.label elements not found in colData. Check control.ploidy."))
     }
 
     counts.mat <- SummarizedExperiment::assay(TapestriExperiment, "normcounts")
@@ -78,7 +78,7 @@ getPloidy <- function(TapestriExperiment, control.ploidy, coldata.set = "cluster
         return(probe.median)
     }
 
-    probe.medians <- lapply(1:nrow(probe.table), getProbeMedian)
+    probe.medians <- lapply(seq_len(nrow(probe.table)), getProbeMedian)
     probe.medians <- unlist(probe.medians)
     names(probe.medians) <- probe.table$probe.id
 

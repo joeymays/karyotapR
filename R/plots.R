@@ -169,10 +169,10 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
         tibble::column_to_rownames("feature.id")
 
     if(is.null(split.col.by)){
-        show.column.names <- T
+        show.column.names <- TRUE
         column.split <- NULL
     } else {
-        show.column.names <- F
+        show.column.names <- FALSE
         column.split <- tidy.data %>% dplyr::select("feature.id", {{split.col.by}}) %>% dplyr::distinct() %>% dplyr::pull({{split.col.by}})
     }
 
@@ -189,7 +189,7 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
             dplyr::pull({{annotate.row.by}}) %>% tibble::enframe(name = NULL, value = {{annotate.row.by}}) %>% as.data.frame()
 
         n.colors <- length(unique(row.annotation.data[!is.na(row.annotation.data[,1]),1]))
-        color.vector <- viridisLite::viridis(n.colors + 1)[1:n.colors]
+        color.vector <- viridisLite::viridis(n.colors + 1)[seq_len(length(n.colors))]
         names(color.vector) <- unique(row.annotation.data[!is.na(row.annotation.data[,1]),1])
         color.list <- list(color.vector)
         names(color.list)[1] <- annotate.row.by
@@ -212,17 +212,17 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
     }
 
     hm <- ComplexHeatmap::Heatmap(matrix = t(hm.matrix),
-                                  cluster_rows = T,
-                                  cluster_row_slices = F,
-                                  show_row_names = F,
-                                  show_row_dend = F,
+                                  cluster_rows = TRUE,
+                                  cluster_row_slices = FALSE,
+                                  show_row_names = FALSE,
+                                  show_row_dend = FALSE,
                                   row_split = row.split,
                                   row_title_gp = grid::gpar(fontsize = 10),
                                   #
-                                  cluster_columns = F,
+                                  cluster_columns = FALSE,
                                   show_column_names = show.column.names,
                                   column_names_side = "top",
-                                  show_column_dend = F,
+                                  show_column_dend = FALSE,
                                   column_split = column.split,
                                   column_title_gp = grid::gpar(fontsize = 8),
                                   column_names_gp = grid::gpar(fontsize = 10),
@@ -231,7 +231,7 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
                                   #
                                   left_annotation = row.annotation,
                                   name = assay,
-                                  border = T,
+                                  border = TRUE,
                                   col = hm.col,
                                   ...)
 

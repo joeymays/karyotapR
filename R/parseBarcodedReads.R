@@ -67,12 +67,12 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
     })
 
     # stop if no matches
-    if(all(sapply(sequence.match.counts, is.null))){
+    if(all(vapply(sequence.match.counts, is.null, FUN.VALUE = logical(1)))){
         stop("No matches found for any barcode IDs.")
     }
 
     # remove NULL items from sequence.match.counts, removes barcode IDs with no matches
-    sequence.match.counts <- sequence.match.counts[!sapply(sequence.match.counts, is.null)]
+    sequence.match.counts <- sequence.match.counts[!vapply(sequence.match.counts, is.null, logical(1))]
 
     # combine count tables
     sequence.match.counts <- Reduce(function(x, y) merge(x, y, by="cell.barcode", all = T), sequence.match.counts)

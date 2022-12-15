@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- runPCA(TapestriExperiment, sd.min.threshold = 35)}
-runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.threshold = 0, center = T, scale. = T){
+runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.threshold = 0, center = TRUE, scale. = TRUE){
 
     if(!feature.set %in% altExpNames(TapestriExperiment)){
         stop("feature.set not found in alternative experiments.")
@@ -59,7 +59,7 @@ PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", pcs
     prop.vector <- S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, feature.set))$pca.proportion.of.variance
     ylim <- c(0,1)
 
-    simpleLinePlot(x = 1:length(prop.vector), y = prop.vector, labs.title = "Variance Explained by Principal Components",
+    simpleLinePlot(x = seq_len(length(prop.vector)), y = prop.vector, labs.title = "Variance Explained by Principal Components",
                    labs.x = "Principal Component", labs.y = "Percent Variance Explained", xlim = c(min(pcs), max(pcs)), ylim = ylim)
 
 }
@@ -77,7 +77,7 @@ PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", pcs
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- runUMAP(TapestriExperiment, input.dims = 1:3)}
-runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca.dims = T, input.dims = NULL, ...){
+runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca.dims = TRUE, input.dims = NULL, ...){
 
     if(!feature.set %in% altExpNames(TapestriExperiment)){
         stop("feature.set not found in alternative experiments.")
@@ -199,10 +199,10 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
     existing.cell.data <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment))
 
     # drop existing clusters if they exist to allow overwriting
-    existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != "cluster"), drop = F]
+    existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != "cluster"), drop = FALSE]
 
     # merge result and existing colData
-    updated.cell.data <- merge(existing.cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    updated.cell.data <- merge(existing.cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = TRUE, sort = FALSE)
 
     # reorder to match colData
     rownames(updated.cell.data) <- updated.cell.data$cell.barcode
@@ -216,10 +216,10 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
     existing.cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)))
 
     # drop existing clusters if they exist to allow overwriting
-    existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != "cluster"), drop = F]
+    existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != "cluster"), drop = FALSE]
 
     # merge result and existing colData
-    updated.cell.data <- merge(existing.cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = T, sort = F)
+    updated.cell.data <- merge(existing.cell.data, dbscan.result.clusters, by = "cell.barcode", all.x = TRUE, sort = FALSE)
 
     # reorder to match colData
     rownames(updated.cell.data) <- updated.cell.data$cell.barcode
