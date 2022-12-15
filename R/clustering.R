@@ -47,21 +47,37 @@ runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.t
 #'
 #' @param TapestriExperiment TapestriExperiment object
 #' @param feature.set Chr string identifying the altExp feature set PCA was performed on. Default "alleleFrequency".
-#' @param pcs Numeric vector, indicating indices of PCs to plot. Default 1:10.
+#' @param n.pcs Numeric vector, indicating number of PCs to plot, starting at 1. Default 10.
 #'
 #' @return ggplot knee plot
 #' @export
 #'
 #' @examples
 #' \dontrun{PCAKneePlot(TapestriExperiment, pcs = 1:5)}
-PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", pcs = 1:10){
+PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", n.pcs = 10){
 
-    prop.vector <- S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, feature.set))$pca.proportion.of.variance
-    ylim <- c(0,1)
+    knee.df <- data.frame(prop.variance = S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, feature.set))$pca.proportion.of.variance)
+    knee.df$cumulative.prop <- cumsum(knee.df$prop.variance)
+    knee.df$index <- seq_len(nrow(knee.df))
 
-    simpleLinePlot(x = seq_len(length(prop.vector)), y = prop.vector, labs.title = "Variance Explained by Principal Components",
-                   labs.x = "Principal Component", labs.y = "Percent Variance Explained", xlim = c(min(pcs), max(pcs)), ylim = ylim)
+    if(n.pcs > nrow(knee.df)){
+        warning("n.pcs exceeds number of principal components.")
+        n.pcs <- nrow(knee.df)
+    }
 
+    knee.df <- knee.df[seq_len(n.pcs), ]
+    knee.df$index <- as.factor(knee.df$index)
+
+    g1 <- ggplot(knee.df) +
+        geom_line(aes(x = index, y = prop.variance, group = 1)) +
+        geom_point(aes(x = index, y = prop.variance)) +
+        geom_col(aes(x = index, y = cumulative.prop), alpha = 0.3, width = 0.5) +
+        theme_bw() +
+        coord_cartesian(ylim = c(0,1)) +
+        theme(panel.grid.minor.x = element_blank()) +
+        labs(x = "Principal Component", y = "Percent/cumulative Variance Explained", title = "Variance Explained by Principal Components")
+
+    return(g1)
 }
 
 #' Cluster Data by UMAP

@@ -76,15 +76,3 @@ getTidyData(exp3.subset)
 getTidyData(exp3.subset, alt.exp = "alleleFrequency")
 getTidyData(exp3.subset, alt.exp = "chrYCounts")
 getTidyData(exp3.subset, alt.exp = "smoothedPloidyByChrom")
-
-
-
-
-
-
-
-
-
-
-
-
