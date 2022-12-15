@@ -4,7 +4,7 @@
 \name{CNweaveR-package}
 \alias{CNweaveR}
 \alias{CNweaveR-package}
-\title{CNweaveR: CNV Analysis for Tapestri}
+\title{CNweaveR: DNA CNV Analysis for Custom Genome-Wide Tapestri Panels}
 \description{
 This package enables basic analysis of CNVs using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system.
 }

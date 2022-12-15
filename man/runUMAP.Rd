@@ -7,7 +7,7 @@
 runUMAP(
   TapestriExperiment,
   feature.set = "alleleFrequency",
-  use.pca.dims = T,
+  use.pca.dims = TRUE,
   input.dims = NULL,
   ...
 )

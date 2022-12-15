@@ -8,8 +8,8 @@ runPCA(
   TapestriExperiment,
   feature.set = "alleleFrequency",
   sd.min.threshold = 0,
-  center = T,
-  scale. = T
+  center = TRUE,
+  scale. = TRUE
 )
 }
 \arguments{
