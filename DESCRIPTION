@@ -1,5 +1,5 @@
 Package: CNweaveR
-Title: CNV Analysis for Tapestri
+Title: DNA CNV Analysis for Custom Genome-Wide Tapestri Panels
 Version: 0.0.0.9000
 Authors@R:
     person("Joseph", "Mays", , "josephcmays@gmail.com", role = c("aut", "cre"),
@@ -25,6 +25,7 @@ Imports:
     rhdf5,
     rlang,
     S4Vectors,
+    stats,
     SummarizedExperiment,
     tibble,
     tidyr,
