@@ -4,14 +4,14 @@
 \alias{PCAKneePlot}
 \title{Plot PCA Variance Knee}
 \usage{
-PCAKneePlot(TapestriExperiment, feature.set = "alleleFrequency", pcs = 1:10)
+PCAKneePlot(TapestriExperiment, feature.set = "alleleFrequency", n.pcs = 10)
 }
 \arguments{
 \item{TapestriExperiment}{TapestriExperiment object}
 
 \item{feature.set}{Chr string identifying the altExp feature set PCA was performed on. Default "alleleFrequency".}
 
-\item{pcs}{Numeric vector, indicating indices of PCs to plot. Default 1:10.}
+\item{n.pcs}{Numeric vector, indicating number of PCs to plot, starting at 1. Default 10.}
 }
 \value{
 ggplot knee plot

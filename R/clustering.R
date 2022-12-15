@@ -56,7 +56,7 @@ runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.t
 #' \dontrun{PCAKneePlot(TapestriExperiment, pcs = 1:5)}
 PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", n.pcs = 10){
 
-    knee.df <- data.frame(prop.variance = S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, feature.set))$pca.proportion.of.variance)
+    knee.df <- data.frame("prop.variance" = S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, feature.set))$pca.proportion.of.variance)
     knee.df$cumulative.prop <- cumsum(knee.df$prop.variance)
     knee.df$index <- seq_len(nrow(knee.df))
 
@@ -69,9 +69,9 @@ PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", n.p
     knee.df$index <- as.factor(knee.df$index)
 
     g1 <- ggplot(knee.df) +
-        geom_line(aes(x = index, y = prop.variance, group = 1)) +
-        geom_point(aes(x = index, y = prop.variance)) +
-        geom_col(aes(x = index, y = cumulative.prop), alpha = 0.3, width = 0.5) +
+        geom_line(aes(x = .data$index, y = .data$prop.variance, group = 1)) +
+        geom_point(aes(x = .data$index, y = .data$prop.variance)) +
+        geom_col(aes(x = .data$index, y = .data$cumulative.prop), alpha = 0.3, width = 0.5) +
         theme_bw() +
         coord_cartesian(ylim = c(0,1)) +
         theme(panel.grid.minor.x = element_blank()) +
