@@ -140,7 +140,8 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", l
 #' @param alt.exp Chr string indicating altExp slot to pull from. `NULL` (default) pulls from top-level/main experiment.
 #' @param assay Chr string indicating assay slot to pull from. `NULL` (default) pulls from first-indexed assay (often "counts").
 #' @param split.col.by Chr string indicating RowData field to split columns by, usually "chr" or "arm". Default NULL.
-#' @param split.row.by Chr sting indicating ColData field
+#' @param split.row.by Chr string indicating ColData field to split rows by, usually "cluster". Default NULL.
+#' @param annotate.row.by Chr string indicating ColData field to use as annotation. Default NULL.
 #'
 #' @return A ComplexHeatmap object
 #' @export
@@ -148,7 +149,7 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", l
 #' @examples
 #' \dontrun{assayHeatmap(TapestriExperiment, alt.exp = "smoothedPloidyByArm",
 #' assay = "discretePloidy", split.row.by = "cluster")}
-assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL){
+assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL, annotate.row.by = NULL){
 
     assay <- .SelectAssay(TapestriExperiment, alt.exp, assay) #check call validity
 
@@ -172,6 +173,21 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
         row.split <- tidy.data %>% dplyr::select("cell.barcode", {{split.row.by}}) %>% dplyr::distinct() %>% dplyr::pull({{split.row.by}})
     }
 
+    if(is.null(annotate.row.by)){
+        row.annotation <- NULL
+    } else {
+        row.annotation.data <- tidy.data %>% dplyr::select("cell.barcode", {{annotate.row.by}}) %>% dplyr::distinct() %>%
+            dplyr::pull({{annotate.row.by}}) %>% tibble::enframe(name = NULL, value = {{annotate.row.by}}) %>% as.data.frame()
+
+        n.colors <- length(unique(row.annotation.data[!is.na(row.annotation.data[,1]),1]))
+        color.vector <- viridisLite::viridis(n.colors + 1)[1:n.colors]
+        names(color.vector) <- unique(row.annotation.data[!is.na(row.annotation.data[,1]),1])
+        color.list <- list(color.vector)
+        names(color.list)[1] <- annotate.row.by
+        row.annotation <- ComplexHeatmap::rowAnnotation(df = row.annotation.data, col = color.list, border = T, na_col = "white",
+                                                        annotation_name_side = "top", annotation_name_gp = grid::gpar(fontsize = 8))
+    }
+
     hm <- ComplexHeatmap::Heatmap(matrix = t(hm.matrix),
                                   cluster_rows = T,
                                   cluster_row_slices = F,
@@ -190,6 +206,7 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
                                   column_title_rot = 90,
                                   column_gap = unit(0, "mm"),
                                   #
+                                  left_annotation = row.annotation,
                                   name = assay,
                                   border = T)
 

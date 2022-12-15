@@ -9,7 +9,8 @@ assayHeatmap(
   alt.exp = NULL,
   assay = NULL,
   split.col.by = NULL,
-  split.row.by = NULL
+  split.row.by = NULL,
+  annotate.row.by = NULL
 )
 }
 \arguments{
@@ -21,7 +22,9 @@ assayHeatmap(
 
 \item{split.col.by}{Chr string indicating RowData field to split columns by, usually "chr" or "arm". Default NULL.}
 
-\item{split.row.by}{Chr sting indicating ColData field}
+\item{split.row.by}{Chr string indicating ColData field to split rows by, usually "cluster". Default NULL.}
+
+\item{annotate.row.by}{Chr string indicating ColData field to use as annotation. Default NULL.}
 }
 \value{
 A ComplexHeatmap object
