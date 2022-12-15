@@ -206,9 +206,11 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
     }
     message(paste0("Finding clusters with ", dim.reduction, " using Alt Experiment: ", feature.set))
 
-    dbscan.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"), "UMAP")
+    dbscan.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, feature.set), "UMAP")
     dbscan.result <- dbscan::dbscan(dbscan.assay, eps = eps, ...)
     dbscan.result.clusters <- data.frame(cell.barcode = rownames(dbscan.assay), cluster = as.factor(dbscan.result$cluster))
+
+    dbscan.result.clusters$cluster <- .FactorNumericalOrder(dbscan.result.clusters$cluster)
 
     ##
     # get and merge colData in main
@@ -247,3 +249,11 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
     return(TapestriExperiment)
 }
 
+.FactorNumericalOrder <- function(f){
+
+    f <- stats::reorder(f,f,FUN=length)
+    f <- factor(f, levels = rev(levels(f)))
+    levels(f) <- seq_len(length(levels(f)))
+
+    return(f)
+}
