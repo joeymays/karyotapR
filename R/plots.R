@@ -133,8 +133,12 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", l
 
 #' Generate Assay Heatmap
 #'
-#' Use to create a heatmap of matrix data in a TapestriObject.
+#' Use to create a heatmap of matrix data in a TapestriObject using the `ComplexHeatmap` package.
 #' Heatmaps are generated as transposed representations of the matrix.
+#'
+#' `color.preset` presets:
+#' ploidy: `circlize::colorRamp2(c(0,1,2,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))`; Blue-white-red gradient from 0-2-4. 4 to 8+ is black.
+#' ploidy.denoise: `circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))`; Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diplod cells.
 #'
 #' @param TapestriExperiment TapestriExperiment object
 #' @param alt.exp Chr string indicating altExp slot to pull from. `NULL` (default) pulls from top-level/main experiment.
@@ -142,14 +146,19 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", l
 #' @param split.col.by Chr string indicating RowData field to split columns by, usually "chr" or "arm". Default NULL.
 #' @param split.row.by Chr string indicating ColData field to split rows by, usually "cluster". Default NULL.
 #' @param annotate.row.by Chr string indicating ColData field to use as annotation. Default NULL.
+#' @param color.preset Chr string indicating color preset to use to color heatmap, either ploidy or ploidy.denoise (see Details). Supersedes `color.custom`. `NULL` (default) uses default `ComplexHeatmap` color.
+#' @param color.custom Color mapping function given by `circlize::colorRamp2()`. `color.preset` must be `NULL`.
+#' @param ... Additional parameters to pass to `[ComplexHeatmap::Heatmap()]`.
 #'
 #' @return A ComplexHeatmap object
 #' @export
 #'
+#' @seealso \link[ComplexHeatmap]{Heatmap}
+#'
 #' @examples
 #' \dontrun{assayHeatmap(TapestriExperiment, alt.exp = "smoothedPloidyByArm",
 #' assay = "discretePloidy", split.row.by = "cluster")}
-assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL, annotate.row.by = NULL){
+assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL, annotate.row.by = NULL, color.preset = NULL, color.custom = NULL, ...){
 
     assay <- .SelectAssay(TapestriExperiment, alt.exp, assay) #check call validity
 
@@ -188,6 +197,20 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
                                                         annotation_name_side = "top", annotation_name_gp = grid::gpar(fontsize = 8))
     }
 
+    if(is.null(color.preset)){
+        if(is.null(color.custom)){
+            hm.col <- NULL
+        } else {
+            hm.col <- color.custom
+        }
+    } else if(color.preset == "ploidy"){
+        hm.col <- circlize::colorRamp2(c(0,1,2,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))
+    } else if(color.preset == "ploidy.denoise"){
+        hm.col <- circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))
+    } else {
+        hm.col <- color.custom
+    }
+
     hm <- ComplexHeatmap::Heatmap(matrix = t(hm.matrix),
                                   cluster_rows = T,
                                   cluster_row_slices = F,
@@ -208,7 +231,9 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
                                   #
                                   left_annotation = row.annotation,
                                   name = assay,
-                                  border = T)
+                                  border = T,
+                                  col = hm.col,
+                                  ...)
 
     return(hm)
 

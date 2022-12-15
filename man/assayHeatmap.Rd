@@ -10,7 +10,10 @@ assayHeatmap(
   assay = NULL,
   split.col.by = NULL,
   split.row.by = NULL,
-  annotate.row.by = NULL
+  annotate.row.by = NULL,
+  color.preset = NULL,
+  color.custom = NULL,
+  ...
 )
 }
 \arguments{
@@ -25,15 +28,29 @@ assayHeatmap(
 \item{split.row.by}{Chr string indicating ColData field to split rows by, usually "cluster". Default NULL.}
 
 \item{annotate.row.by}{Chr string indicating ColData field to use as annotation. Default NULL.}
+
+\item{color.preset}{Chr string indicating color preset to use to color heatmap, either ploidy or ploidy.denoise (see Details). Supersedes \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} color.}
+
+\item{color.custom}{Color mapping function given by \code{circlize::colorRamp2()}. \code{color.preset} must be \code{NULL}.}
+
+\item{...}{Additional parameters to pass to \verb{[ComplexHeatmap::Heatmap()]}.}
 }
 \value{
 A ComplexHeatmap object
 }
 \description{
-Use to create a heatmap of matrix data in a TapestriObject.
+Use to create a heatmap of matrix data in a TapestriObject using the \code{ComplexHeatmap} package.
 Heatmaps are generated as transposed representations of the matrix.
+}
+\details{
+\code{color.preset} presets:
+ploidy: \code{circlize::colorRamp2(c(0,1,2,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))}; Blue-white-red gradient from 0-2-4. 4 to 8+ is black.
+ploidy.denoise: \code{circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))}; Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diplod cells.
 }
 \examples{
 \dontrun{assayHeatmap(TapestriExperiment, alt.exp = "smoothedPloidyByArm",
 assay = "discretePloidy", split.row.by = "cluster")}
+}
+\seealso{
+\link[ComplexHeatmap]{Heatmap}
 }
