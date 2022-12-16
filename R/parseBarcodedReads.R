@@ -123,7 +123,7 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
         existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
 
         # drop columns if already exist to allow overwriting
-        existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != colnames(result)[colnames(result) != "cell.barcode"])]
+        existing.cell.data <- existing.cell.data[,!colnames(existing.cell.data) %in% setdiff(colnames(result), "cell.barcode")]
 
         # merge result and existing colData
         updated.cell.data <- merge(existing.cell.data, result, by = "cell.barcode", all.x = T, sort = F)
@@ -197,7 +197,7 @@ callSampleLables <- function(TapestriExperiment, coldata.labels, sample.label = 
         } else {
 
             # drop from existing data if already exist to allow overwriting
-            existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != colnames(sample.calls)[colnames(sample.calls) != "cell.barcode"])]
+            existing.cell.data <- existing.cell.data[,!colnames(existing.cell.data) %in% setdiff(colnames(sample.calls), "cell.barcode")]
 
             # merge result and existing colData
             updated.cell.data <- merge(existing.cell.data, sample.calls, by = "cell.barcode", all.x = T, sort = F)
