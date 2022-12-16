@@ -70,6 +70,8 @@ control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE1")
 control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, coldata.set = "cluster")
 exp3.subset <- smoothPloidy(exp3.subset)
+assayHeatmap(exp3.subset, assay = "ploidy", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
+
 
 
 getTidyData(exp3.subset)
