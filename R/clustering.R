@@ -3,8 +3,9 @@
 #' Runs a set of features through PCA and saves results to reducedDims slot of input TapestriObject.
 #'
 #' @param TapestriExperiment TapestriExperiment object
-#' @param feature.set Chr string identifying the altExp feature set to perform PCA on. Default "alleleFrequency".
-#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Default 0.
+#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
+#' @param assay Chr string indicating assay to use. NULL (default) selects first listed assay.
+#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to NULL if not using for alleleFrequency slot. Default NULL.
 #' @param center Logical, whether the variables should be shifted to be zero centered. See [stats::prcomp()].
 #' @param scale. Logical, whether the variables should be scaled to have unit variance before the analysis takes place. See [stats::prcomp()].
 #'
@@ -12,31 +13,46 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{TapestriExperiment <- runPCA(TapestriExperiment, sd.min.threshold = 35)}
-runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.threshold = 0, center = TRUE, scale. = TRUE){
+#' \dontrun{TapestriExperiment <- runPCA(TapestriExperiment,
+#' alt.exp = "alleleFrequency", sd.min.threshold = 35)}
+runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL, sd.min.threshold = NULL, center = TRUE, scale. = TRUE){
 
-    if(!feature.set %in% altExpNames(TapestriExperiment)){
-        stop("feature.set not found in alternative experiments.")
-    }
-    message(paste0("Running PCA on Alt Experiment: ", feature.set))
+    assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
+
+    message(paste("Running PCA on:", alt.exp, assay))
 
     # filter by sd.min.threshold
-    feature.set.filter <- SingleCellExperiment::rowData(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"))$allelefreq.sd >= sd.min.threshold
-
-    if(all(!feature.set.filter)){
-        stop("All features filtered out. Reduce threshold.")
+    if(!is.null(sd.min.threshold)){
+        feature.set.filter <- SingleCellExperiment::rowData(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$allelefreq.sd >= sd.min.threshold
+        if(all(!feature.set.filter)){
+            stop("All features filtered out. Reduce threshold.")
+        }
     }
 
-    pca.assay <- SummarizedExperiment::assay(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"), feature.set, withDimnames = T)
-    pca.assay <- pca.assay[feature.set.filter,] #subset data
-    pca.assay <- t(pca.assay) #transpose matrix
+    pca.assay <- getTidyData(TapestriExperiment, alt.exp = alt.exp, assay = assay, feature.id.as.factor = F)
+    pca.assay <- pca.assay %>% tidyr::pivot_wider(id_cols = "feature.id", names_from = "cell.barcode", values_from = {{assay}}) %>% tibble::column_to_rownames("feature.id") %>%
+        as.data.frame()
+
+    if(!is.null(sd.min.threshold)){
+        pca.assay <- pca.assay[feature.set.filter,]
+    }
+
+    #transpose matrix
+    pca.assay <- t(pca.assay)
 
     # run PCA
     pca.result <- stats::prcomp(pca.assay, center = center, scale. = scale.)
 
-    # save PCA to object
-    SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"), "PCA", withDimnames = T) <- pca.result$x
-    S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, "alleleFrequency"))$pca.proportion.of.variance <- summary(pca.result)$importance["Proportion of Variance", ]
+    # save PCA to main experiment
+    if(is.null(alt.exp)){
+        SingleCellExperiment::reducedDim(TapestriExperiment, "PCA", withDimnames = T) <- pca.result$x
+        S4Vectors::metadata(TapestriExperiment)$pca.proportion.of.variance <- summary(pca.result)$importance["Proportion of Variance", ]
+        S4Vectors::metadata(TapestriExperiment)$pca.assay <- assay
+    } else { # save PCA to alt experiment
+        SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, alt.exp), "PCA", withDimnames = T) <- pca.result$x
+        S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$pca.proportion.of.variance <- summary(pca.result)$importance["Proportion of Variance", ]
+        S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$pca.assay <- assay
+    }
 
     return(TapestriExperiment)
 }
@@ -46,7 +62,7 @@ runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.t
 #' Draws knee plot of PCA variance explained to determine which PCs to include for downstream applications e.g. clustering.
 #'
 #' @param TapestriExperiment TapestriExperiment object
-#' @param feature.set Chr string identifying the altExp feature set PCA was performed on. Default "alleleFrequency".
+#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
 #' @param n.pcs Numeric vector, indicating number of PCs to plot, starting at 1. Default 10.
 #'
 #' @return ggplot knee plot
@@ -54,9 +70,16 @@ runPCA <- function(TapestriExperiment, feature.set = "alleleFrequency", sd.min.t
 #'
 #' @examples
 #' \dontrun{PCAKneePlot(TapestriExperiment, pcs = 1:5)}
-PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", n.pcs = 10){
+PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs = 10){
 
-    knee.df <- data.frame("prop.variance" = S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, feature.set))$pca.proportion.of.variance)
+    if(is.null(alt.exp)){
+        knee.df <- data.frame("prop.variance" = S4Vectors::metadata(TapestriExperiment)$pca.proportion.of.variance)
+        chart.title <- S4Vectors::metadata(TapestriExperiment)$pca.assay
+    } else {
+        knee.df <- data.frame("prop.variance" = S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$pca.proportion.of.variance)
+        chart.title <- S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$pca.assay
+    }
+
     knee.df$cumulative.prop <- cumsum(knee.df$prop.variance)
     knee.df$index <- seq_len(nrow(knee.df))
 
@@ -75,7 +98,7 @@ PCAKneePlot <- function(TapestriExperiment, feature.set = "alleleFrequency", n.p
         theme_bw() +
         coord_cartesian(ylim = c(0,1)) +
         theme(panel.grid.minor.x = element_blank()) +
-        labs(x = "Principal Component", y = "Percent/cumulative Variance Explained", title = "Variance Explained by Principal Components")
+        labs(x = "Principal Component", y = "Percent/cumulative Variance Explained", title = "Variance Explained by Principal Components", subtitle = chart.title)
 
     return(g1)
 }

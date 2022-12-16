@@ -6,8 +6,9 @@
 \usage{
 runPCA(
   TapestriExperiment,
-  feature.set = "alleleFrequency",
-  sd.min.threshold = 0,
+  alt.exp = "alleleFrequency",
+  assay = NULL,
+  sd.min.threshold = NULL,
   center = TRUE,
   scale. = TRUE
 )
@@ -15,9 +16,11 @@ runPCA(
 \arguments{
 \item{TapestriExperiment}{TapestriExperiment object}
 
-\item{feature.set}{Chr string identifying the altExp feature set to perform PCA on. Default "alleleFrequency".}
+\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
 
-\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Default 0.}
+\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay.}
+
+\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to NULL if not using for alleleFrequency slot. Default NULL.}
 
 \item{center}{Logical, whether the variables should be shifted to be zero centered. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
 
@@ -30,5 +33,6 @@ TapestriExperiment with PCA results saved to reducedDims slot of altExp, and pro
 Runs a set of features through PCA and saves results to reducedDims slot of input TapestriObject.
 }
 \examples{
-\dontrun{TapestriExperiment <- runPCA(TapestriExperiment, sd.min.threshold = 35)}
+\dontrun{TapestriExperiment <- runPCA(TapestriExperiment,
+alt.exp = "alleleFrequency", sd.min.threshold = 35)}
 }
