@@ -6,20 +6,23 @@
 \usage{
 runUMAP(
   TapestriExperiment,
-  feature.set = "alleleFrequency",
+  alt.exp = "alleleFrequency",
+  assay = NULL,
   use.pca.dims = TRUE,
-  input.dims = NULL,
+  pca.dims = NULL,
   ...
 )
 }
 \arguments{
 \item{TapestriExperiment}{TapestriExperiment object}
 
-\item{feature.set}{Chr string identifying the altExp feature set to perform UMAP on. Default "alleleFrequency".}
+\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
 
-\item{use.pca.dims}{Logical, only TRUE supported. Default TRUE.}
+\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay. Npt used when \code{use.pca.dims = TRUE}.}
 
-\item{input.dims}{Numeric vector, indicating indices of PCs to use in UMAP.}
+\item{use.pca.dims}{Logical, if TRUE, uses experiment PCA, otherwise uses assay data. Default TRUE.}
+
+\item{pca.dims}{Numeric vector, indicating indices of PCs to use in UMAP. NULL (default) uses all dimensions.}
 
 \item{...}{Additional parameters to pass to umap, e.g. for configuration (see \code{\link[umap:umap.defaults]{umap::umap.defaults}}).}
 }

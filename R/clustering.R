@@ -106,28 +106,43 @@ PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs =
 #' Cluster Data by UMAP
 #'
 #' @param TapestriExperiment TapestriExperiment object
-#' @param feature.set Chr string identifying the altExp feature set to perform UMAP on. Default "alleleFrequency".
-#' @param input.dims Numeric vector, indicating indices of PCs to use in UMAP.
+#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
+#' @param assay Chr string indicating assay to use. NULL (default) selects first listed assay. Npt used when `use.pca.dims = TRUE`.
+#' @param use.pca.dims Logical, if TRUE, uses experiment PCA, otherwise uses assay data. Default TRUE.
+#' @param pca.dims Numeric vector, indicating indices of PCs to use in UMAP. NULL (default) uses all dimensions.
 #' @param ... Additional parameters to pass to umap, e.g. for configuration (see [`umap::umap.defaults`]).
-#' @param use.pca.dims Logical, only TRUE supported. Default TRUE.
 #'
 #' @return TapestriExperiment with UMAP embeddings saved to reducedDims slot of altExp.
 #' @export
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- runUMAP(TapestriExperiment, input.dims = 1:3)}
-runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca.dims = TRUE, input.dims = NULL, ...){
+runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL, use.pca.dims = TRUE, pca.dims = NULL, ...){
 
-    if(!feature.set %in% altExpNames(TapestriExperiment)){
-        stop("feature.set not found in alternative experiments.")
-    }
-    message(paste0("Running UMAP on Alt Experiment: ", feature.set))
+    assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
-    # subset dims
+    message(paste("Running UMAP on:", alt.exp, assay))
+
+    # PCA
     if(use.pca.dims){
-    umap.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, feature.set), type = "PCA")[,input.dims]
+
+        if(is.null(alt.exp)){
+            umap.assay <- SingleCellExperiment::reducedDim(TapestriExperiment, type = "PCA")
+        } else {
+            umap.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, alt.exp), type = "PCA")
+        }
+
+        if(is.null(pca.dims)){
+            warning("pca.dims not set. Running on all PCs.")
+        } else {
+            umap.assay <- umap.assay[,pca.dims]
+        }
     } else {
-        stop(paste0("Set use.pca.dims to TRUE, nothing else currently supported."))
+
+        if(is.null(alt.exp)){
+            umap.assay <- SummarizedExperiment::assay(TapestriExperiment, assay)
+        } else
+            umap.assay <- SummarizedExperiment::assay(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))
     }
 
     # run UMAP
@@ -135,8 +150,14 @@ runUMAP <- function(TapestriExperiment, feature.set = "alleleFrequency", use.pca
     umap.embeddings <- as.data.frame(umap.result$layout)
     colnames(umap.embeddings) <- c("umap.1", "umap.2")
 
-    # save UMAP to object
-    SingleCellExperiment::reducedDim(altExp(TapestriExperiment, feature.set), "UMAP", withDimnames = T) <- umap.embeddings
+    # save UMAP to main experiment
+    if(is.null(alt.exp)){
+        SingleCellExperiment::reducedDim(TapestriExperiment, "UMAP", withDimnames = T) <- umap.embeddings
+        S4Vectors::metadata(TapestriExperiment)$"umap.assay" <- ifelse(use.pca.dims, "PCA", assay)
+    } else { # save UMAP to alt experiment
+        SingleCellExperiment::reducedDim(altExp(TapestriExperiment, alt.exp), "UMAP", withDimnames = T) <- umap.embeddings
+        S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$"umap.assay" <- ifelse(use.pca.dims, "PCA", assay)
+    }
 
     return(TapestriExperiment)
 }
