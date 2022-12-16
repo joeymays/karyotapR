@@ -7,7 +7,7 @@
 assayBoxPlot(
   TapestriExperiment,
   alt.exp = NULL,
-  assay = "counts",
+  assay = NULL,
   log.y = T,
   split.features = F,
   coldata.set = NULL
@@ -18,11 +18,11 @@ assayBoxPlot(
 
 \item{alt.exp}{Chr string indicating altExp to use, NULL (default) uses main experiment.}
 
-\item{assay}{Chr string indicating assay to use. Default "counts".}
+\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay.}
 
-\item{log.y}{Logical, if TRUE, scales counts by \code{log1p()}. Default TRUE.}
+\item{log.y}{Logical, if TRUE, scales data by \code{log1p()}. Default TRUE.}
 
-\item{split.features}{Logical, if TRUE, splits plot by rowData features.}
+\item{split.features}{Logical, if TRUE, splits plot by rowData features. Default FALSE.}
 
 \item{coldata.set}{Chr string indicating colData column to use for X axis categories. Default NULL.}
 }
@@ -30,7 +30,7 @@ assayBoxPlot(
 ggplot object
 }
 \description{
-Draws boxplot of count data. Useful for visualizing altExp count data.
+Draws boxplot of matrix data. Useful for visualizing altExp count data.
 }
 \examples{
 \dontrun{assayBoxPlot(TapestriExperiment, "chrYCounts", assay = "counts",

@@ -75,8 +75,8 @@ control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, coldata.set = "cluster")
 exp3.subset <- smoothPloidy(exp3.subset)
 assayHeatmap(exp3.subset, assay = "ploidy", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
-
-
+assayHeatmap(exp3.subset, alt.exp = "smoothedPloidyByChrom", assay = "discretePloidy", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
+assayBoxPlot(exp3.subset, alt.exp = "chrYCounts", split.features = T, coldata.set = "cluster")
 
 getTidyData(exp3.subset)
 getTidyData(exp3.subset, alt.exp = "alleleFrequency")

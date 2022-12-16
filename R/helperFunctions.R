@@ -81,6 +81,7 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
     return(tidy.data)
 }
 
+#checks if assay is available. If not, lists available assays in error. If assay = NULL, sets assay to first assay in exp or alt exp.
 .SelectAssay <- function(TapestriExperiment, alt.exp = NULL, assay = NULL){
 
     if(is.null(alt.exp)){

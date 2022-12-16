@@ -70,13 +70,13 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x ="", labs.y ="", 
 
 #' Boxplot of Counts
 #'
-#' Draws boxplot of count data. Useful for visualizing altExp count data.
+#' Draws boxplot of matrix data. Useful for visualizing altExp count data.
 #'
 #' @param TapestriExperiment TapestriExperiment object
 #' @param alt.exp Chr string indicating altExp to use, NULL (default) uses main experiment.
-#' @param assay Chr string indicating assay to use. Default "counts".
-#' @param log.y Logical, if TRUE, scales counts by `log1p()`. Default TRUE.
-#' @param split.features Logical, if TRUE, splits plot by rowData features.
+#' @param assay Chr string indicating assay to use. NULL (default) selects first listed assay.
+#' @param log.y Logical, if TRUE, scales data by `log1p()`. Default TRUE.
+#' @param split.features Logical, if TRUE, splits plot by rowData features. Default FALSE.
 #' @param coldata.set Chr string indicating colData column to use for X axis categories. Default NULL.
 #'
 #' @return ggplot object
@@ -87,47 +87,37 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x ="", labs.y ="", 
 #' @examples
 #'\dontrun{assayBoxPlot(TapestriExperiment, "chrYCounts", assay = "counts",
 #'split.features = T, coldata.set = "cluster")}
-assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = "counts", log.y = T, split.features = F, coldata.set = NULL){
+assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = T, split.features = F, coldata.set = NULL){
 
-    if(is.null(alt.exp)){
-        counts.to.plot <- SummarizedExperiment::assay(TapestriExperiment, assay)
-    } else {
-        counts.to.plot <- SummarizedExperiment::assay(SingleCellExperiment::altExp(TapestriExperiment, alt.exp), assay)
-    }
+    assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
-    if(is.null(coldata.set)){
-        to.join <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment)[,c("cell.barcode"), drop = F])
-    } else {
-        to.join <- as.data.frame(SummarizedExperiment::colData(TapestriExperiment)[,c("cell.barcode", {{ coldata.set }})])
-    }
-
-    counts.to.plot <- counts.to.plot %>% as.data.frame() %>% tibble::rownames_to_column("probe.id") %>%
-        tidyr::pivot_longer(cols = !dplyr::matches("probe.id"), values_to = "counts", names_to = "cell.barcode") %>%
-        dplyr::left_join(to.join, by = "cell.barcode")
+    tidy.data <- getTidyData(TapestriExperiment, alt.exp, assay)
 
     if(log.y){
-        counts.to.plot$counts <- log1p(counts.to.plot$counts)
-        y.label <- "log(counts + 1)"
+        tidy.data[,assay] <- log1p(tidy.data[,assay, drop = T])
+        y.label <- paste0("log(", assay, ") + 1")
     } else {
-        y.label <- "counts"
+        y.label <- assay
     }
 
     if(is.null(coldata.set)){
-        g1 <- ggplot(counts.to.plot, aes(y = counts))
+        g1 <- ggplot(tidy.data, aes(y = .data[[assay]]))
     } else {
-        g1 <- ggplot(counts.to.plot, aes(x = .data[[coldata.set]], y = counts))
+        g1 <- ggplot(tidy.data, aes(x = .data[[coldata.set]], y = .data[[assay]]))
     }
 
     if(split.features){
-        g1 <- g1 + geom_boxplot(aes(fill = .data$probe.id))
+        g1 <- g1 + geom_boxplot(aes(fill = .data$feature.id))
     } else {
         g1 <- g1 + geom_boxplot()
     }
 
-    g1 <- g1 + labs(y = y.label, title = alt.exp, subtitle = assay) + theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.border = element_rect(colour = "black", fill=NA, size=1))
+    g1 <- g1 + labs(y = y.label, title = alt.exp, subtitle = assay) +
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 45, hjust = 1),
+              panel.border = element_rect(colour = "black", fill=NA, size=1))
 
     return(g1)
-
 }
 
 
