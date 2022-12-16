@@ -69,7 +69,8 @@ moveNonGenomeProbes <- function(TapestriExperiment, move.non.genome.probes = c("
     }
 
     if(all(feature.type == "CNV")){
-        stop("No non-genomic probe IDs found. Aborting.")
+        message("No non-genomic probe IDs found.")
+        return(TapestriExperiment)
     }
 
     TapestriExperiment <- SingleCellExperiment::splitAltExps(TapestriExperiment, feature.type, ref = "CNV")
