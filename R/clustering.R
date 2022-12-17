@@ -162,59 +162,50 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
     return(TapestriExperiment)
 }
 
-#' Scatter plot for reduced dimensions
+#' Scatter plot for dimensional reduction results.
 #'
 #' @param TapestriExperiment TapestriExperiment object
 #' @param dim.reduction Chr, which dimension reduction to plot, either "PCA" or "UMAP".
-#' @param pc.x Numeric, if `dim.reduction == "PCA"`, index of PC to plot. Default 1 for PC1.
-#' @param pc.y Numeric, if `dim.reduction == "PCA"`, index of PC to plot. Default 2 for PC2.
-#' @param feature.set Chr string identifying the altExp feature set to plot. Default "alleleFrequency".
 #' @param group.label Chr string indicating colData column for coloring samples. Default NULL.
+#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
+#' @param dim.x Numeric, index of dimensional reduction data to plot on X axis. Default 1.
+#' @param dim.y Numeric, index of dimensional reduction data to plot on Y axis. Default 2.
 #'
 #' @return ggplot scatter plot
 #' @export
 #'
 #' @examples
 #' \dontrun{reducedDimPlot(TapestriExperiment, dim.reduction = "pca")}
-reducedDimPlot <- function(TapestriExperiment, dim.reduction, pc.x = 1, pc.y = 2, feature.set = "alleleFrequency", group.label = NULL){
+reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
+                           dim.reduction, dim.x = 1, dim.y = 2, group.label = NULL){
 
     dim.reduction <- toupper(dim.reduction)
-    group.label.data <- NULL
 
-    if(!is.null(group.label)){
-
-        if(group.label %in% colnames(colData(TapestriExperiment))){
-            group.label.data <- colData(TapestriExperiment)[,group.label]
-        } else {
-            stop(paste0("group.label '", group.label, "' not found in colData."))
-        }
-    }
-
-    if(dim.reduction == "PCA"){
-
-        to.plot <- reducedDim(altExp(TapestriExperiment, feature.set), "PCA")
-
-        g1 <- simpleScatterPlot(x = to.plot[,pc.x],
-                                y = to.plot[,pc.y],
-                                labs.x = paste0("PC", pc.x),
-                                labs.y = paste0("PC", pc.y),
-                                labs.title = "PCA")
-
-    } else if(dim.reduction == "UMAP"){
-
-        to.plot <- reducedDim(altExp(TapestriExperiment, feature.set), "UMAP")
-
-        g1 <- simpleScatterPlot(x = to.plot[,1],
-                                y = to.plot[,2],
-                                labs.x = "UMAP1",
-                                labs.y = "UMAP2",
-                                labs.title = "UMAP",
-                                group.label = group.label.data,
-                                group.label.legend = group.label)
-
+    if(is.null(alt.exp)){
+        to.plot <- reducedDim(TapestriExperiment, dim.reduction)
+        to.plot <- to.plot[,c(dim.x, dim.y)]
     } else {
-        stop(paste0("dim.reduction", dim.reduction, "not found in object"))
+        to.plot <- reducedDim(altExp(TapestriExperiment, alt.exp), dim.reduction)
+        to.plot <- to.plot[,c(dim.x, dim.y)]
     }
+
+    if(is.null(group.label)){
+        group.label.data <- NULL
+    } else {
+        #check for group label
+        if(!group.label %in% colnames(colData(TapestriExperiment))){
+            stop("group.label not found in colData.")
+        }
+        group.label.data <- colData(TapestriExperiment)[,group.label]
+    }
+
+    g1 <- simpleScatterPlot(x = to.plot[,1],
+                            y = to.plot[,2],
+                            labs.title = dim.reduction,
+                            labs.x = colnames(to.plot)[1],
+                            labs.y = colnames(to.plot[2]),
+                            group.label = group.label.data,
+                            group.label.legend = group.label)
 
     return(g1)
 
