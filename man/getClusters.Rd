@@ -2,24 +2,30 @@
 % Please edit documentation in R/clustering.R
 \name{getClusters}
 \alias{getClusters}
-\title{Cluster data}
+\title{Cluster 2D data}
 \usage{
 getClusters(
   TapestriExperiment,
-  feature.set = "alleleFrequency",
+  alt.exp = "alleleFrequency",
   dim.reduction = "UMAP",
   eps = 0.8,
+  dim.1 = 1,
+  dim.2 = 2,
   ...
 )
 }
 \arguments{
 \item{TapestriExperiment}{TapestriExperiment object}
 
-\item{feature.set}{Chr string identifying the altExp feature set to use Default "alleleFrequency".}
+\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
 
 \item{dim.reduction}{Chr string indicating the reduced dimension set to use. Default "UMAP".}
 
 \item{eps}{Numeric, dbscan eps parameter. Change to adjust cluster granularity. See \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. Default 0.8.}
+
+\item{dim.1}{Numeric, index of dimensional reduction dimension to use. Default 1.}
+
+\item{dim.2}{Numeric, index of dimensional reduction dimension to use. Default 2.}
 
 \item{...}{Additional parameters to pass to \code{dbscan::dbscan()}.}
 }

@@ -211,15 +211,17 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 
 }
 
-#' Cluster data
+#' Cluster 2D data
 #'
 #' Cluster data using dbscan method. Uses UMAP reduced dimensions to partition data into clusters and saves the clusters to colData.
 #'
 #' @param TapestriExperiment TapestriExperiment object
-#' @param feature.set Chr string identifying the altExp feature set to use Default "alleleFrequency".
+#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
 #' @param dim.reduction Chr string indicating the reduced dimension set to use. Default "UMAP".
 #' @param eps Numeric, dbscan eps parameter. Change to adjust cluster granularity. See [`dbscan::dbscan()`]. Default 0.8.
 #' @param ... Additional parameters to pass to `dbscan::dbscan()`.
+#' @param dim.1 Numeric, index of dimensional reduction dimension to use. Default 1.
+#' @param dim.2 Numeric, index of dimensional reduction dimension to use. Default 2.
 #'
 #' @return TapestriExperiment object with updated colData
 #' @export
@@ -228,20 +230,22 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- getClusters(TapestriExperiment, dim.reduction = "UMAP", eps = 0.8)}
-getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim.reduction = "UMAP", eps = 0.8, ...){
+getClusters <- function(TapestriExperiment, alt.exp = "alleleFrequency", dim.reduction = "UMAP", eps = 0.8, dim.1 = 1, dim.2 = 2, ...){
 
     dim.reduction <- toupper(dim.reduction)
 
-    if(dim.reduction != "UMAP"){
-        stop("dim.reduction currently only supports UMAP.")
+    .SelectAssay(TapestriExperiment, alt.exp = alt.exp)
+
+    message(paste("Finding clusters using on:", alt.exp, dim.reduction))
+
+    if(is.null(alt.exp)){
+        dbscan.assay <- SingleCellExperiment::reducedDim(TapestriExperiment, dim.reduction)
+        dbscan.assay <- dbscan.assay[,c(dim.1, dim.2)]
+    } else {
+        dbscan.assay <- SingleCellExperiment::reducedDim(altExp(TapestriExperiment, alt.exp), dim.reduction)
+        dbscan.assay <- dbscan.assay[,c(dim.1, dim.2)]
     }
 
-    if(!feature.set %in% altExpNames(TapestriExperiment)){
-        stop("feature.set not found in alternative experiments.")
-    }
-    message(paste0("Finding clusters with ", dim.reduction, " using Alt Experiment: ", feature.set))
-
-    dbscan.assay <- SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, feature.set), "UMAP")
     dbscan.result <- dbscan::dbscan(dbscan.assay, eps = eps, ...)
     dbscan.result.clusters <- data.frame(cell.barcode = rownames(dbscan.assay), cluster = as.factor(dbscan.result$cluster))
 
@@ -266,7 +270,7 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
 
     ##
     # get and merge colData in altExp
-    existing.cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)))
+    existing.cell.data <- as.data.frame(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, alt.exp)))
 
     # drop existing clusters if they exist to allow overwriting
     existing.cell.data <- existing.cell.data[,which(colnames(existing.cell.data) != "cluster"), drop = FALSE]
@@ -276,10 +280,10 @@ getClusters <- function(TapestriExperiment, feature.set = "alleleFrequency", dim
 
     # reorder to match colData
     rownames(updated.cell.data) <- updated.cell.data$cell.barcode
-    updated.cell.data <- updated.cell.data[rownames(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set))),]
+    updated.cell.data <- updated.cell.data[rownames(SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))),]
 
     # update TapestriExperiment
-    SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, feature.set)) <- S4Vectors::DataFrame(updated.cell.data)
+    SummarizedExperiment::colData(SingleCellExperiment::altExp(TapestriExperiment, alt.exp)) <- S4Vectors::DataFrame(updated.cell.data)
 
     return(TapestriExperiment)
 }
