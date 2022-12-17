@@ -179,13 +179,15 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
 reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
                            dim.reduction, dim.x = 1, dim.y = 2, group.label = NULL){
 
+    .SelectAssay(TapestriExperiment, alt.exp = alt.exp)
+
     dim.reduction <- toupper(dim.reduction)
 
     if(is.null(alt.exp)){
-        to.plot <- reducedDim(TapestriExperiment, dim.reduction)
+        to.plot <- SingleCellExperiment::reducedDim(TapestriExperiment, dim.reduction)
         to.plot <- to.plot[,c(dim.x, dim.y)]
     } else {
-        to.plot <- reducedDim(altExp(TapestriExperiment, alt.exp), dim.reduction)
+        to.plot <- SingleCellExperiment::reducedDim(altExp(TapestriExperiment, alt.exp), dim.reduction)
         to.plot <- to.plot[,c(dim.x, dim.y)]
     }
 
@@ -193,10 +195,10 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
         group.label.data <- NULL
     } else {
         #check for group label
-        if(!group.label %in% colnames(colData(TapestriExperiment))){
+        if(!group.label %in% colnames(SummarizedExperiment::colData(TapestriExperiment))){
             stop("group.label not found in colData.")
         }
-        group.label.data <- colData(TapestriExperiment)[,group.label]
+        group.label.data <- SummarizedExperiment::colData(TapestriExperiment)[,group.label]
     }
 
     g1 <- simpleScatterPlot(x = to.plot[,1],
