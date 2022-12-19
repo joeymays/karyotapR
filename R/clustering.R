@@ -133,7 +133,7 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
         }
 
         if(is.null(pca.dims)){
-            warning("pca.dims not set. Running on all PCs.")
+            stop("pca.dims not set.")
         } else {
             umap.assay <- umap.assay[,pca.dims]
         }
