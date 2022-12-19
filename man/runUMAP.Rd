@@ -18,7 +18,7 @@ runUMAP(
 
 \item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
 
-\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay. Npt used when \code{use.pca.dims = TRUE}.}
+\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay. Not used when \code{use.pca.dims = TRUE}.}
 
 \item{use.pca.dims}{Logical, if TRUE, uses experiment PCA, otherwise uses assay data. Default TRUE.}
 

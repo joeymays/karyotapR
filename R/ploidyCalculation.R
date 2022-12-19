@@ -33,7 +33,7 @@ generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cl
 #'
 #' `getPloidy()` transforms the normalized count matrix of a TapestriExperiment object into ploidy values based on a reference subset of cell barcodes and given ploidy value (e.g. 2 for diploid).
 #' This is practically used to set the median ploidy of a control, usually diploid, cell population to a known ploidy value, e.g. 2, and then calculate the ploidy for all the cells relative to that control population.
-#' This occurs individially for each probe.
+#' This occurs individually for each probe.
 #' `control.ploidy` is a lookup table (data.frame) to indicate the ploidy value and cell barcodes to use as the reference.
 #' A template for `control.ploidy` can be generated using [`generateControlPloidyTemplate()`].
 #' The `control.ploidy` data.frame should include 3 columns named `arm`, `ploidy`, and `sample.label`.

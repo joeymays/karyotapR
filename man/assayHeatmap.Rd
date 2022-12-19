@@ -23,11 +23,11 @@ assayHeatmap(
 
 \item{assay}{Chr string indicating assay slot to pull from. \code{NULL} (default) pulls from first-indexed assay (often "counts").}
 
-\item{split.col.by}{Chr string indicating RowData field to split columns by, usually "chr" or "arm". Default NULL.}
+\item{split.col.by}{Chr string indicating rowData field to split columns by, usually "chr" or "arm". Default NULL.}
 
-\item{split.row.by}{Chr string indicating ColData field to split rows by, usually "cluster". Default NULL.}
+\item{split.row.by}{Chr string indicating colData field to split rows by, usually "cluster". Default NULL.}
 
-\item{annotate.row.by}{Chr string indicating ColData field to use as annotation. Default NULL.}
+\item{annotate.row.by}{Chr string indicating colData field to use as annotation. Default NULL.}
 
 \item{color.preset}{Chr string indicating color preset to use to color heatmap, either ploidy or ploidy.denoise (see Details). Supersedes \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} color.}
 
@@ -45,7 +45,7 @@ Heatmaps are generated as transposed representations of the matrix.
 \details{
 \code{color.preset} presets:
 ploidy: \code{circlize::colorRamp2(c(0,1,2,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))}; Blue-white-red gradient from 0-2-4. 4 to 8+ is black.
-ploidy.denoise: \code{circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))}; Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diplod cells.
+ploidy.denoise: \code{circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))}; Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
 }
 \examples{
 \dontrun{assayHeatmap(TapestriExperiment, alt.exp = "smoothedPloidyByArm",

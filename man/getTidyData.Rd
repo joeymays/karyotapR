@@ -25,8 +25,8 @@ A tibble of tidy data with corresponding metadata from colData and rowData.
 }
 \description{
 \code{getTidyData()} pulls the matrix from the indicated assay and/or altExp slot(s), and morphs it into tidy format.
-ColData from the top-level/main experiment is merged.
-RowData from the indicated assay and/or altExp slot(s) is merged.
+colData from the top-level/main experiment is merged.
+rowData from the indicated assay and/or altExp slot(s) is merged.
 Attempts are made to sort by "chr" and "start.pos" columns if they are present in order to
 }
 \examples{

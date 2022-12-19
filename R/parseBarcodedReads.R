@@ -158,7 +158,7 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @param sample.label A chr string indicating the column name to use for the sample call. Default "sample.call".
 #' @param return.table Logical, if TRUE returns a data.frame of the sample.calls. Otherwise returns updatedTapestriExperiment object. Default FALSE.
 #'
-#' @return A TapestriExperiment object with sample calls added to ColData. If `return.table == TRUE`, a data.frame of sample calls.
+#' @return A TapestriExperiment object with sample calls added to colData. If `return.table == TRUE`, a data.frame of sample calls.
 #' @export
 #'
 #' @examples

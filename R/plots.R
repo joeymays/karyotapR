@@ -128,14 +128,14 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #'
 #' `color.preset` presets:
 #' ploidy: `circlize::colorRamp2(c(0,1,2,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))`; Blue-white-red gradient from 0-2-4. 4 to 8+ is black.
-#' ploidy.denoise: `circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))`; Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diplod cells.
+#' ploidy.denoise: `circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))`; Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
 #'
 #' @param TapestriExperiment TapestriExperiment object
 #' @param alt.exp Chr string indicating altExp slot to pull from. `NULL` (default) pulls from top-level/main experiment.
 #' @param assay Chr string indicating assay slot to pull from. `NULL` (default) pulls from first-indexed assay (often "counts").
-#' @param split.col.by Chr string indicating RowData field to split columns by, usually "chr" or "arm". Default NULL.
-#' @param split.row.by Chr string indicating ColData field to split rows by, usually "cluster". Default NULL.
-#' @param annotate.row.by Chr string indicating ColData field to use as annotation. Default NULL.
+#' @param split.col.by Chr string indicating rowData field to split columns by, usually "chr" or "arm". Default NULL.
+#' @param split.row.by Chr string indicating colData field to split rows by, usually "cluster". Default NULL.
+#' @param annotate.row.by Chr string indicating colData field to use as annotation. Default NULL.
 #' @param color.preset Chr string indicating color preset to use to color heatmap, either ploidy or ploidy.denoise (see Details). Supersedes `color.custom`. `NULL` (default) uses default `ComplexHeatmap` color.
 #' @param color.custom Color mapping function given by `circlize::colorRamp2()`. `color.preset` must be `NULL`.
 #' @param ... Additional parameters to pass to `[ComplexHeatmap::Heatmap()]`.

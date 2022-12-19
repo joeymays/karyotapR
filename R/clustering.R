@@ -107,7 +107,7 @@ PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs =
 #'
 #' @param TapestriExperiment TapestriExperiment object
 #' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
-#' @param assay Chr string indicating assay to use. NULL (default) selects first listed assay. Npt used when `use.pca.dims = TRUE`.
+#' @param assay Chr string indicating assay to use. NULL (default) selects first listed assay. Not used when `use.pca.dims = TRUE`.
 #' @param use.pca.dims Logical, if TRUE, uses experiment PCA, otherwise uses assay data. Default TRUE.
 #' @param pca.dims Numeric vector, indicating indices of PCs to use in UMAP. NULL (default) uses all dimensions.
 #' @param ... Additional parameters to pass to umap, e.g. for configuration (see [`umap::umap.defaults`]).

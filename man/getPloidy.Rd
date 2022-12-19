@@ -30,7 +30,7 @@ TapestriExperiment object with ploidy values in \code{ploidy} assay slot.
 
 \code{getPloidy()} transforms the normalized count matrix of a TapestriExperiment object into ploidy values based on a reference subset of cell barcodes and given ploidy value (e.g. 2 for diploid).
 This is practically used to set the median ploidy of a control, usually diploid, cell population to a known ploidy value, e.g. 2, and then calculate the ploidy for all the cells relative to that control population.
-This occurs individially for each probe.
+This occurs individually for each probe.
 \code{control.ploidy} is a lookup table (data.frame) to indicate the ploidy value and cell barcodes to use as the reference.
 A template for \code{control.ploidy} can be generated using \code{\link[=generateControlPloidyTemplate]{generateControlPloidyTemplate()}}.
 The \code{control.ploidy} data.frame should include 3 columns named \code{arm}, \code{ploidy}, and \code{sample.label}.

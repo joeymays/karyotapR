@@ -30,7 +30,7 @@ callSampleLables(
 \item{ties.method}{A chr string passed to \code{max.col()} indicating how to break ties. Default "first".}
 }
 \value{
-A TapestriExperiment object with sample calls added to ColData. If \code{return.table == TRUE}, a data.frame of sample calls.
+A TapestriExperiment object with sample calls added to colData. If \code{return.table == TRUE}, a data.frame of sample calls.
 }
 \description{
 \code{callSampleLables()} determines sample labels by comparing auxiliary count data, most likely generated from barcoded reads (see\code{\link[=parseBarcodedReads]{parseBarcodedReads()}}).
