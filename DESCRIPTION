@@ -1,10 +1,13 @@
 Package: CNweaveR
-Title: DNA CNV Analysis for Custom Genome-Wide Tapestri Panels
+Title: DNA Copy Number Analysis for Genome-wide Tapestri Panels
 Version: 0.0.0.9000
 Authors@R:
     person("Joseph", "Mays", , "josephcmays@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4903-938X"))
-Description: This package enables basic analysis of CNVs using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system.
+Description: CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of single cells, 
+    using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system.
+    This package allows users to easily parse, manipulate, and visualize datasets produced 
+    from the automated Tapestri Pipeline, with support for normalization, clustering, and ploidy calling.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -6,7 +6,7 @@
 \alias{CNweaveR-package}
 \title{CNweaveR: DNA CNV Analysis for Custom Genome-Wide Tapestri Panels}
 \description{
-This package enables basic analysis of CNVs using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system.
+CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of single cells, using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system. This package allows users to easily parse, manipulate, and visualize datasets produced from the automated Tapestri Pipeline, with support for normalization, clustering, and ploidy calling.
 }
 \seealso{
 Useful links:

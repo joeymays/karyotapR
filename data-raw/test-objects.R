@@ -56,7 +56,7 @@ exp3 <- parseBarcodedReads(exp3, bam.file = bam.file, barcode.lookup = barcode.l
 exp3 <- callSampleLables(exp3, coldata.labels = c("g7x3", "gNC"), sample.label = "sample.grna")
 exp3 <- runPCA(exp3, sd.min.threshold = 40)
 PCAKneePlot(exp3)
-exp3 <- runUMAP(exp3, input.dims = 1:2)
+exp3 <- runUMAP(exp3, pca.dims = 1:2)
 reducedDimPlot(exp3, "umap")
 exp3 <- getClusters(exp3, eps = 0.9)
 reducedDimPlot(exp3, "umap", group.label = "cluster")
