@@ -9,16 +9,17 @@ smoothPloidy(TapestriExperiment, method = "median")
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{method}{Character string, smoothing method. Supports median (default) or mean.}
+\item{method}{Character, smoothing method. Supports median (default) or mean.}
 }
 \value{
-\code{TapestriExperiment} with \code{smoothPloidy} and \code{DiscretePloidy} assays in \code{altExp} slot
+\code{TapestriExperiment} with \code{smoothPloidy} and \code{DiscretePloidy} assays in \code{altExp} slots \code{smoothedPloidyByChrom} and \code{smoothedPloidyByArm}.
 }
 \description{
-\code{smoothPloidy()} takes ploidy values across probes and smooths them by median (default) for each chromosome and chromosome arm,
-resulting in one ploidy value per chromosome/arm per cell barcode.
+\code{smoothPloidy()} takes \code{ploidy} slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
+and chromosome arm, resulting in one ploidy value per chromosome and chromosome arm for each cell barcode.
 Values are then discretized into integers by conventional rounding.
-Results are stored in \code{altExp} slots in \code{TapestriObject}, with \code{smoothPloidy} and \code{DiscretePloidy} assays.
+Smoothed ploidy and discretized smoothed ploidy values are stored as \code{smoothPloidy} and \code{DiscretePloidy} assays,
+in \code{altExp} slots \code{smoothedPloidyByChrom} for chromosome-level smoothing, and \code{smoothedPloidyByArm} for chromosome arm-level smoothing.
 }
 \examples{
 \dontrun{

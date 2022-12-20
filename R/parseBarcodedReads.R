@@ -1,16 +1,19 @@
 #' Parse Barcoded Reads
 #'
-#' @param bam.file Chr string indicating file path of BAM file. `.bai` BAM index file must be in the same location.
-#' @param barcode.lookup data.frame where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
-#' @param cell.barcode.tag Character string of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".
-#' @param contig Chr string of contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.
-#' @param max.mismatch The maximum and minimum number of mismatching letters allowed. See [Biostrings::matchPattern()].
-#' @param with.indels If TRUE then indels are allowed. See [Biostrings::matchPattern()].
+#' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location.
+#' @param barcode.lookup `data.frame` where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
+#' @param cell.barcode.tag Character of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".
+#' @param contig Charcter, contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.
+#' @param max.mismatch Numeric, the maximum and minimum number of mismatching letters allowed.
+#' @param with.indels If `TRUE` then indels are allowed.
 #'
 #' @return A data.frame of read counts for each specified barcode.
 #' @export
 #'
 #' @rdname parseBarcodedReads
+#' @order 2
+#'
+#' @seealso [Biostrings::matchPattern()]
 #'
 #' @examples
 #' \dontrun{counts <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
@@ -82,21 +85,29 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
     return(sequence.match.counts)
 }
 
-#' Parse Barcoded Reads
+#' @name parseBarcodedReads
 #'
-#' `parseBarcodedReads()` and `parseBarcodedReadsFromContig()` match exogenous DNA barcode sequences to their associated cell barcodes and saves them to the colData (cell barcode metadata) of the input TapestriExperiment object.
-#' `parseBarcodedReads()` is a shortcut for `parseBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode', and assign the result to the input object..
-#' The entries in the `barcode.lookup` table do not have to be present in the sample, allowing users to keep one master table/file of available barcode sequences to use for all experiments.
+#' @title Get read counts from barcoded reads
 #'
-#' @param bam.file Chr string indicating file path of BAM file. `.bai` BAM index file must be in the same location.
-#' @param barcode.lookup data.frame where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
-#' @param probe.tag Chr string, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts alternative experiments, respectively.
+#' @description `parseBarcodedReads()` and `parseBarcodedReadsFromContig()` match exogenous DNA barcode sequences to their associated
+#' cell barcodes and saves them to the `colData` (cell barcode metadata) of `TapestriExperiment`.
+#' `parseBarcodedReads()` is a shortcut for `parseBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode'
+#' to use the grnaCounts or sampleBarcodeCounts `altExp` slots.
+#' The entries in the `barcode.lookup` table do not have to be present in the sample,
+#' allowing users to keep one master table/file of available barcode sequences for use in all experiments.
+#'
+#' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location.
+#' @param barcode.lookup `data.frame`, first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
+#' @param probe.tag Character, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts `altExp` slots, respectively.
 #' @param ... Arguments to pass on to `parseBarcodedReadsFromContig()`.
-#' @param TapestriExperiment TapestriExperiment object
-#' @param return.table If TRUE, returns table of read counts per barcode. If FALSE, returns TapestriExperiment. Default FALSE.
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param return.table Logical, if `TRUE`, returns table of read counts per barcode. If `FALSE`, returns `TapestriExperiment.` Default `FALSE`.
 #'
-#' @return An updated TapestriExperiment object with read counts added to the colData slot. If `return.table == TRUE`, a data.frame of read counts for each specified barcode.
+#' @return `TapestriExperiment` with barcoded read counts added to `colData`.
 #' @export
+#'
+#' @rdname parseBarcodedReads
+#' @order 1
 #'
 #' @examples
 #' \dontrun{counts <- parseBarcodedReads(TapestriExperiment,

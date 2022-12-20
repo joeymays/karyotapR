@@ -1,23 +1,44 @@
 #' Create TapestriExperiment object from Tapestri Pipeline output
 #'
-#' `createTapestriExperiment()` constructs a `TapestriExperiment` object from `.h5` file output by the Tapestri Pipeline.
-#' Probe panel metadata is automatically imported from the `.h5` file.
-#' `panel.id` is an optional shortcut to set gRNA and barcode probe identities based internal custom panel IDs.
-#' `move.non.genome.probes` moves the specified probes to `altExp` (alternative experiment) slots in the `TapestriExperiment` object.
-#' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, and probes on ChrY are moved by default, if present.
-#' Basic QC stats (e.g. total number of reads per probe) are added to either the object's `colData` or `rowData.`
-#' Basic metadata for the experiment is automatically to the `metadata` slot.
-#' `filter.variants == TRUE` only loads variants that have passed filters in the Tapestri Pipeline.
-#' This greatly reduces the number of variants to a smaller number of likely more consequential variants.
+#' `createTapestriExperiment()` constructs a `TapestriExperiment` container object from data in the `.h5` file output by the Tapestri Pipeline.
+#' Read count matrix (probe x cell barcode) is stored in the "counts" `assay` slot of the top-level experiment.
+#' Allele frequency matrix (variant x cell barcode) is stored in the "alleleFrequency" `assay` slot of the "alleleFrequency" `altExp` (alternative experiment) slot.
+#' `panel.id` is an optional shortcut to set special probe identities for specific custom panels.
+#' See details for full explanation of construction.
 #'
-#' @param h5.filename file path for .h5 file from Tapestri Pipeline output.
+#' # Automatic Operations
+#' ## Raw Data
+#' Read count and allele frequency matrices are imported to their appropriate slots as described above.
+#' `filter.variants == TRUE` (default) only loads allele frequency variants that have passed internal filters in the Tapestri Pipeline.
+#' This greatly reduces the number of variants from tens of thousands to hundreds of likely more consequential variants,
+#' saving RAM and reducing operation time.
+#'
+#' ## Metadata
+#' Several metadata sets are copied or generated and then stored in the appropriate `TapestriExperiment` slot during construction.
+#' - Probe panel metadata stored in the `.h5` file are copied to `rowData`.
+#' - Basic QC stats (e.g. total number of reads per probe) are added to `rowData.`
+#' - Basic QC stats (e.g. total number of reads per cell barcode) are added to `colData.`
+#' - Experiment-level metadata is stored in `metadata`.
+#'
+#' # Optional Operations
+#' Two additional major operations are called by default during `TapestriExperiment` construction for convenience.
+#' `get.cytobands == TRUE` (default) calls [getCytobands()], which retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in `rowData`.
+#' Some downstream smoothing and plotting functions may fail if chromosome arms are not present in `rowData`, so this generally should always be run.
+#' `move.non.genome.probes` calls [moveNonGenomeProbes()], which moves probes corresponding to the specified tags to `altExp` (alternative experiment) slots in the `TapestriExperiment` object.
+#' These probes should be those which do not correspond to a chromosome and therefore would not be used to call copy number variants.
+#' The exception is probes on chromosome Y; chrY does not generally experience CNVs, so we move it to an `altExp` for separate analysis.
+#' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, which are specified by the `panel.id` shortcut or manually (see [Custom Slot Getters and Setters]),
+#' are automatically moved to `altExp` by this operation as well.
+#' If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
+#'
+#' @param h5.filename File path for `.h5` file from Tapestri Pipeline output.
 #' @param panel.id Tapestri panel name, CO261 and CO293 only supported. Acts as shortcut for setting custom slots. Default `NULL`.
 #' @param get.cytobands Logical, whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default `TRUE`.
 #' @param genome Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.
-#' @param move.non.genome.probes Character vector,  non-genomic probes to move counts and metadata to `altExp` slots, if available. Default c("grna", "sample.barcode", "Y").
+#' @param move.non.genome.probes Character vector,  non-genomic probes to move counts and metadata to `altExp` slots, if available. Default `c("grna", "sample.barcode", "Y")`.
 #' @param filter.variants Logical, if `TRUE`, only loads variants that have passed Tapestri Pipeline filters. Default `TRUE`.
 #'
-#' @return Constructed `TapestriExperiment` object
+#' @return Constructed `TapestriExperiment` object.
 #' @export
 #'
 #' @import SingleCellExperiment

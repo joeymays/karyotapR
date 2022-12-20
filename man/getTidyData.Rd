@@ -2,32 +2,32 @@
 % Please edit documentation in R/helperFunctions.R
 \name{getTidyData}
 \alias{getTidyData}
-\title{Get tidy-style data from TapestriExperiment objects}
+\title{Get tidy-style data from \code{TapestriExperiment} objects}
 \usage{
 getTidyData(
   TapestriExperiment,
   alt.exp = NULL,
   assay = NULL,
-  feature.id.as.factor = T
+  feature.id.as.factor = TRUE
 )
 }
 \arguments{
-\item{TapestriExperiment}{A TapestriExperiment object}
+\item{TapestriExperiment}{A \code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp slot to pull from. \code{NULL} (default) pulls from top-level/main experiment.}
+\item{alt.exp}{Character, \code{altExp} slot to use. \code{NULL} (default) uses top-level/main experiment.}
 
-\item{assay}{Chr string indicating assay slot to pull from. \code{NULL} (default) pulls from first-indexed assay (often "counts").}
+\item{assay}{Character, \code{assay} slot to use. \code{NULL} (default) uses first-indexed assay (often "counts").}
 
-\item{feature.id.as.factor}{Logical indicating whether feature.id column should be coerced into a factor. In practice, used to preserve order for downstream plotting. Default T.}
+\item{feature.id.as.factor}{Logical, whether the feature.id column should be output as a factor. Default TRUE.}
 }
 \value{
-A tibble of tidy data with corresponding metadata from colData and rowData.
+A \code{tibble} of tidy data with corresponding metadata from \code{colData} and \code{rowData}.
 }
 \description{
-\code{getTidyData()} pulls the matrix from the indicated assay and/or altExp slot(s), and morphs it into tidy format.
-colData from the top-level/main experiment is merged.
-rowData from the indicated assay and/or altExp slot(s) is merged.
-Attempts are made to sort by "chr" and "start.pos" columns if they are present in order to
+\code{getTidyData()} pulls the matrix from the indicated \code{assay} and/or \code{altExp} slot(s), and rearranges it into tidy format.
+\code{colData} from the top-level/main experiment is merged.
+\code{rowData} from the indicated \code{assay} and/or \code{altExp} slot(s) is merged.
+Attempts are made to sort by "chr" and "start.pos" columns if they are present to simplify downstream operations, e.g. plotting.
 }
 \examples{
 \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}

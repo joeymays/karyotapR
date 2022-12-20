@@ -7,13 +7,13 @@
 corner(input.mat)
 }
 \arguments{
-\item{input.mat}{a matrix-like object}
+\item{input.mat}{A matrix-like object.}
 }
 \value{
-matrix-like object matching input class
+A matrix-like object matching input class, subset to a maximum of 5 rows and columns.
 }
 \description{
-Outputs up to 5 rows and columns of the input matrix object to get a quick look without filling the console.
+Outputs up to 5 rows and columns of the input matrix object (with \code{rownames} and \code{colnames}) to get a quick look without filling the console.
 }
 \examples{
 \dontrun{

@@ -2,23 +2,25 @@
 % Please edit documentation in R/clustering.R
 \name{PCAKneePlot}
 \alias{PCAKneePlot}
-\title{Plot PCA Variance Knee}
+\title{Plot of PCA variance explained}
 \usage{
 PCAKneePlot(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs = 10)
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
+\item{alt.exp}{Character, \code{altExp} to use, \code{NULL} uses top-level/main experiment. Default "alleleFrequency".}
 
-\item{n.pcs}{Numeric vector, indicating number of PCs to plot, starting at 1. Default 10.}
+\item{n.pcs}{Numeric, number of PCs to plot, starting at 1. Default 10.}
 }
 \value{
-ggplot knee plot
+ggplot2 object, combined line plot and bar graph
 }
 \description{
-Draws knee plot of PCA variance explained to determine which PCs to include for downstream applications e.g. clustering.
+Draws "knee plot" of PCA variance explained to determine which principal componenets (PCs) to include for downstream applications e.g. clustering.
+Variance explained for each PC is indicated by the line.
+Cumulative variance explained is indicated by the bars.
 }
 \examples{
-\dontrun{PCAKneePlot(TapestriExperiment, pcs = 1:5)}
+\dontrun{PCAKneePlot(TapestriExperiment, n.pcs = 5)}
 }

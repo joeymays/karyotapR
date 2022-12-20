@@ -1,9 +1,13 @@
-#' Retrieve and add chromosome cytobands and chromosome arms to probe metadata of TapestriExperiment object
+#' Retrieve and add chromosome cytobands and chromosome arms to `TapestriExperiment` object
 #'
-#' @param TapestriExperiment TapestriExperiment object
-#' @param genome Character string indicating reference genome to use. Only hg19 is currently supported.
+#' `getCytobands()` retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in `rowData`.
+#' This is run automatically as part of [createTapestriExperiment()].
+#' Note: Some downstream smoothing and plotting functions may fail if chromosome arms are not present in `rowData`.
 #'
-#' @return TapestriExperiment object with rowData updated to include chromosome arms and cytobands
+#' @param TapestriExperiment `TapestriExperiment` object.
+#' @param genome Character, reference genome to use. Only hg19 is currently supported.
+#'
+#' @return `TapestriExperiment` object with `rowData` updated to include chromosome arms and cytobands.
 #' @export
 #'
 #' @examples

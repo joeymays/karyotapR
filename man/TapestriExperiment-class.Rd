@@ -12,7 +12,7 @@
 \arguments{
 \item{object}{An R object}
 
-\item{TapestriExperiment}{A TapestriExperiment object}
+\item{TapestriExperiment}{A \code{TapestriExperiment} object}
 }
 \value{
 TapestriExperiment
@@ -22,7 +22,7 @@ TapestriExperiment Class Definition
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{show(TapestriExperiment)}: Show method for Tapestri Experiment
+\item \code{show(TapestriExperiment)}: Show method for \code{TapestriExperiment}
 
 }}
 \section{Slots}{
@@ -34,5 +34,5 @@ TapestriExperiment Class Definition
 }}
 
 \examples{
-x <- new("TapestriExperiment")
+tapExpObject <- new("TapestriExperiment")
 }

@@ -3,7 +3,7 @@
 \name{getPloidy}
 \alias{getPloidy}
 \alias{generateControlPloidyTemplate}
-\title{Calculate cell-chromosome ploidy using control cell population as baseline}
+\title{Calculate ploidy for each cell-chromosome pair using baseline control}
 \usage{
 getPloidy(TapestriExperiment, control.ploidy, coldata.set = "cluster")
 
@@ -12,7 +12,7 @@ generateControlPloidyTemplate(ploidy.all = 2, sample.label.all = "cluster")
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{control.ploidy}{A \code{data.frame} with columns \code{arm}, \code{ploidy}, and \code{sample.label}. See description.}
+\item{control.ploidy}{A \code{data.frame} with columns \code{arm}, \code{ploidy}, and \code{sample.label}. See details.}
 
 \item{coldata.set}{Character, \code{colData} field to use for subsetting cell.barcodes. Default "cluster".}
 
@@ -28,28 +28,31 @@ generateControlPloidyTemplate(ploidy.all = 2, sample.label.all = "cluster")
 \description{
 \code{getPloidy()} transforms the normalized count matrix of a \code{TapestriExperiment} object
 into ploidy values based on a reference subset of cell barcodes and given ploidy value (e.g. 2 for diploid).
-This is practically used to set the median ploidy of a control, usually diploid,
+This is practically used to set the median ploidy of a usually diploid reference/control
 cell population to a known ploidy value, e.g. 2, and then calculate the ploidy for all the
-cells relative to that control population. This occurs individually for each probe.
+cells relative to that control population. This occurs individually for each probe,
+such that the result is one ploidy value per cell barcode per probe.
 \code{control.ploidy} is a \code{data.frame} lookup table used to indicate the ploidy value and cell barcodes
 to use as the reference. A template for \code{control.ploidy} can be generated using \code{\link[=generateControlPloidyTemplate]{generateControlPloidyTemplate()}}.
+
 The \code{control.ploidy} data.frame should include 3 columns named \code{arm}, \code{ploidy}, and \code{sample.label}.
 \code{arm} is chromosome arms from chr1p through chrXq, \code{ploidy} is the reference ploidy value, and \code{sample.label} is the
 value corresponding to the \code{colData} field given in \code{coldata.set} to indicate the cell barcode subset to use to set the ploidy.
+This is best used in a workflow where the cells are clustered first, and then one cluster is used as the reference population
+the other clusters. This also allows for the baseline ploidy to be set for each chromosome individually in the case where the
+reference population is not completely diploid.
 }
 \section{Functions}{
 \itemize{
-\item \code{generateControlPloidyTemplate()}: generates a \code{data.frame} template for use in \code{getPloidy()}.
+\item \code{generateControlPloidyTemplate()}: generates a \code{data.frame} template for \code{control.ploidy} in \code{getPloidy()}.
 
 }}
 \examples{
 \dontrun{
+control.ploidy <- generateControlPloidyTemplate()
 TapestriExperiment <- getPloidy(TapestriExperiment,
   control.ploidy,
   coldata.set = "cluster"
 )
-}
-\dontrun{
-control.ploidy <- generateControlPloidyTemplate()
 }
 }

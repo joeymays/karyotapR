@@ -2,20 +2,22 @@
 % Please edit documentation in R/getCytobands.R
 \name{getCytobands}
 \alias{getCytobands}
-\title{Retrieve and add chromosome cytobands and chromosome arms to probe metadata of TapestriExperiment object}
+\title{Retrieve and add chromosome cytobands and chromosome arms to \code{TapestriExperiment} object}
 \usage{
 getCytobands(TapestriExperiment, genome = "hg19")
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{genome}{Character string indicating reference genome to use. Only hg19 is currently supported.}
+\item{genome}{Character, reference genome to use. Only hg19 is currently supported.}
 }
 \value{
-TapestriExperiment object with rowData updated to include chromosome arms and cytobands
+\code{TapestriExperiment} object with \code{rowData} updated to include chromosome arms and cytobands.
 }
 \description{
-Retrieve and add chromosome cytobands and chromosome arms to probe metadata of TapestriExperiment object
+\code{getCytobands()} retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in \code{rowData}.
+This is run automatically as part of \code{\link[=createTapestriExperiment]{createTapestriExperiment()}}.
+Note: Some downstream smoothing and plotting functions may fail if chromosome arms are not present in \code{rowData}.
 }
 \examples{
 \dontrun{tapObject <- getCytobands(tapObject, genome = "hg19")}

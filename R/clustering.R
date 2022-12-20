@@ -1,16 +1,18 @@
-#' Clustering by PCA
+#' Cluster matrix data by Principal Components Analysis
 #'
-#' Runs a set of features through PCA and saves results to reducedDims slot of input TapestriObject.
+#' Analyzes matrix data by Principal Components Analysis (PCA) and saves results to `reducedDims` slot of `TapestriObject`.
 #'
-#' @param TapestriExperiment TapestriExperiment object
-#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
-#' @param assay Chr string indicating assay to use. NULL (default) selects first listed assay.
-#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to NULL if not using for alleleFrequency slot. Default NULL.
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param alt.exp Character, `altExp` to use, `NULL` uses top-level/main experiment. Default "alleleFrequency".
+#' @param assay Character, `assay` to use. `NULL` (default) uses first-indexed assay.
+#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to `NULL` if not using for alleleFrequency slot. Default `NULL`.
 #' @param center Logical, whether the variables should be shifted to be zero centered. See [stats::prcomp()].
 #' @param scale. Logical, whether the variables should be scaled to have unit variance before the analysis takes place. See [stats::prcomp()].
 #'
-#' @return TapestriExperiment with PCA results saved to reducedDims slot of altExp, and proportion of variance saved to metadata slot of altExp.
+#' @return `TapestriExperiment` with PCA results saved to `reducedDims` slot of `altExp`, and proportion of variance saved to `metadata` slot of `altExp.`
 #' @export
+#'
+#' @seealso [stats::prcomp()] for PCA method details.
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- runPCA(TapestriExperiment,
@@ -57,19 +59,21 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
     return(TapestriExperiment)
 }
 
-#' Plot PCA Variance Knee
+#' Plot of PCA variance explained
 #'
-#' Draws knee plot of PCA variance explained to determine which PCs to include for downstream applications e.g. clustering.
+#' Draws "knee plot" of PCA variance explained to determine which principal componenets (PCs) to include for downstream applications e.g. clustering.
+#' Variance explained for each PC is indicated by the line.
+#' Cumulative variance explained is indicated by the bars.
 #'
-#' @param TapestriExperiment TapestriExperiment object
-#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
-#' @param n.pcs Numeric vector, indicating number of PCs to plot, starting at 1. Default 10.
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param alt.exp Character, `altExp` to use, `NULL` uses top-level/main experiment. Default "alleleFrequency".
+#' @param n.pcs Numeric, number of PCs to plot, starting at 1. Default 10.
 #'
-#' @return ggplot knee plot
+#' @return ggplot2 object, combined line plot and bar graph
 #' @export
 #'
 #' @examples
-#' \dontrun{PCAKneePlot(TapestriExperiment, pcs = 1:5)}
+#' \dontrun{PCAKneePlot(TapestriExperiment, n.pcs = 5)}
 PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs = 10){
 
     if(is.null(alt.exp)){
@@ -103,16 +107,18 @@ PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs =
     return(g1)
 }
 
-#' Cluster Data by UMAP
+#' Cluster matrix data by UMAP
 #'
-#' @param TapestriExperiment TapestriExperiment object
-#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
-#' @param assay Chr string indicating assay to use. NULL (default) selects first listed assay. Not used when `use.pca.dims = TRUE`.
-#' @param use.pca.dims Logical, if TRUE, uses experiment PCA, otherwise uses assay data. Default TRUE.
-#' @param pca.dims Numeric vector, indicating indices of PCs to use in UMAP. NULL (default) uses all dimensions.
-#' @param ... Additional parameters to pass to umap, e.g. for configuration (see [`umap::umap.defaults`]).
+#' Analyzes matrix data by UMAP and saves results to `reducedDims` slot of `TapestriObject`.
 #'
-#' @return TapestriExperiment with UMAP embeddings saved to reducedDims slot of altExp.
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param alt.exp Character, `altExp` to use, `NULL` uses top-level/main experiment. Default "alleleFrequency".
+#' @param assay Character, `assay` to use. `NULL` (default) uses first-indexed assay. Not used when `use.pca.dims = TRUE`.
+#' @param use.pca.dims Logical, if `TRUE`, uses experiment PCA, otherwise uses `assay` data. Default `TRUE`.
+#' @param pca.dims Numeric, indices of PCs to use in UMAP. Default `NULL`.
+#' @param ... Additional parameters to pass to [umap::umap()], e.g. for configuration (see [`umap::umap.defaults`]).
+#'
+#' @return `TapestriExperiment` with UMAP embeddings saved to `reducedDims` slot of `altExp.`
 #' @export
 #'
 #' @examples
@@ -162,16 +168,18 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
     return(TapestriExperiment)
 }
 
-#' Scatter plot for dimensional reduction results.
+#' Scatter plot for dimensional reduction results
 #'
-#' @param TapestriExperiment TapestriExperiment object
-#' @param dim.reduction Chr, which dimension reduction to plot, either "PCA" or "UMAP".
-#' @param group.label Chr string indicating colData column for coloring samples. Default NULL.
-#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
+#' Plots a scatter plot of the indicated dimensional reduction results.
+#'
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param dim.reduction Character, dimension reduction to plot, either "PCA" or "UMAP".
+#' @param group.label Character, `colData` column for coloring samples. Default `NULL`.
+#' @param alt.exp Character, `altExp` to use, `NULL` uses top-level/main experiment. Default "alleleFrequency".
 #' @param dim.x Numeric, index of dimensional reduction data to plot on X axis. Default 1.
 #' @param dim.y Numeric, index of dimensional reduction data to plot on Y axis. Default 2.
 #'
-#' @return ggplot scatter plot
+#' @return ggplot2 object, scatter plot
 #' @export
 #'
 #' @examples
@@ -215,20 +223,21 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 
 #' Cluster 2D data
 #'
-#' Cluster data using dbscan method. Uses UMAP reduced dimensions to partition data into clusters and saves the clusters to colData.
+#' Clusters data using dbscan method and saves cluster assignments for each cell barcode to `colData`.
+#' Generally used to assign clusters to UMAP projection after PCA and UMAP dimensional reduction.
 #'
-#' @param TapestriExperiment TapestriExperiment object
-#' @param alt.exp Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".
-#' @param dim.reduction Chr string indicating the reduced dimension set to use. Default "UMAP".
-#' @param eps Numeric, dbscan eps parameter. Change to adjust cluster granularity. See [`dbscan::dbscan()`]. Default 0.8.
-#' @param ... Additional parameters to pass to `dbscan::dbscan()`.
-#' @param dim.1 Numeric, index of dimensional reduction dimension to use. Default 1.
-#' @param dim.2 Numeric, index of dimensional reduction dimension to use. Default 2.
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param alt.exp Character, `altExp` slot to use. `NULL` uses top-level/main experiment. Default "alleleFrequency".
+#' @param dim.reduction Character, reduced dimension data to use. Default "UMAP".
+#' @param eps Numeric, `dbscan` `eps` parameter. Change to adjust cluster granularity. See [dbscan::dbscan()]. Default 0.8.
+#' @param ... Additional parameters to pass to [dbscan::dbscan()].
+#' @param dim.1 Numeric, index of data dimension to use. Default 1.
+#' @param dim.2 Numeric, index of data dimension to use. Default 2.
 #'
-#' @return TapestriExperiment object with updated colData
+#' @return `TapestriExperiment` object with updated `colData` containing cluster assingments.
 #' @export
 #'
-#' @seealso [`dbscan::dbscan()`].
+#' @seealso [`dbscan::dbscan()`]
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- getClusters(TapestriExperiment, dim.reduction = "UMAP", eps = 0.8)}

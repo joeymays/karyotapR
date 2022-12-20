@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{runUMAP}
 \alias{runUMAP}
-\title{Cluster Data by UMAP}
+\title{Cluster matrix data by UMAP}
 \usage{
 runUMAP(
   TapestriExperiment,
@@ -14,23 +14,23 @@ runUMAP(
 )
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
+\item{alt.exp}{Character, \code{altExp} to use, \code{NULL} uses top-level/main experiment. Default "alleleFrequency".}
 
-\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay. Not used when \code{use.pca.dims = TRUE}.}
+\item{assay}{Character, \code{assay} to use. \code{NULL} (default) uses first-indexed assay. Not used when \code{use.pca.dims = TRUE}.}
 
-\item{use.pca.dims}{Logical, if TRUE, uses experiment PCA, otherwise uses assay data. Default TRUE.}
+\item{use.pca.dims}{Logical, if \code{TRUE}, uses experiment PCA, otherwise uses \code{assay} data. Default \code{TRUE}.}
 
-\item{pca.dims}{Numeric vector, indicating indices of PCs to use in UMAP. NULL (default) uses all dimensions.}
+\item{pca.dims}{Numeric, indices of PCs to use in UMAP. Default \code{NULL}.}
 
-\item{...}{Additional parameters to pass to umap, e.g. for configuration (see \code{\link[umap:umap.defaults]{umap::umap.defaults}}).}
+\item{...}{Additional parameters to pass to \code{\link[umap:umap]{umap::umap()}}, e.g. for configuration (see \code{\link[umap:umap.defaults]{umap::umap.defaults}}).}
 }
 \value{
-TapestriExperiment with UMAP embeddings saved to reducedDims slot of altExp.
+\code{TapestriExperiment} with UMAP embeddings saved to \code{reducedDims} slot of \code{altExp.}
 }
 \description{
-Cluster Data by UMAP
+Analyzes matrix data by UMAP and saves results to \code{reducedDims} slot of \code{TapestriObject}.
 }
 \examples{
 \dontrun{TapestriExperiment <- runUMAP(TapestriExperiment, input.dims = 1:3)}

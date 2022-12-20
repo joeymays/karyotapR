@@ -1,10 +1,10 @@
 #' Glimpse the top-left corner of a matrix
 #'
-#' Outputs up to 5 rows and columns of the input matrix object to get a quick look without filling the console.
+#' Outputs up to 5 rows and columns of the input matrix object (with `rownames` and `colnames`) to get a quick look without filling the console.
 #'
-#' @param input.mat a matrix-like object
+#' @param input.mat A matrix-like object.
 #'
-#' @return matrix-like object matching input class
+#' @return A matrix-like object matching input class, subset to a maximum of 5 rows and columns.
 #' @export
 #'
 #' @examples
@@ -27,23 +27,23 @@ corner <- function(input.mat) {
   input.mat[1:row.out, 1:col.out]
 }
 
-#' Get tidy-style data from TapestriExperiment objects
+#' Get tidy-style data from `TapestriExperiment` objects
 #'
-#' `getTidyData()` pulls the matrix from the indicated assay and/or altExp slot(s), and morphs it into tidy format.
-#' colData from the top-level/main experiment is merged.
-#' rowData from the indicated assay and/or altExp slot(s) is merged.
-#' Attempts are made to sort by "chr" and "start.pos" columns if they are present in order to
+#' `getTidyData()` pulls the matrix from the indicated `assay` and/or `altExp` slot(s), and rearranges it into tidy format.
+#' `colData` from the top-level/main experiment is merged.
+#' `rowData` from the indicated `assay` and/or `altExp` slot(s) is merged.
+#' Attempts are made to sort by "chr" and "start.pos" columns if they are present to simplify downstream operations, e.g. plotting.
 #'
-#' @param TapestriExperiment A TapestriExperiment object
-#' @param alt.exp Chr string indicating altExp slot to pull from. `NULL` (default) pulls from top-level/main experiment.
-#' @param assay Chr string indicating assay slot to pull from. `NULL` (default) pulls from first-indexed assay (often "counts").
-#' @param feature.id.as.factor Logical indicating whether feature.id column should be coerced into a factor. In practice, used to preserve order for downstream plotting. Default T.
+#' @param TapestriExperiment A `TapestriExperiment` object
+#' @param alt.exp Character, `altExp` slot to use. `NULL` (default) uses top-level/main experiment.
+#' @param assay Character, `assay` slot to use. `NULL` (default) uses first-indexed assay (often "counts").
+#' @param feature.id.as.factor Logical, whether the feature.id column should be output as a factor. Default TRUE.
 #'
-#' @return A tibble of tidy data with corresponding metadata from colData and rowData.
+#' @return A `tibble` of tidy data with corresponding metadata from `colData` and `rowData`.
 #' @export
 #'
 #' @examples \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}
-getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, feature.id.as.factor = T){
+getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, feature.id.as.factor = TRUE){
 
     if(is.null(alt.exp)){
         target.exp <- TapestriExperiment

@@ -15,29 +15,30 @@ getClusters(
 )
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
+\item{alt.exp}{Character, \code{altExp} slot to use. \code{NULL} uses top-level/main experiment. Default "alleleFrequency".}
 
-\item{dim.reduction}{Chr string indicating the reduced dimension set to use. Default "UMAP".}
+\item{dim.reduction}{Character, reduced dimension data to use. Default "UMAP".}
 
-\item{eps}{Numeric, dbscan eps parameter. Change to adjust cluster granularity. See \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. Default 0.8.}
+\item{eps}{Numeric, \code{dbscan} \code{eps} parameter. Change to adjust cluster granularity. See \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. Default 0.8.}
 
-\item{dim.1}{Numeric, index of dimensional reduction dimension to use. Default 1.}
+\item{dim.1}{Numeric, index of data dimension to use. Default 1.}
 
-\item{dim.2}{Numeric, index of dimensional reduction dimension to use. Default 2.}
+\item{dim.2}{Numeric, index of data dimension to use. Default 2.}
 
-\item{...}{Additional parameters to pass to \code{dbscan::dbscan()}.}
+\item{...}{Additional parameters to pass to \code{\link[dbscan:dbscan]{dbscan::dbscan()}}.}
 }
 \value{
-TapestriExperiment object with updated colData
+\code{TapestriExperiment} object with updated \code{colData} containing cluster assingments.
 }
 \description{
-Cluster data using dbscan method. Uses UMAP reduced dimensions to partition data into clusters and saves the clusters to colData.
+Clusters data using dbscan method and saves cluster assignments for each cell barcode to \code{colData}.
+Generally used to assign clusters to UMAP projection after PCA and UMAP dimensional reduction.
 }
 \examples{
 \dontrun{TapestriExperiment <- getClusters(TapestriExperiment, dim.reduction = "UMAP", eps = 0.8)}
 }
 \seealso{
-\code{\link[dbscan:dbscan]{dbscan::dbscan()}}.
+\code{\link[dbscan:dbscan]{dbscan::dbscan()}}
 }

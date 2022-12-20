@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{runPCA}
 \alias{runPCA}
-\title{Clustering by PCA}
+\title{Cluster matrix data by Principal Components Analysis}
 \usage{
 runPCA(
   TapestriExperiment,
@@ -14,25 +14,28 @@ runPCA(
 )
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
+\item{alt.exp}{Character, \code{altExp} to use, \code{NULL} uses top-level/main experiment. Default "alleleFrequency".}
 
-\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay.}
+\item{assay}{Character, \code{assay} to use. \code{NULL} (default) uses first-indexed assay.}
 
-\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to NULL if not using for alleleFrequency slot. Default NULL.}
+\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to \code{NULL} if not using for alleleFrequency slot. Default \code{NULL}.}
 
 \item{center}{Logical, whether the variables should be shifted to be zero centered. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
 
 \item{scale.}{Logical, whether the variables should be scaled to have unit variance before the analysis takes place. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
 }
 \value{
-TapestriExperiment with PCA results saved to reducedDims slot of altExp, and proportion of variance saved to metadata slot of altExp.
+\code{TapestriExperiment} with PCA results saved to \code{reducedDims} slot of \code{altExp}, and proportion of variance saved to \code{metadata} slot of \code{altExp.}
 }
 \description{
-Runs a set of features through PCA and saves results to reducedDims slot of input TapestriObject.
+Analyzes matrix data by Principal Components Analysis (PCA) and saves results to \code{reducedDims} slot of \code{TapestriObject}.
 }
 \examples{
 \dontrun{TapestriExperiment <- runPCA(TapestriExperiment,
 alt.exp = "alleleFrequency", sd.min.threshold = 35)}
+}
+\seealso{
+\code{\link[stats:prcomp]{stats::prcomp()}} for PCA method details.
 }

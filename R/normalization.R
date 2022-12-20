@@ -1,15 +1,15 @@
-#' Normalize Raw Counts
+#' Normalize raw counts
 #'
-#' Normalizes raw counts from `counts` slot in a TapestriExperiment and returns the object with normalized counts in the `normcounts` slot.
+#' Normalizes raw counts from `counts` slot in `TapestriExperiment` and returns the object with normalized counts in the `normcounts` slot.
 #' "mb" is the only method supported currently.
 #' This method performs the same normalization scheme as in Mission Bio's mosaic package for python.
-#' Counts for each barcode are normalized relative to their barcode means and probe counts are normalized relative to their probe medians.
-#' Also calculates the standard deviation for each amplicon using normalized counts and adds it to `rowData`.
+#' Counts for each barcode are normalized relative to their barcode's mean and probe counts are normalized relative to their probe's median.
+#' Also calculates the standard deviation for each probe using normalized counts and adds it to `rowData`.
 #'
-#' @param TapestriExperiment TapestriExperiment object
-#' @param method Chr string indicating normalization method. Default "mb".
+#' @param TapestriExperiment `TapestriExperiment` object.
+#' @param method Character, normalization method. Default "mb".
 #'
-#' @return TapestriExperiment object with normalized counts added to `normcounts` slot.
+#' @return `TapestriExperiment` object with normalized counts added to `normcounts` slot.
 #' @export
 #'
 #' @importFrom stats median sd

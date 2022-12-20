@@ -4,13 +4,9 @@
 #' @return `data.frame` with 3 columns named `arm`, `ploidy`, and `sample.label`
 #' @export
 #'
-#' @describeIn getPloidy generates a `data.frame` template for use in `getPloidy()`.
+#' @describeIn getPloidy generates a `data.frame` template for `control.ploidy` in `getPloidy()`.
 #' @order 2
 #'
-#' @examples
-#' \dontrun{
-#' control.ploidy <- generateControlPloidyTemplate()
-#' }
 generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cluster") {
   ploidy.template <- data.frame(
     arm = c(
@@ -33,21 +29,26 @@ generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cl
 
 #' @name getPloidy
 #'
-#' @title Calculate cell-chromosome ploidy using control cell population as baseline
+#' @title Calculate ploidy for each cell-chromosome pair using baseline control
 #'
 #' @description `getPloidy()` transforms the normalized count matrix of a `TapestriExperiment` object
 #' into ploidy values based on a reference subset of cell barcodes and given ploidy value (e.g. 2 for diploid).
-#' This is practically used to set the median ploidy of a control, usually diploid,
+#' This is practically used to set the median ploidy of a usually diploid reference/control
 #' cell population to a known ploidy value, e.g. 2, and then calculate the ploidy for all the
-#' cells relative to that control population. This occurs individually for each probe.
+#' cells relative to that control population. This occurs individually for each probe,
+#' such that the result is one ploidy value per cell barcode per probe.
 #' `control.ploidy` is a `data.frame` lookup table used to indicate the ploidy value and cell barcodes
 #' to use as the reference. A template for `control.ploidy` can be generated using [`generateControlPloidyTemplate()`].
+#'
 #' The `control.ploidy` data.frame should include 3 columns named `arm`, `ploidy`, and `sample.label`.
 #' `arm` is chromosome arms from chr1p through chrXq, `ploidy` is the reference ploidy value, and `sample.label` is the
 #' value corresponding to the `colData` field given in `coldata.set` to indicate the cell barcode subset to use to set the ploidy.
+#' This is best used in a workflow where the cells are clustered first, and then one cluster is used as the reference population
+#' the other clusters. This also allows for the baseline ploidy to be set for each chromosome individually in the case where the
+#' reference population is not completely diploid.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
-#' @param control.ploidy A `data.frame` with columns `arm`, `ploidy`, and `sample.label`. See description.
+#' @param control.ploidy A `data.frame` with columns `arm`, `ploidy`, and `sample.label`. See details.
 #' @param coldata.set Character, `colData` field to use for subsetting cell.barcodes. Default "cluster".
 #'
 #' @return `TapestriExperiment` object with ploidy values in `ploidy` assay slot.
@@ -58,6 +59,7 @@ generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cl
 #'
 #' @examples
 #' \dontrun{
+#' control.ploidy <- generateControlPloidyTemplate()
 #' TapestriExperiment <- getPloidy(TapestriExperiment,
 #'   control.ploidy,
 #'   coldata.set = "cluster"
@@ -111,17 +113,18 @@ getPloidy <- function(TapestriExperiment, control.ploidy, coldata.set = "cluster
 
 #' Smooth ploidy values by chromosome and chromosome arm
 #'
-#' `smoothPloidy()` takes ploidy values across probes and smooths them by median (default) for each chromosome and chromosome arm,
-#' resulting in one ploidy value per chromosome/arm per cell barcode.
+#' `smoothPloidy()` takes `ploidy` slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
+#' and chromosome arm, resulting in one ploidy value per chromosome and chromosome arm for each cell barcode.
 #' Values are then discretized into integers by conventional rounding.
-#' Results are stored in `altExp` slots in `TapestriObject`, with `smoothPloidy` and `DiscretePloidy` assays.
+#' Smoothed ploidy and discretized smoothed ploidy values are stored as `smoothPloidy` and `DiscretePloidy` assays,
+#' in `altExp` slots `smoothedPloidyByChrom` for chromosome-level smoothing, and `smoothedPloidyByArm` for chromosome arm-level smoothing.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
-#' @param method Character string, smoothing method. Supports median (default) or mean.
+#' @param method Character, smoothing method. Supports median (default) or mean.
 #'
 #' @importFrom rlang .data
 #'
-#' @return `TapestriExperiment` with `smoothPloidy` and `DiscretePloidy` assays in `altExp` slot
+#' @return `TapestriExperiment` with `smoothPloidy` and `DiscretePloidy` assays in `altExp` slots `smoothedPloidyByChrom` and `smoothedPloidyByArm`.
 #' @export
 #'
 #' @examples

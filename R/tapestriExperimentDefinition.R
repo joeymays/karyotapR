@@ -9,7 +9,7 @@
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 #'
 #' @examples
-#' x <- new("TapestriExperiment")
+#' tapExpObject <- new("TapestriExperiment")
 .TapestriExperiment <- setClass(
     "TapestriExperiment",
     contains = "SingleCellExperiment",
@@ -18,8 +18,8 @@
 )
 
 
-#' @describeIn .TapestriExperiment Show method for Tapestri Experiment
-#' @param TapestriExperiment A TapestriExperiment object
+#' @describeIn .TapestriExperiment Show method for `TapestriExperiment`
+#' @param TapestriExperiment A `TapestriExperiment` object
 #' @param object An R object
 #'
 #' @export

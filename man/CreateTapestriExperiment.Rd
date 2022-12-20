@@ -14,7 +14,7 @@ createTapestriExperiment(
 )
 }
 \arguments{
-\item{h5.filename}{file path for .h5 file from Tapestri Pipeline output.}
+\item{h5.filename}{File path for \code{.h5} file from Tapestri Pipeline output.}
 
 \item{panel.id}{Tapestri panel name, CO261 and CO293 only supported. Acts as shortcut for setting custom slots. Default \code{NULL}.}
 
@@ -22,24 +22,53 @@ createTapestriExperiment(
 
 \item{genome}{Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.}
 
-\item{move.non.genome.probes}{Character vector,  non-genomic probes to move counts and metadata to \code{altExp} slots, if available. Default c("grna", "sample.barcode", "Y").}
+\item{move.non.genome.probes}{Character vector,  non-genomic probes to move counts and metadata to \code{altExp} slots, if available. Default \code{c("grna", "sample.barcode", "Y")}.}
 
 \item{filter.variants}{Logical, if \code{TRUE}, only loads variants that have passed Tapestri Pipeline filters. Default \code{TRUE}.}
 }
 \value{
-Constructed \code{TapestriExperiment} object
+Constructed \code{TapestriExperiment} object.
 }
 \description{
-\code{createTapestriExperiment()} constructs a \code{TapestriExperiment} object from \code{.h5} file output by the Tapestri Pipeline.
-Probe panel metadata is automatically imported from the \code{.h5} file.
-\code{panel.id} is an optional shortcut to set gRNA and barcode probe identities based internal custom panel IDs.
-\code{move.non.genome.probes} moves the specified probes to \code{altExp} (alternative experiment) slots in the \code{TapestriExperiment} object.
-Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, and probes on ChrY are moved by default, if present.
-Basic QC stats (e.g. total number of reads per probe) are added to either the object's \code{colData} or \code{rowData.}
-Basic metadata for the experiment is automatically to the \code{metadata} slot.
-\code{filter.variants == TRUE} only loads variants that have passed filters in the Tapestri Pipeline.
-This greatly reduces the number of variants to a smaller number of likely more consequential variants.
+\code{createTapestriExperiment()} constructs a \code{TapestriExperiment} container object from data in the \code{.h5} file output by the Tapestri Pipeline.
+Read count matrix (probe x cell barcode) is stored in the "counts" \code{assay} slot of the top-level experiment.
+Allele frequency matrix (variant x cell barcode) is stored in the "alleleFrequency" \code{assay} slot of the "alleleFrequency" \code{altExp} (alternative experiment) slot.
+\code{panel.id} is an optional shortcut to set special probe identities for specific custom panels.
+See details for full explanation of construction.
 }
+\section{Automatic Operations}{
+\subsection{Raw Data}{
+
+Read count and allele frequency matrices are imported to their appropriate slots as described above.
+\code{filter.variants == TRUE} (default) only loads allele frequency variants that have passed internal filters in the Tapestri Pipeline.
+This greatly reduces the number of variants from tens of thousands to hundreds of likely more consequential variants,
+saving RAM and reducing operation time.
+}
+
+\subsection{Metadata}{
+
+Several metadata sets are copied or generated and then stored in the appropriate \code{TapestriExperiment} slot during construction.
+\itemize{
+\item Probe panel metadata stored in the \code{.h5} file are copied to \code{rowData}.
+\item Basic QC stats (e.g. total number of reads per probe) are added to \code{rowData.}
+\item Basic QC stats (e.g. total number of reads per cell barcode) are added to \code{colData.}
+\item Experiment-level metadata is stored in \code{metadata}.
+}
+}
+}
+
+\section{Optional Operations}{
+Two additional major operations are called by default during \code{TapestriExperiment} construction for convenience.
+\code{get.cytobands == TRUE} (default) calls \code{\link[=getCytobands]{getCytobands()}}, which retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in \code{rowData}.
+Some downstream smoothing and plotting functions may fail if chromosome arms are not present in \code{rowData}, so this generally should always be run.
+\code{move.non.genome.probes} calls \code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, which moves probes corresponding to the specified tags to \code{altExp} (alternative experiment) slots in the \code{TapestriExperiment} object.
+These probes should be those which do not correspond to a chromosome and therefore would not be used to call copy number variants.
+The exception is probes on chromosome Y; chrY does not generally experience CNVs, so we move it to an \code{altExp} for separate analysis.
+Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, which are specified by the \code{panel.id} shortcut or manually (see \link{Custom Slot Getters and Setters}),
+are automatically moved to \code{altExp} by this operation as well.
+If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
+}
+
 \examples{
 \dontrun{
 tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")

@@ -1,7 +1,7 @@
 #' Get chromosome order from a string of chromosome/contig names
 #'
 #' `getChrOrder()` takes a string of chromosome or contig names and returns the indices of the string in typical chromosome order, i.e. 1 through 22, X, Y.
-#' Contig names that do not match 1:22, X, or Y are sorted numerically and alphabetically with numbers coming first, and added to the end of the order.
+#' Contig names that do not match 1:22, X, or Y are sorted numerically and alphabetically (with numbers coming first), and added to the end of the order.
 #' The output string can then be used to sort the input string into typical chromosome order.
 #'
 #' @param chr.vector Character vector of chromosome or contig names.
@@ -10,7 +10,8 @@
 #' @export
 #'
 #' @examples
-#' getChrOrder(c(1,"virus",5,"X",22,"plasmid","Y"))
+#' chr.order <- getChrOrder(c(1,"virus",5,"X",22,"plasmid","Y"))
+#' ordered.vector <- c(1,"virus",5,"X",22,"plasmid","Y")[chr.order]
 
 getChrOrder <- function(chr.vector){
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{reducedDimPlot}
 \alias{reducedDimPlot}
-\title{Scatter plot for dimensional reduction results.}
+\title{Scatter plot for dimensional reduction results}
 \usage{
 reducedDimPlot(
   TapestriExperiment,
@@ -14,23 +14,23 @@ reducedDimPlot(
 )
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp to use, NULL uses top-level experiment. Default "alleleFrequency".}
+\item{alt.exp}{Character, \code{altExp} to use, \code{NULL} uses top-level/main experiment. Default "alleleFrequency".}
 
-\item{dim.reduction}{Chr, which dimension reduction to plot, either "PCA" or "UMAP".}
+\item{dim.reduction}{Character, dimension reduction to plot, either "PCA" or "UMAP".}
 
 \item{dim.x}{Numeric, index of dimensional reduction data to plot on X axis. Default 1.}
 
 \item{dim.y}{Numeric, index of dimensional reduction data to plot on Y axis. Default 2.}
 
-\item{group.label}{Chr string indicating colData column for coloring samples. Default NULL.}
+\item{group.label}{Character, \code{colData} column for coloring samples. Default \code{NULL}.}
 }
 \value{
-ggplot scatter plot
+ggplot2 object, scatter plot
 }
 \description{
-Scatter plot for dimensional reduction results.
+Plots a scatter plot of the indicated dimensional reduction results.
 }
 \examples{
 \dontrun{reducedDimPlot(TapestriExperiment, dim.reduction = "pca")}

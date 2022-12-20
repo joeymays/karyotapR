@@ -2,24 +2,24 @@
 % Please edit documentation in R/normalization.R
 \name{normalizeCounts}
 \alias{normalizeCounts}
-\title{Normalize Raw Counts}
+\title{Normalize raw counts}
 \usage{
 normalizeCounts(TapestriExperiment, method = "mb")
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{method}{Chr string indicating normalization method. Default "mb".}
+\item{method}{Character, normalization method. Default "mb".}
 }
 \value{
-TapestriExperiment object with normalized counts added to \code{normcounts} slot.
+\code{TapestriExperiment} object with normalized counts added to \code{normcounts} slot.
 }
 \description{
-Normalizes raw counts from \code{counts} slot in a TapestriExperiment and returns the object with normalized counts in the \code{normcounts} slot.
+Normalizes raw counts from \code{counts} slot in \code{TapestriExperiment} and returns the object with normalized counts in the \code{normcounts} slot.
 "mb" is the only method supported currently.
 This method performs the same normalization scheme as in Mission Bio's mosaic package for python.
-Counts for each barcode are normalized relative to their barcode means and probe counts are normalized relative to their probe medians.
-Also calculates the standard deviation for each amplicon using normalized counts and adds it to \code{rowData}.
+Counts for each barcode are normalized relative to their barcode's mean and probe counts are normalized relative to their probe's median.
+Also calculates the standard deviation for each probe using normalized counts and adds it to \code{rowData}.
 }
 \examples{
 \dontrun{TapestriExperiment <- normalizeCounts(TapestriExperiment)}

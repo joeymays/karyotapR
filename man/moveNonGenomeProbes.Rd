@@ -2,7 +2,7 @@
 % Please edit documentation in R/moveNonGenomeProbes.R
 \name{moveNonGenomeProbes}
 \alias{moveNonGenomeProbes}
-\title{Move non-genome probe counts and metadata to alternative experiment slots}
+\title{Move non-genome probes counts and metadata to altExp slots}
 \usage{
 moveNonGenomeProbes(
   TapestriExperiment,
@@ -10,19 +10,32 @@ moveNonGenomeProbes(
 )
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{move.non.genome.probes}{Chr vector including a combination of "grna", "sample.barcode", and or "Y" (default), or FALSE.}
+\item{move.non.genome.probes}{Character vector, a combination of "grna", "sample.barcode", and/or "Y" (default), or \code{FALSE}.}
 }
 \value{
 A \code{TapestriExperiment} with \code{altExp} slots filled with counts and metadata for the specified probes.
 }
 \description{
-\code{moveNonGenomeProbes()} takes the probe IDs corresponding to \code{grnaProbe} and \code{barcodeProbe} slots of the \code{TapestriExperiment} object, as well as probes on chrY, and moves them to their own \code{altExp} (alternative experiment) slots in the object.
+\code{moveNonGenomeProbes()} takes the probe IDs corresponding to \code{grnaProbe} and \code{barcodeProbe} slots of the \code{TapestriExperiment} object,
+as well as probes on chrY, and moves them to their own \code{altExp} slots in the object.
 This allows those counts and associated metadata to be manipulated separately without interfering with the other probes in the panel.
+\code{\link[SingleCellExperiment:splitAltExps]{SingleCellExperiment::splitAltExps()}} can be used for manual specification of probes to move to \code{altExp} slots if the shortcut slots are not used.
+}
+\details{
+\code{moveNonGenomeProbes()} moves probes corresponding to the specified tags to \code{altExp} (alternative experiment) slots in the \code{TapestriExperiment} object.
+These probes should be those which do not correspond to a chromosome and therefore would not be used to call copy number variants.
+The exception is probes on chromosome Y; chrY does not generally experience CNVs, so we move it to an \code{altExp} for separate analysis.
+Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, which are specified by the \code{panel.id} shortcut or manually (see \link{Custom Slot Getters and Setters}),
+are automatically moved to \code{altExp} by this operation as well.
+If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
+This is run automatically by default and with default behavior as part of \code{\link[=createTapestriObject]{createTapestriObject()}}.
 }
 \examples{
-\dontrun{tapObject <- moveNonGenomeProbes(tapObject)}
+\dontrun{
+tapObject <- moveNonGenomeProbes(tapObject)
+}
 }
 \seealso{
 \code{\link[SingleCellExperiment:splitAltExps]{SingleCellExperiment::splitAltExps()}} for manual specification of probes to move to \code{altExp} slots.
