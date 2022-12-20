@@ -10,7 +10,7 @@ assayBoxPlot(
   assay = NULL,
   log.y = T,
   split.features = F,
-  coldata.set = NULL
+  split.x.by = NULL
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ assayBoxPlot(
 
 \item{split.features}{Logical, if \code{TRUE}, splits plot by \code{rowData} features. Default \code{FALSE.}}
 
-\item{coldata.set}{Character, \code{colData} field to use for X axis categories. Default \code{NULL}.}
+\item{split.x.by}{Character, \code{colData} column to use for X axis categories. Default \code{NULL}.}
 }
 \value{
 A ggplot object using \code{\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot()}}.
@@ -38,7 +38,7 @@ probes on chrY.
 \dontrun{
 assayBoxPlot(TapestriExperiment, "chrYCounts",
   assay = "counts",
-  split.features = T, coldata.set = "cluster"
+  split.features = T, split.x.by = "cluster"
 )
 }
 }

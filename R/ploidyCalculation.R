@@ -42,14 +42,14 @@ generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cl
 #'
 #' The `control.ploidy` data.frame should include 3 columns named `arm`, `ploidy`, and `sample.label`.
 #' `arm` is chromosome arms from chr1p through chrXq, `ploidy` is the reference ploidy value, and `sample.label` is the
-#' value corresponding to the `colData` field given in `coldata.set` to indicate the cell barcode subset to use to set the ploidy.
+#' value corresponding to the `colData` column given in `sample.category` to indicate the cell barcode subset to use to set the ploidy.
 #' This is best used in a workflow where the cells are clustered first, and then one cluster is used as the reference population
 #' the other clusters. This also allows for the baseline ploidy to be set for each chromosome individually in the case where the
 #' reference population is not completely diploid.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param control.ploidy A `data.frame` with columns `arm`, `ploidy`, and `sample.label`. See details.
-#' @param coldata.set Character, `colData` field to use for subsetting cell.barcodes. Default "cluster".
+#' @param sample.category Character, `colData` column to use for subsetting cell.barcodes. Default "cluster".
 #'
 #' @return `TapestriExperiment` object with ploidy values in `ploidy` assay slot.
 #' @export
@@ -62,18 +62,18 @@ generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cl
 #' control.ploidy <- generateControlPloidyTemplate()
 #' TapestriExperiment <- getPloidy(TapestriExperiment,
 #'   control.ploidy,
-#'   coldata.set = "cluster"
+#'   sample.category = "cluster"
 #' )
 #' }
-getPloidy <- function(TapestriExperiment, control.ploidy, coldata.set = "cluster") {
-  coldata.set <- tolower(coldata.set)
+getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "cluster") {
+  sample.category <- tolower(sample.category)
 
   # error checks
-  if (!coldata.set %in% colnames(SummarizedExperiment::colData(TapestriExperiment))) {
-    stop(paste0("coldata.set '", coldata.set, "' not found in colData"))
+  if (!sample.category %in% colnames(SummarizedExperiment::colData(TapestriExperiment))) {
+    stop(paste0("sample.category '", sample.category, "' not found in colData"))
   }
 
-  if (any(!unique(control.ploidy$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, coldata.set]))) {
+  if (any(!unique(control.ploidy$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.category]))) {
     stop(paste0("control.ploidy sample.label elements not found in colData. Check control.ploidy."))
   }
 
@@ -84,12 +84,12 @@ getPloidy <- function(TapestriExperiment, control.ploidy, coldata.set = "cluster
   probe.table <- merge(probe.table, control.ploidy, by = "arm", all.x = T, sort = F)
   rownames(probe.table) <- probe.table$probe.id
 
-  coldata.set.lookup <- SummarizedExperiment::colData(TapestriExperiment)[, coldata.set, drop = F]
+  sample.category.lookup <- SummarizedExperiment::colData(TapestriExperiment)[, sample.category, drop = F]
 
   # define function for calculating median from cell subset
   getProbeMedian <- function(idx) {
     probe.info <- probe.table[idx, ]
-    probe.median <- median(counts.mat[probe.info$probe.id, rownames(coldata.set.lookup)[coldata.set.lookup[, 1] == probe.info$sample.label]])
+    probe.median <- median(counts.mat[probe.info$probe.id, rownames(sample.category.lookup)[sample.category.lookup[, 1] == probe.info$sample.label]])
     return(probe.median)
   }
 

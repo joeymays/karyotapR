@@ -36,7 +36,7 @@ parseBarcodedReadsFromContig(
 
 \item{...}{Arguments to pass on to \code{parseBarcodedReadsFromContig()}.}
 
-\item{contig}{Charcter, contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.}
+\item{contig}{Character, contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.}
 
 \item{cell.barcode.tag}{Character of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".}
 

@@ -30,7 +30,7 @@ getClusters(
 \item{...}{Additional parameters to pass to \code{\link[dbscan:dbscan]{dbscan::dbscan()}}.}
 }
 \value{
-\code{TapestriExperiment} object with updated \code{colData} containing cluster assingments.
+\code{TapestriExperiment} object with updated \code{colData} containing cluster assignments.
 }
 \description{
 Clusters data using dbscan method and saves cluster assignments for each cell barcode to \code{colData}.

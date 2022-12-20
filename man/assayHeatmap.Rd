@@ -21,13 +21,13 @@ assayHeatmap(
 
 \item{alt.exp}{Character, \code{altExp} slot to use. \code{NULL} (default) uses top-level/main experiment.}
 
-\item{assay}{Character, \code{assay} slot to use. \code{NULL} (default) uses first-indexed assay (often "counts").}
+\item{assay}{Character, \code{assay} slot to use. \code{NULL} (default) uses first-indexed assay (usually "counts").}
 
-\item{split.col.by}{Character, \code{rowData} field to split columns by, usually "chr" or "arm". Default \code{NULL}.}
+\item{split.col.by}{Character, \code{rowData} column to split columns by, usually "chr" or "arm". Default \code{NULL}.}
 
-\item{split.row.by}{Character, \code{colData} field to split rows by, usually "cluster". Default \code{NULL}.}
+\item{split.row.by}{Character, \code{colData} column to split rows by, usually "cluster". Default \code{NULL}.}
 
-\item{annotate.row.by}{Character, \code{colData} field to use as annotation. Default \code{NULL}.}
+\item{annotate.row.by}{Character, \code{colData} column to use for annotation. Default \code{NULL}.}
 
 \item{color.preset}{Character, color preset to use to color heatmap, either "ploidy" or "ploidy.denoise" (see \code{Details}). Overrides \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} coloring.}
 

@@ -5,7 +5,7 @@
 \alias{generateControlPloidyTemplate}
 \title{Calculate ploidy for each cell-chromosome pair using baseline control}
 \usage{
-getPloidy(TapestriExperiment, control.ploidy, coldata.set = "cluster")
+getPloidy(TapestriExperiment, control.ploidy, sample.category = "cluster")
 
 generateControlPloidyTemplate(ploidy.all = 2, sample.label.all = "cluster")
 }
@@ -14,7 +14,7 @@ generateControlPloidyTemplate(ploidy.all = 2, sample.label.all = "cluster")
 
 \item{control.ploidy}{A \code{data.frame} with columns \code{arm}, \code{ploidy}, and \code{sample.label}. See details.}
 
-\item{coldata.set}{Character, \code{colData} field to use for subsetting cell.barcodes. Default "cluster".}
+\item{sample.category}{Character, \code{colData} column to use for subsetting cell.barcodes. Default "cluster".}
 
 \item{ploidy.all}{Numeric, sets all entries of \code{ploidy} column in output. Default 2.}
 
@@ -37,7 +37,7 @@ to use as the reference. A template for \code{control.ploidy} can be generated u
 
 The \code{control.ploidy} data.frame should include 3 columns named \code{arm}, \code{ploidy}, and \code{sample.label}.
 \code{arm} is chromosome arms from chr1p through chrXq, \code{ploidy} is the reference ploidy value, and \code{sample.label} is the
-value corresponding to the \code{colData} field given in \code{coldata.set} to indicate the cell barcode subset to use to set the ploidy.
+value corresponding to the \code{colData} column given in \code{sample.category} to indicate the cell barcode subset to use to set the ploidy.
 This is best used in a workflow where the cells are clustered first, and then one cluster is used as the reference population
 the other clusters. This also allows for the baseline ploidy to be set for each chromosome individually in the case where the
 reference population is not completely diploid.
@@ -52,7 +52,7 @@ reference population is not completely diploid.
 control.ploidy <- generateControlPloidyTemplate()
 TapestriExperiment <- getPloidy(TapestriExperiment,
   control.ploidy,
-  coldata.set = "cluster"
+  sample.category = "cluster"
 )
 }
 }

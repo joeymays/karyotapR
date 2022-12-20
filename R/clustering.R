@@ -61,7 +61,7 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
 
 #' Plot of PCA variance explained
 #'
-#' Draws "knee plot" of PCA variance explained to determine which principal componenets (PCs) to include for downstream applications e.g. clustering.
+#' Draws "knee plot" of PCA variance explained to determine which principal components (PCs) to include for downstream applications e.g. clustering.
 #' Variance explained for each PC is indicated by the line.
 #' Cumulative variance explained is indicated by the bars.
 #'
@@ -234,7 +234,7 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 #' @param dim.1 Numeric, index of data dimension to use. Default 1.
 #' @param dim.2 Numeric, index of data dimension to use. Default 2.
 #'
-#' @return `TapestriExperiment` object with updated `colData` containing cluster assingments.
+#' @return `TapestriExperiment` object with updated `colData` containing cluster assignments.
 #' @export
 #'
 #' @seealso [`dbscan::dbscan()`]

@@ -81,7 +81,7 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' @param assay Character, assay to plot. `NULL` (default) selects first assay listed `TapestriExperiment`.
 #' @param log.y Logical, if `TRUE`, scales data using `log1p()`. Default `TRUE.`
 #' @param split.features Logical, if `TRUE`, splits plot by `rowData` features. Default `FALSE.`
-#' @param coldata.set Character, `colData` field to use for X axis categories. Default `NULL`.
+#' @param split.x.by Character, `colData` column to use for X axis categories. Default `NULL`.
 #'
 #' @return A ggplot object using [`ggplot2::geom_boxplot()`].
 #' @export
@@ -92,10 +92,10 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' \dontrun{
 #' assayBoxPlot(TapestriExperiment, "chrYCounts",
 #'   assay = "counts",
-#'   split.features = T, coldata.set = "cluster"
+#'   split.features = T, split.x.by = "cluster"
 #' )
 #' }
-assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = T, split.features = F, coldata.set = NULL) {
+assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = T, split.features = F, split.x.by = NULL) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
   tidy.data <- getTidyData(TapestriExperiment, alt.exp, assay)
@@ -107,10 +107,10 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
     y.label <- assay
   }
 
-  if (is.null(coldata.set)) {
+  if (is.null(split.x.by)) {
     g1 <- ggplot(tidy.data, aes(y = .data[[assay]]))
   } else {
-    g1 <- ggplot(tidy.data, aes(x = .data[[coldata.set]], y = .data[[assay]]))
+    g1 <- ggplot(tidy.data, aes(x = .data[[split.x.by]], y = .data[[assay]]))
   }
 
   if (split.features) {
@@ -152,10 +152,10 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #'
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param alt.exp Character, `altExp` slot to use. `NULL` (default) uses top-level/main experiment.
-#' @param assay Character, `assay` slot to use. `NULL` (default) uses first-indexed assay (often "counts").
-#' @param split.col.by Character, `rowData` field to split columns by, usually "chr" or "arm". Default `NULL`.
-#' @param split.row.by Character, `colData` field to split rows by, usually "cluster". Default `NULL`.
-#' @param annotate.row.by Character, `colData` field to use as annotation. Default `NULL`.
+#' @param assay Character, `assay` slot to use. `NULL` (default) uses first-indexed assay (usually "counts").
+#' @param split.col.by Character, `rowData` column to split columns by, usually "chr" or "arm". Default `NULL`.
+#' @param split.row.by Character, `colData` column to split rows by, usually "cluster". Default `NULL`.
+#' @param annotate.row.by Character, `colData` column to use for annotation. Default `NULL`.
 #' @param color.preset Character, color preset to use to color heatmap, either "ploidy" or "ploidy.denoise" (see `Details`). Overrides `color.custom`. `NULL` (default) uses default `ComplexHeatmap` coloring.
 #' @param color.custom Color mapping function given by [`circlize::colorRamp2()`]. `color.preset` must be `NULL`.
 #' @param ... Additional parameters to pass to [`ComplexHeatmap::Heatmap()`].

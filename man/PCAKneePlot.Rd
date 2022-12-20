@@ -17,7 +17,7 @@ PCAKneePlot(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs = 10)
 ggplot2 object, combined line plot and bar graph
 }
 \description{
-Draws "knee plot" of PCA variance explained to determine which principal componenets (PCs) to include for downstream applications e.g. clustering.
+Draws "knee plot" of PCA variance explained to determine which principal components (PCs) to include for downstream applications e.g. clustering.
 Variance explained for each PC is indicated by the line.
 Cumulative variance explained is indicated by the bars.
 }
