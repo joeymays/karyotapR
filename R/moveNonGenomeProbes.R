@@ -11,7 +11,7 @@
 #' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, which are specified by the `panel.id` shortcut or manually (see [Custom Slot Getters and Setters]),
 #' are automatically moved to `altExp` by this operation as well.
 #' If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
-#' This is run automatically by default and with default behavior as part of [createTapestriObject()].
+#' This is run automatically by default and with default behavior as part of [createTapestriExperiment()].
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param move.non.genome.probes Character vector, a combination of "grna", "sample.barcode", and/or "Y" (default), or `FALSE`.

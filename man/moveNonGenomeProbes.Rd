@@ -30,7 +30,7 @@ The exception is probes on chromosome Y; chrY does not generally experience CNVs
 Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, which are specified by the \code{panel.id} shortcut or manually (see \link{Custom Slot Getters and Setters}),
 are automatically moved to \code{altExp} by this operation as well.
 If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
-This is run automatically by default and with default behavior as part of \code{\link[=createTapestriObject]{createTapestriObject()}}.
+This is run automatically by default and with default behavior as part of \code{\link[=createTapestriExperiment]{createTapestriExperiment()}}.
 }
 \examples{
 \dontrun{
