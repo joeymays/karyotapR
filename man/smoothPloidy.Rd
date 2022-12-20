@@ -2,23 +2,26 @@
 % Please edit documentation in R/ploidyCalculation.R
 \name{smoothPloidy}
 \alias{smoothPloidy}
-\title{Smooth Ploidy Values by Chromosome and Chromosome Arm}
+\title{Smooth ploidy values by chromosome and chromosome arm}
 \usage{
 smoothPloidy(TapestriExperiment, method = "median")
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object.}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{method}{Chr string indicating smoothing method. Supports median (default) or mean.}
+\item{method}{Character string, smoothing method. Supports median (default) or mean.}
 }
 \value{
-TapestriExperiment object with smoothed ploidy values in altExp slot
+\code{TapestriExperiment} with \code{smoothPloidy} and \code{DiscretePloidy} assays in \code{altExp} slot
 }
 \description{
-\code{smoothPloidy()} takes ploidy values across probes and smooths them by median (default) for each chromosome and chromosome arm, resulting in one ploidy value per chromosome/arm per cell barcode.
+\code{smoothPloidy()} takes ploidy values across probes and smooths them by median (default) for each chromosome and chromosome arm,
+resulting in one ploidy value per chromosome/arm per cell barcode.
 Values are then discretized into integers by conventional rounding.
-Results are stored as alternate experiments in the TapestriObject, with smoothPloidy and DiscretePloidy assays.
+Results are stored in \code{altExp} slots in \code{TapestriObject}, with \code{smoothPloidy} and \code{DiscretePloidy} assays.
 }
 \examples{
-\dontrun{TapestriExperiment <- smoothPloidy(TapestriExperiment)}
+\dontrun{
+TapestriExperiment <- smoothPloidy(TapestriExperiment)
+}
 }

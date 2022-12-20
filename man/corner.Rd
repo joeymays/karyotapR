@@ -2,7 +2,7 @@
 % Please edit documentation in R/helperFunctions.R
 \name{corner}
 \alias{corner}
-\title{Glimpse the top corner of a matrix}
+\title{Glimpse the top-left corner of a matrix}
 \usage{
 corner(input.mat)
 }
@@ -16,5 +16,7 @@ matrix-like object matching input class
 Outputs up to 5 rows and columns of the input matrix object to get a quick look without filling the console.
 }
 \examples{
-\dontrun{corner(assay(TapestriObject))}
+\dontrun{
+corner(assay(TapestriObject))
+}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{assayHeatmap}
 \alias{assayHeatmap}
-\title{Generate Assay Heatmap}
+\title{Generate heatmap of matrix data}
 \usage{
 assayHeatmap(
   TapestriExperiment,
@@ -17,39 +17,58 @@ assayHeatmap(
 )
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp slot to pull from. \code{NULL} (default) pulls from top-level/main experiment.}
+\item{alt.exp}{Character, \code{altExp} slot to use. \code{NULL} (default) uses top-level/main experiment.}
 
-\item{assay}{Chr string indicating assay slot to pull from. \code{NULL} (default) pulls from first-indexed assay (often "counts").}
+\item{assay}{Character, \code{assay} slot to use. \code{NULL} (default) uses first-indexed assay (often "counts").}
 
-\item{split.col.by}{Chr string indicating rowData field to split columns by, usually "chr" or "arm". Default NULL.}
+\item{split.col.by}{Character, \code{rowData} field to split columns by, usually "chr" or "arm". Default \code{NULL}.}
 
-\item{split.row.by}{Chr string indicating colData field to split rows by, usually "cluster". Default NULL.}
+\item{split.row.by}{Character, \code{colData} field to split rows by, usually "cluster". Default \code{NULL}.}
 
-\item{annotate.row.by}{Chr string indicating colData field to use as annotation. Default NULL.}
+\item{annotate.row.by}{Character, \code{colData} field to use as annotation. Default \code{NULL}.}
 
-\item{color.preset}{Chr string indicating color preset to use to color heatmap, either ploidy or ploidy.denoise (see Details). Supersedes \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} color.}
+\item{color.preset}{Character, color preset to use to color heatmap, either "ploidy" or "ploidy.denoise" (see \code{Details}). Overrides \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} coloring.}
 
-\item{color.custom}{Color mapping function given by \code{circlize::colorRamp2()}. \code{color.preset} must be \code{NULL}.}
+\item{color.custom}{Color mapping function given by \code{\link[circlize:colorRamp2]{circlize::colorRamp2()}}. \code{color.preset} must be \code{NULL}.}
 
-\item{...}{Additional parameters to pass to \verb{[ComplexHeatmap::Heatmap()]}.}
+\item{...}{Additional parameters to pass to \code{\link[ComplexHeatmap:Heatmap]{ComplexHeatmap::Heatmap()}}.}
 }
 \value{
-A ComplexHeatmap object
+A \code{ComplexHeatmap} object
 }
 \description{
-Use to create a heatmap of matrix data in a TapestriObject using the \code{ComplexHeatmap} package.
-Heatmaps are generated as transposed representations of the matrix.
+Creates a heatmap of matrix data in a \code{TapestriObject} using the \code{ComplexHeatmap} package.
+Heatmaps are generated as transposed (i.e. x-y flipped) representations of the indicated matrix.
 }
-\details{
-\code{color.preset} presets:
-ploidy: \code{circlize::colorRamp2(c(0,1,2,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))}; Blue-white-red gradient from 0-2-4. 4 to 8+ is black.
-ploidy.denoise: \code{circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8), c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))}; Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
+\section{\code{color.preset} Options}{
+\subsection{"ploidy"}{
+
+Blue-white-red gradient from 0-2-4. 4 to 8+ is red-black gradient.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{circlize::colorRamp2(c(0,1,2,3,4,8),
+c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))
+}\if{html}{\out{</div>}}
 }
+
+\subsection{"ploidy.denoise"}{
+
+Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8),
+c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))
+}\if{html}{\out{</div>}}
+}
+}
+
 \examples{
-\dontrun{assayHeatmap(TapestriExperiment, alt.exp = "smoothedPloidyByArm",
-assay = "discretePloidy", split.row.by = "cluster")}
+\dontrun{
+assayHeatmap(TapestriExperiment,
+  alt.exp = "smoothedPloidyByArm",
+  assay = "discretePloidy", split.row.by = "cluster"
+)
+}
 }
 \seealso{
 \link[ComplexHeatmap]{Heatmap}

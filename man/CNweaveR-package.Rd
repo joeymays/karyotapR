@@ -4,15 +4,15 @@
 \name{CNweaveR-package}
 \alias{CNweaveR}
 \alias{CNweaveR-package}
-\title{CNweaveR: DNA CNV Analysis for Custom Genome-Wide Tapestri Panels}
+\title{CNweaveR: DNA Copy Number Analysis for Genome-wide Tapestri Panels}
 \description{
 CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of single cells, using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system. This package allows users to easily parse, manipulate, and visualize datasets produced from the automated Tapestri Pipeline, with support for normalization, clustering, and ploidy calling.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/joeymays/weaver}
-  \item Report bugs at \url{https://github.com/joeymays/weaver/issues}
+  \item \url{https://github.com/joeymays/CNweaveR}
+  \item Report bugs at \url{https://github.com/joeymays/CNweaveR/issues}
 }
 
 }

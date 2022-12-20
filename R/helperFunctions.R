@@ -1,4 +1,4 @@
-#' Glimpse the top corner of a matrix
+#' Glimpse the top-left corner of a matrix
 #'
 #' Outputs up to 5 rows and columns of the input matrix object to get a quick look without filling the console.
 #'
@@ -8,17 +8,23 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{corner(assay(TapestriObject))}
-corner <- function(input.mat){
-    if(nrow(input.mat) > 4){
-        row.out <- 5
-    } else { row.out = nrow(input.mat)}
+#' \dontrun{
+#' corner(assay(TapestriObject))
+#' }
+corner <- function(input.mat) {
+  if (nrow(input.mat) > 4) {
+    row.out <- 5
+  } else {
+    row.out <- nrow(input.mat)
+  }
 
-    if(ncol(input.mat) > 4){
-        col.out <- 5
-    } else { col.out = ncol(input.mat)}
+  if (ncol(input.mat) > 4) {
+    col.out <- 5
+  } else {
+    col.out <- ncol(input.mat)
+  }
 
-    input.mat[1:row.out, 1:col.out]
+  input.mat[1:row.out, 1:col.out]
 }
 
 #' Get tidy-style data from TapestriExperiment objects
@@ -81,7 +87,18 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
     return(tidy.data)
 }
 
-#checks if assay is available. If not, lists available assays in error. If assay = NULL, sets assay to first assay in exp or alt exp.
+#' Check for available `altExp` and `assay` slots
+#'
+#' Checks if assay is available in given `altExp.` If not, lists available assays in error.
+#' If assay is `NULL`, sets assay to first assay in `mainExp` or `altExp.`
+#'
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param alt.exp Character, `altExp` slot to use. `NULL` (default) uses top-level/main experiment.
+#' @param assay Character, `assay` slot to use. `NULL` (default) uses first-indexed assay (often "counts").
+#'
+#' @return Character, assay selection
+#' @noRd
+#'
 .SelectAssay <- function(TapestriExperiment, alt.exp = NULL, assay = NULL){
 
     if(is.null(alt.exp)){

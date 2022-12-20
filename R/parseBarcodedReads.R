@@ -143,74 +143,76 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
     }
 }
 
-#' Call sample labels based on metadata counts.
+#' Call sample labels based on feature counts.
 #'
-#' `callSampleLables()` determines sample labels by comparing auxiliary count data, most likely generated from barcoded reads (see[parseBarcodedReads()]).
-#' Labels are dictated by whichever `coldata.labels` element has the highest number of counts.
+#' `callSampleLables()` determines sample labels by comparing auxiliary feature count data,
+#' most likely generated from barcoded reads (see [parseBarcodedReads]).
+#' For `method = max`, labels are dictated by whichever `coldata.labels` field has the highest number of counts.
 #' By default, ties are broken by choosing whichever label has the lowest index position (`ties.method = "first"`).
-#' Samples with 0 counts for all labels are labeled "none".
+#' Samples with 0 counts for all `coldata.labels` fields are labeled according to `neg.label`.
 #'
-#' @param TapestriExperiment A TapestriExperiment object.
-#' @param coldata.labels A chr vector of column labels corresponding to colData.
-#' @param method A chr string indicating call method. Only "max" currently supported, calls based on whichever label has the most counts.
-#' @param ties.method A chr string passed to `max.col()` indicating how to break ties. Default "first".
-#' @param neg.label A chr string indicating what to label samples with no counts. Default NA.
-#' @param sample.label A chr string indicating the column name to use for the sample call. Default "sample.call".
-#' @param return.table Logical, if TRUE returns a data.frame of the sample.calls. Otherwise returns updatedTapestriExperiment object. Default FALSE.
+#' @param TapestriExperiment A `TapestriExperiment` object
+#' @param coldata.labels Character vector, column fields corresponding to `colData`.
+#' @param method Character, call method. Only "max" currently supported, calls based on whichever `coldata.labels` field has the most counts.
+#' @param ties.method Character, passed to `max.col()` indicating how to break ties. Default "first".
+#' @param neg.label Character, label for samples with no counts. Default `NA`.
+#' @param sample.label Character, column name to use for the sample call. Default "sample.call".
+#' @param return.table Logical, if `TRUE`, returns a data.frame of the sample.calls. If `FALSE` (default), returns updated `TapestriExperiment` object.
 #'
-#' @return A TapestriExperiment object with sample calls added to colData. If `return.table == TRUE`, a data.frame of sample calls.
+#' @return A `TapestriExperiment` object with sample calls added to `colData.` If `return.table == TRUE`, a data.frame of sample calls.
 #' @export
 #'
 #' @examples
-#' \dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"),
-#' sample.label = "sample.grna")}
-callSampleLables <- function(TapestriExperiment, coldata.labels, sample.label = "sample.call", return.table = F, neg.label = NA, method = "max", ties.method = "first"){
-
-    if(method != "max"){
-        stop("Method not recognized. Only 'max' currently supported.")
-    } else {
-
-        # check for missing colData labels
-        if(any(!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment)))){
-            stop(paste0(coldata.labels[!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData.\n"))
-        }
-
-        # subset colData
-        existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
-        coldata.subset <- existing.cell.data[,coldata.labels]
-
-        # check if numeric
-        if(any(!apply(coldata.subset, 2, is.numeric))){
-            stop("Selected coldata.labels are not numeric.")
-        }
-
-        # make calls
-        sample.calls <- coldata.labels[max.col(coldata.subset, ties.method = ties.method)]
-        sample.calls <- data.frame(cell.barcode = rownames(coldata.subset), sample.call = sample.calls)
-        sample.calls[rowSums(coldata.subset) == 0, "sample.call"] <- neg.label # set label if no call is made
-        sample.calls$sample.call <- as.factor(sample.calls$sample.call)
-        rownames(sample.calls) <- sample.calls$cell.barcode
-        colnames(sample.calls)[2] <- sample.label
-
-        if(return.table){
-            return(sample.calls)
-        } else {
-
-            # drop from existing data if already exist to allow overwriting
-            existing.cell.data <- existing.cell.data[,!colnames(existing.cell.data) %in% setdiff(colnames(sample.calls), "cell.barcode")]
-
-            # merge result and existing colData
-            updated.cell.data <- merge(existing.cell.data, sample.calls, by = "cell.barcode", all.x = T, sort = F)
-
-            # reorder to match colData
-            rownames(updated.cell.data) <- updated.cell.data$cell.barcode
-            updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)),]
-
-            # update TapestriExperiment
-            SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
-
-            return(TapestriExperiment)
-        }
+#' \dontrun{
+#' TapestriExperiment <- callSampleLables(TapestriExperiment,
+#'   coldata.labels = c("g7", "gNC"),
+#'   sample.label = "sample.grna"
+#' )
+#' }
+callSampleLables <- function(TapestriExperiment, coldata.labels, sample.label = "sample.call", return.table = F, neg.label = NA, method = "max", ties.method = "first") {
+  if (method != "max") {
+    stop("Method not recognized. Only 'max' currently supported.")
+  } else {
+    # check for missing colData labels
+    if (any(!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment)))) {
+      stop(paste0(coldata.labels[!coldata.labels %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData.\n"))
     }
+
+    # subset colData
+    existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
+    coldata.subset <- existing.cell.data[, coldata.labels]
+
+    # check if numeric
+    if (any(!apply(coldata.subset, 2, is.numeric))) {
+      stop("Selected coldata.labels are not numeric.")
+    }
+
+    # make calls
+    sample.calls <- coldata.labels[max.col(coldata.subset, ties.method = ties.method)]
+    sample.calls <- data.frame(cell.barcode = rownames(coldata.subset), sample.call = sample.calls)
+    sample.calls[rowSums(coldata.subset) == 0, "sample.call"] <- neg.label # set label if no call is made
+    sample.calls$sample.call <- as.factor(sample.calls$sample.call)
+    rownames(sample.calls) <- sample.calls$cell.barcode
+    colnames(sample.calls)[2] <- sample.label
+
+    if (return.table) {
+      return(sample.calls)
+    } else {
+      # drop from existing data if already exist to allow overwriting
+      existing.cell.data <- existing.cell.data[, !colnames(existing.cell.data) %in% setdiff(colnames(sample.calls), "cell.barcode")]
+
+      # merge result and existing colData
+      updated.cell.data <- merge(existing.cell.data, sample.calls, by = "cell.barcode", all.x = T, sort = F)
+
+      # reorder to match colData
+      rownames(updated.cell.data) <- updated.cell.data$cell.barcode
+      updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)), ]
+
+      # update TapestriExperiment
+      SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
+
+      return(TapestriExperiment)
+    }
+  }
 }
 

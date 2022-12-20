@@ -34,34 +34,40 @@ setMethod("show", "TapestriExperiment", function(object) {
 })
 
 
-#' Getters and Setters for TapestriExperiment slots
+#' @name Custom Slot Getters and Setters
 #'
-#' Current slots supported are barcodeProbe for a sample barcode probe ID and grnaProbe for a gRNA-associated probe ID.
+#' @title Getter and Setter functions for `TapestriExperiment` slots
 #'
-#' @param x A TapestriExperiment object
+#' @description Get and set custom slots in `TapestriExperiment`. Currently supported slots
+#' are `barcodeProbe` for a sample barcode probe ID
+#' and `grnaProbe` for a gRNA-associated probe ID. These are used as shortcuts for
+#' [`moveNonGenomeProbes()`] and [`parseBarcodedReads()`].
 #'
-#' @export
-#' @describeIn slotGettersSetters Getter and Setter functions for custom slots in TapestriExperiment Object.
-setGeneric("barcodeProbe", function(x) standardGeneric("barcodeProbe"))
-
-#' @param TapestriExperiment A TapestriExperiment object
+#' @param x A `TapestriExperiment` object
 #'
 #' @export
 #' @rdname slotGettersSetters
+#' @aliases barcodeProbe
+setGeneric("barcodeProbe", function(x) standardGeneric("barcodeProbe"))
+
+#' @param TapestriExperiment A `TapestriExperiment` object
+#'
+#' @export
+#' @describeIn slotGettersSetters barcodeProbe getter
 setMethod("barcodeProbe", "TapestriExperiment", function(x) x@barcodeProbe)
 
-#' @param x A TapestriExperiment object
+#' @param x A `TapestriExperiment` object
 #'
-#' @param value Chr string to assign to slot
+#' @param value Character, probe ID to assign to slot
 #'
 #' @export
 #' @rdname slotGettersSetters
 setGeneric("barcodeProbe<-", function(x, value) standardGeneric("barcodeProbe<-"))
 
-#' @param TapestriExperiment A TapestriExperiment object
+#' @param TapestriExperiment A `TapestriExperiment` object
 #'
 #' @export
-#' @rdname slotGettersSetters
+#' @describeIn slotGettersSetters barcodeProbe setter
 setMethod("barcodeProbe<-", "TapestriExperiment", function(x, value) {
     x@barcodeProbe <- value
     validObject(x)
@@ -75,24 +81,24 @@ setMethod("barcodeProbe<-", "TapestriExperiment", function(x, value) {
 #' @rdname slotGettersSetters
 setGeneric("grnaProbe", function(x) standardGeneric("grnaProbe"))
 
-#' @param TapestriExperiment A TapestriExperiment object
+#' @param TapestriExperiment A `TapestriExperiment` object
 #'
 #' @export
-#' @rdname slotGettersSetters
+#' @describeIn slotGettersSetters grnaProbe getter
 setMethod("grnaProbe", "TapestriExperiment", function(x) x@grnaProbe)
 
-#' @param x A TapestriExperiment object
+#' @param x A `TapestriExperiment` object
 #'
-#' @param value Chr string to assign to slot
+#' @param value Character, probe ID to assign to slot
 #'
 #' @export
 #' @rdname slotGettersSetters
 setGeneric("grnaProbe<-", function(x, value) standardGeneric("grnaProbe<-"))
 
-#' @param TapestriExperiment A TapestriExperiment object
+#' @param TapestriExperiment A `TapestriExperiment` object
 #'
 #' @export
-#' @rdname slotGettersSetters
+#' @describeIn slotGettersSetters grnaProbe setter
 setMethod("grnaProbe<-", "TapestriExperiment", function(x, value) {
     x@grnaProbe <- value
     validObject(x)

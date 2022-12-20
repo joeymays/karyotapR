@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{assayBoxPlot}
 \alias{assayBoxPlot}
-\title{Boxplot of Counts}
+\title{Generate a box plot from matrix data}
 \usage{
 assayBoxPlot(
   TapestriExperiment,
@@ -14,25 +14,31 @@ assayBoxPlot(
 )
 }
 \arguments{
-\item{TapestriExperiment}{TapestriExperiment object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{alt.exp}{Chr string indicating altExp to use, NULL (default) uses main experiment.}
+\item{alt.exp}{Character, \code{altExp} to plot. \code{NULL} (default) uses the top-level experiment in \code{TapestriExperiment}.}
 
-\item{assay}{Chr string indicating assay to use. NULL (default) selects first listed assay.}
+\item{assay}{Character, assay to plot. \code{NULL} (default) selects first assay listed \code{TapestriExperiment}.}
 
-\item{log.y}{Logical, if TRUE, scales data by \code{log1p()}. Default TRUE.}
+\item{log.y}{Logical, if \code{TRUE}, scales data using \code{log1p()}. Default \code{TRUE.}}
 
-\item{split.features}{Logical, if TRUE, splits plot by rowData features. Default FALSE.}
+\item{split.features}{Logical, if \code{TRUE}, splits plot by \code{rowData} features. Default \code{FALSE.}}
 
-\item{coldata.set}{Chr string indicating colData column to use for X axis categories. Default NULL.}
+\item{coldata.set}{Character, \code{colData} field to use for X axis categories. Default \code{NULL}.}
 }
 \value{
-ggplot object
+A ggplot object using \code{\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot()}}.
 }
 \description{
-Draws boxplot of matrix data. Useful for visualizing altExp count data.
+Draws box plot of matrix data stored in a \code{TapestriExperiment}.
+This is especially useful for visualizing \code{altExp} count data, such as counts from
+probes on chrY.
 }
 \examples{
-\dontrun{assayBoxPlot(TapestriExperiment, "chrYCounts", assay = "counts",
-split.features = T, coldata.set = "cluster")}
+\dontrun{
+assayBoxPlot(TapestriExperiment, "chrYCounts",
+  assay = "counts",
+  split.features = T, coldata.set = "cluster"
+)
+}
 }

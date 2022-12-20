@@ -2,7 +2,7 @@
 % Please edit documentation in R/parseBarcodedReads.R
 \name{callSampleLables}
 \alias{callSampleLables}
-\title{Call sample labels based on metadata counts.}
+\title{Call sample labels based on feature counts.}
 \usage{
 callSampleLables(
   TapestriExperiment,
@@ -15,30 +15,35 @@ callSampleLables(
 )
 }
 \arguments{
-\item{TapestriExperiment}{A TapestriExperiment object.}
+\item{TapestriExperiment}{A \code{TapestriExperiment} object}
 
-\item{coldata.labels}{A chr vector of column labels corresponding to colData.}
+\item{coldata.labels}{Character vector, column fields corresponding to \code{colData}.}
 
-\item{sample.label}{A chr string indicating the column name to use for the sample call. Default "sample.call".}
+\item{sample.label}{Character, column name to use for the sample call. Default "sample.call".}
 
-\item{return.table}{Logical, if TRUE returns a data.frame of the sample.calls. Otherwise returns updatedTapestriExperiment object. Default FALSE.}
+\item{return.table}{Logical, if \code{TRUE}, returns a data.frame of the sample.calls. If \code{FALSE} (default), returns updated \code{TapestriExperiment} object.}
 
-\item{neg.label}{A chr string indicating what to label samples with no counts. Default NA.}
+\item{neg.label}{Character, label for samples with no counts. Default \code{NA}.}
 
-\item{method}{A chr string indicating call method. Only "max" currently supported, calls based on whichever label has the most counts.}
+\item{method}{Character, call method. Only "max" currently supported, calls based on whichever \code{coldata.labels} field has the most counts.}
 
-\item{ties.method}{A chr string passed to \code{max.col()} indicating how to break ties. Default "first".}
+\item{ties.method}{Character, passed to \code{max.col()} indicating how to break ties. Default "first".}
 }
 \value{
-A TapestriExperiment object with sample calls added to colData. If \code{return.table == TRUE}, a data.frame of sample calls.
+A \code{TapestriExperiment} object with sample calls added to \code{colData.} If \code{return.table == TRUE}, a data.frame of sample calls.
 }
 \description{
-\code{callSampleLables()} determines sample labels by comparing auxiliary count data, most likely generated from barcoded reads (see\code{\link[=parseBarcodedReads]{parseBarcodedReads()}}).
-Labels are dictated by whichever \code{coldata.labels} element has the highest number of counts.
+\code{callSampleLables()} determines sample labels by comparing auxiliary feature count data,
+most likely generated from barcoded reads (see \link{parseBarcodedReads}).
+For \code{method = max}, labels are dictated by whichever \code{coldata.labels} field has the highest number of counts.
 By default, ties are broken by choosing whichever label has the lowest index position (\code{ties.method = "first"}).
-Samples with 0 counts for all labels are labeled "none".
+Samples with 0 counts for all \code{coldata.labels} fields are labeled according to \code{neg.label}.
 }
 \examples{
-\dontrun{TapestriExperiment <- callSampleLables(TapestriExperiment, coldata.labels = c("g7", "gNC"),
-sample.label = "sample.grna")}
+\dontrun{
+TapestriExperiment <- callSampleLables(TapestriExperiment,
+  coldata.labels = c("g7", "gNC"),
+  sample.label = "sample.grna"
+)
+}
 }

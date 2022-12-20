@@ -16,33 +16,35 @@ createTapestriExperiment(
 \arguments{
 \item{h5.filename}{file path for .h5 file from Tapestri Pipeline output.}
 
-\item{panel.id}{Tapestri panel name, CO261 and CO293 supported only. Default NULL.}
+\item{panel.id}{Tapestri panel name, CO261 and CO293 only supported. Acts as shortcut for setting custom slots. Default \code{NULL}.}
 
-\item{get.cytobands}{Logical value indicating whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default TRUE.}
+\item{get.cytobands}{Logical, whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default \code{TRUE}.}
 
-\item{genome}{Chr string indicating reference genome to pull cytobands and arms from. Only hg19 is currently supported. Default "hg19".}
+\item{genome}{Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.}
 
-\item{move.non.genome.probes}{Chr vector indicating non-genomic probes to move counts and metadata to altExp slots. Default c("grna", "sample.barcode", "Y").}
+\item{move.non.genome.probes}{Character vector,  non-genomic probes to move counts and metadata to \code{altExp} slots, if available. Default c("grna", "sample.barcode", "Y").}
 
-\item{filter.variants}{Logical. If TRUE, only loads variants that have passed Tapestri Pipeline filters. Default TRUE.}
+\item{filter.variants}{Logical, if \code{TRUE}, only loads variants that have passed Tapestri Pipeline filters. Default \code{TRUE}.}
 }
 \value{
-Constructed TapestriExperiment object
+Constructed \code{TapestriExperiment} object
 }
 \description{
-\code{createTapestriExperiment()} constructs a \code{TapestriExperiment} object from \code{.h5} file output by the Tapestri pipeline.
-Probe metadata is automatically imported by default.
-\code{panel.id} is an optional shortcut to set gRNA and barcode probe identities.
-\code{move.non.genome.probes} moves the specified probes to altExp (alternative experiment) slots in the TapestriExperiment object.
-Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, and probes on ChrY are moved by default.
-Basic QC stats (e.g. total number of reads per probe) are added to either the object's colData or rowData.
-Basic metadata is automatically to the \code{metadata} slot.
+\code{createTapestriExperiment()} constructs a \code{TapestriExperiment} object from \code{.h5} file output by the Tapestri Pipeline.
+Probe panel metadata is automatically imported from the \code{.h5} file.
+\code{panel.id} is an optional shortcut to set gRNA and barcode probe identities based internal custom panel IDs.
+\code{move.non.genome.probes} moves the specified probes to \code{altExp} (alternative experiment) slots in the \code{TapestriExperiment} object.
+Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, and probes on ChrY are moved by default, if present.
+Basic QC stats (e.g. total number of reads per probe) are added to either the object's \code{colData} or \code{rowData.}
+Basic metadata for the experiment is automatically to the \code{metadata} slot.
 \code{filter.variants == TRUE} only loads variants that have passed filters in the Tapestri Pipeline.
-This greatly reduces the number of variants to a smaller number of useful ones.
+This greatly reduces the number of variants to a smaller number of likely more consequential variants.
 }
 \examples{
-\dontrun{x <- createTapestriExperiment("myh5file.h5", "CO293")}
+\dontrun{
+tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")
+}
 }
 \seealso{
-\code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, \code{\link[=getCytobands]{getCytobands()}} which are run as part of this function for convenience.
+\code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, \code{\link[=getCytobands]{getCytobands()}}, which are run as part of this function by default for convenience.
 }
