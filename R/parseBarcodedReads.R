@@ -158,13 +158,13 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #'
 #' `callSampleLables()` determines sample labels by comparing auxiliary feature count data,
 #' most likely generated from barcoded reads (see [parseBarcodedReads]).
-#' For `method = max`, labels are dictated by whichever `features` column has the highest number of counts.
+#' For `method = max`, labels are dictated by whichever `label.features` column has the highest number of counts.
 #' By default, ties are broken by choosing whichever label has the lowest index position (`ties.method = "first"`).
-#' Samples with 0 counts for all `features` columns are labeled according to `neg.label`.
+#' Samples with 0 counts for all `label.features` columns are labeled according to `neg.label`.
 #'
 #' @param TapestriExperiment A `TapestriExperiment` object.
-#' @param features Character vector, column names in `colData` to evaluate.
-#' @param method Character, call method. Only "max" currently supported, calls based on whichever `features` column has the most counts.
+#' @param label.features Character vector, column names in `colData` to evaluate.
+#' @param method Character, call method. Only "max" currently supported, calls based on whichever `label.features` column has the most counts.
 #' @param ties.method Character, passed to `max.col()` indicating how to break ties. Default "first".
 #' @param neg.label Character, label for samples with no counts. Default `NA`.
 #' @param sample.label Character, column name to use for the sample call output. Default "sample.call".
@@ -176,30 +176,30 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @examples
 #' \dontrun{
 #' TapestriExperiment <- callSampleLables(TapestriExperiment,
-#'   features = c("g7", "gNC"),
+#'   label.features = c("g7", "gNC"),
 #'   sample.label = "sample.grna"
 #' )
 #' }
-callSampleLables <- function(TapestriExperiment, features, sample.label = "sample.call", return.table = F, neg.label = NA, method = "max", ties.method = "first") {
+callSampleLables <- function(TapestriExperiment, label.features, sample.label = "sample.call", return.table = F, neg.label = NA, method = "max", ties.method = "first") {
   if (method != "max") {
     stop("Method not recognized. Only 'max' currently supported.")
   } else {
     # check for missing colData labels
-    if (any(!features %in% colnames(SingleCellExperiment::colData(TapestriExperiment)))) {
-      stop(paste0(features[!features %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData.\n"))
+    if (any(!label.features %in% colnames(SingleCellExperiment::colData(TapestriExperiment)))) {
+      stop(paste0(label.features[!label.features %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData.\n"))
     }
 
     # subset colData
     existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
-    coldata.subset <- existing.cell.data[, features]
+    coldata.subset <- existing.cell.data[, label.features]
 
     # check if numeric
     if (any(!apply(coldata.subset, 2, is.numeric))) {
-      stop("Selected features are not numeric.")
+      stop("Selected label.features are not numeric.")
     }
 
     # make calls
-    sample.calls <- features[max.col(coldata.subset, ties.method = ties.method)]
+    sample.calls <- label.features[max.col(coldata.subset, ties.method = ties.method)]
     sample.calls <- data.frame(cell.barcode = rownames(coldata.subset), sample.call = sample.calls)
     sample.calls[rowSums(coldata.subset) == 0, "sample.call"] <- neg.label # set label if no call is made
     sample.calls$sample.call <- as.factor(sample.calls$sample.call)
