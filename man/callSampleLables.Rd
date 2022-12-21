@@ -6,7 +6,7 @@
 \usage{
 callSampleLables(
   TapestriExperiment,
-  features,
+  label.features,
   sample.label = "sample.call",
   return.table = F,
   neg.label = NA,
@@ -17,7 +17,7 @@ callSampleLables(
 \arguments{
 \item{TapestriExperiment}{A \code{TapestriExperiment} object.}
 
-\item{features}{Character vector, column names in \code{colData} to evaluate.}
+\item{label.features}{Character vector, column names in \code{colData} to evaluate.}
 
 \item{sample.label}{Character, column name to use for the sample call output. Default "sample.call".}
 
@@ -25,7 +25,7 @@ callSampleLables(
 
 \item{neg.label}{Character, label for samples with no counts. Default \code{NA}.}
 
-\item{method}{Character, call method. Only "max" currently supported, calls based on whichever \code{features} column has the most counts.}
+\item{method}{Character, call method. Only "max" currently supported, calls based on whichever \code{label.features} column has the most counts.}
 
 \item{ties.method}{Character, passed to \code{max.col()} indicating how to break ties. Default "first".}
 }
@@ -35,14 +35,14 @@ A \code{TapestriExperiment} object with sample calls added to \code{colData} col
 \description{
 \code{callSampleLables()} determines sample labels by comparing auxiliary feature count data,
 most likely generated from barcoded reads (see \link{parseBarcodedReads}).
-For \code{method = max}, labels are dictated by whichever \code{features} column has the highest number of counts.
+For \code{method = max}, labels are dictated by whichever \code{label.features} column has the highest number of counts.
 By default, ties are broken by choosing whichever label has the lowest index position (\code{ties.method = "first"}).
-Samples with 0 counts for all \code{features} columns are labeled according to \code{neg.label}.
+Samples with 0 counts for all \code{label.features} columns are labeled according to \code{neg.label}.
 }
 \examples{
 \dontrun{
 TapestriExperiment <- callSampleLables(TapestriExperiment,
-  features = c("g7", "gNC"),
+  label.features = c("g7", "gNC"),
   sample.label = "sample.grna"
 )
 }
