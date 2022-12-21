@@ -16,32 +16,21 @@
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- normalizeCounts(TapestriExperiment)}
-
 normalizeCounts <- function(TapestriExperiment, method = "mb"){
 
     method <- tolower(method)
 
-    if(method != "mb"){
-        message("Only method 'mb' is currently supported. Running as `method = 'mb'.")
-    }
-
     raw.count.matrix <- SummarizedExperiment::assay(TapestriExperiment, "counts")
 
-    # get "good barcodes", barcodes that have at least 10% the counts of the 11th barcode ranked for highest number of counts
-    barcode.sums <- apply(raw.count.matrix, MARGIN = 2, sum)
-    barcode.sorted <- sort(barcode.sums, decreasing = T)
-    good.barcodes <- barcode.sums > (barcode.sorted[11] / 10)
+    if(any(is.na(raw.count.matrix))){
+        warning("NAs found in count data. normcounts may also contain NAs.")
+    }
 
-    # normalize barcodes relative to barcode means
-    barcode.means <- apply(raw.count.matrix, 2, mean) + 1
-    read.counts.normal <- sweep(raw.count.matrix, 2, barcode.means, "/")
-
-    # normalize probes relative to probe median. medians calculated using "good barcodes"
-    probe.medians <- apply(read.counts.normal[,good.barcodes], 1, median) + 0.05
-    read.counts.normal <- sweep(read.counts.normal, 1, probe.medians, "/")
-
-    # scale all counts by 2X for diploid baseline
-    read.counts.normal <- read.counts.normal * 2
+    if(method == "mb"){
+        read.counts.normal <- .MBNormCounts(raw.count.matrix)
+    } else {
+        stop("Only method 'mb' is currently supported.")
+    }
 
     # add to normalized counts slot
     normcounts(TapestriExperiment) <- read.counts.normal
@@ -55,4 +44,25 @@ normalizeCounts <- function(TapestriExperiment, method = "mb"){
     SummarizedExperiment::rowData(TapestriExperiment)$norm.count.sd <-  new.probe.data
 
     return(TapestriExperiment)
+}
+
+.MBNormCounts <- function(input.matrix){
+
+    # get "good barcodes", barcodes that have at least 10% the counts of the 11th barcode ranked for highest number of counts
+    barcode.sums <- apply(input.matrix, MARGIN = 2, sum)
+    barcode.sorted <- sort(barcode.sums, decreasing = T)
+    good.barcodes <- barcode.sums > (barcode.sorted[11] / 10)
+
+    # normalize barcodes relative to barcode means
+    barcode.means <- apply(input.matrix, 2, mean) + 1
+    matrix.normal <- sweep(input.matrix, 2, barcode.means, "/")
+
+    # normalize probes relative to probe median. medians calculated using "good barcodes"
+    probe.medians <- apply(matrix.normal[,good.barcodes], 1, median) + 0.05
+    matrix.normal <- sweep(matrix.normal, 1, probe.medians, "/")
+
+    # scale all counts by 2X for diploid baseline
+    matrix.normal <- matrix.normal * 2
+
+    return(matrix.normal)
 }
