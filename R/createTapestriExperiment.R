@@ -6,6 +6,16 @@
 #' `panel.id` is an optional shortcut to set special probe identities for specific custom panels.
 #' See details for full explanation of construction.
 #'
+#' # Panel ID Shortcuts
+#' `panel.id` is an optional shortcut to set the `barcodeProbe` and `grnaProbe` slots in `TapestriExperiment` for specific custom Tapestri panels.
+#' ## CO261
+#' - `barcodeProbe` = "not specified"
+#' - `grnaProbe` = "not specified"
+#'
+#' ## CO293
+#' - `barcodeProbe` = AMPL205334
+#' - `grnaProbe` = AMPL205666
+#'
 #' # Automatic Operations
 #' ## Raw Data
 #' Read count and allele frequency matrices are imported to their appropriate slots as described above.
@@ -32,7 +42,7 @@
 #' If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
 #'
 #' @param h5.filename File path for `.h5` file from Tapestri Pipeline output.
-#' @param panel.id Tapestri panel name, CO261 and CO293 only supported. Acts as shortcut for setting custom slots. Default `NULL`.
+#' @param panel.id Character, Tapestri panel name, either CO261, CO293, or `NULL`. Acts as shortcut for setting custom slots. Default `NULL`.
 #' @param get.cytobands Logical, whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default `TRUE`.
 #' @param genome Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.
 #' @param move.non.genome.probes Character vector,  non-genomic probes to move counts and metadata to `altExp` slots, if available. Default `c("grna", "sample.barcode", "Y")`.
@@ -51,19 +61,12 @@
 #' }
 createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y"),
                                      filter.variants = T) {
-  # read panel ID
-  if (is.null(panel.id)) {
-    barcodeProbe <- "not specified"
-    grnaProbe <- "not specified"
-  } else if (panel.id == "CO293") {
-    barcodeProbe <- "AMPL205334"
-    grnaProbe <- "AMPL205666"
-  } else if (panel.id == "CO261") {
-    barcodeProbe <- "not specified"
-    grnaProbe <- "not specified"
-  } else {
-    stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL to set speciality probes manually."))
-  }
+
+    # read panel ID
+    panel.id.output <- .GetPanelID(panel.id = panel.id)
+    barcodeProbe <- panel.id.output[["barcode.probe"]]
+    grnaProbe <- panel.id.output[["grna.probe"]]
+
 
   # import data
   tapestri.h5 <- rhdf5::H5Fopen(file.path(h5.filename))
@@ -205,4 +208,23 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
   show(tapestri.object)
 
   return(tapestri.object)
+}
+
+.GetPanelID <- function(panel.id){
+
+    # read panel ID
+    if (is.null(panel.id)) {
+        barcodeProbe <- "not specified"
+        grnaProbe <- "not specified"
+    } else if (panel.id == "CO293") {
+        barcodeProbe <- "AMPL205334"
+        grnaProbe <- "AMPL205666"
+    } else if (panel.id == "CO261") {
+        barcodeProbe <- "not specified"
+        grnaProbe <- "not specified"
+    } else {
+        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL to set speciality probes manually."))
+    }
+
+    return(list(barcode.probe = barcodeProbe, grna.probe = grnaProbe))
 }
