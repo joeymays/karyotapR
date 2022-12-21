@@ -16,7 +16,7 @@ createTapestriExperiment(
 \arguments{
 \item{h5.filename}{File path for \code{.h5} file from Tapestri Pipeline output.}
 
-\item{panel.id}{Tapestri panel name, CO261 and CO293 only supported. Acts as shortcut for setting custom slots. Default \code{NULL}.}
+\item{panel.id}{Character, Tapestri panel name, either CO261, CO293, or \code{NULL}. Acts as shortcut for setting custom slots. Default \code{NULL}.}
 
 \item{get.cytobands}{Logical, whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default \code{TRUE}.}
 
@@ -36,6 +36,23 @@ Allele frequency matrix (variant x cell barcode) is stored in the "alleleFrequen
 \code{panel.id} is an optional shortcut to set special probe identities for specific custom panels.
 See details for full explanation of construction.
 }
+\section{Panel ID Shortcuts}{
+\code{panel.id} is an optional shortcut to set the \code{barcodeProbe} and \code{grnaProbe} slots in \code{TapestriExperiment} for specific custom Tapestri panels.
+\subsection{CO261}{
+\itemize{
+\item \code{barcodeProbe} = "not specified"
+\item \code{grnaProbe} = "not specified"
+}
+}
+
+\subsection{CO293}{
+\itemize{
+\item \code{barcodeProbe} = AMPL205334
+\item \code{grnaProbe} = AMPL205666
+}
+}
+}
+
 \section{Automatic Operations}{
 \subsection{Raw Data}{
 
