@@ -205,8 +205,6 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     tapestri.object <- moveNonGenomeProbes(tapestri.object, move.non.genome.probes)
   }
 
-  show(tapestri.object)
-
   return(tapestri.object)
 }
 
