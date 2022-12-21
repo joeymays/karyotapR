@@ -10,3 +10,14 @@ test_that("MB normalization scheme works", {
   )
 })
 
+test_that("NA in normalization input triggers message", {
+
+    #create Dummy object and add NA
+    tap.object <- suppressMessages(newDummyTapestriExperiment())
+    x <- assay(tap.object)
+    x[1,1] <- NA
+    assay(tap.object) <- x
+
+    expect_warning(normalizeCounts(tap.object), "NAs found in count data.")
+
+})
