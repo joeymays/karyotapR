@@ -33,7 +33,7 @@ getCytobands <- function(TapestriExperiment, genome = "hg19"){
                               end = SingleCellExperiment::rowData(TapestriExperiment)$end.pos,
                               id = SingleCellExperiment::rowData(TapestriExperiment)$probe.id)
 
-    cytoband.data <- .GetCytobands.df(amplicon.df, return.genomic.ranges = T)
+    cytoband.data <- .GetCytobands.df(amplicon.df, return.genomic.ranges = TRUE)
     cytoband.data <- as.data.frame(cytoband.data)
     rownames(cytoband.data) <- cytoband.data$probe.id #overwrite to prevent loss
 
@@ -49,7 +49,7 @@ getCytobands <- function(TapestriExperiment, genome = "hg19"){
     return(TapestriExperiment)
 }
 
-.GetCytobands.df <- function(input.df, return.genomic.ranges = F){
+.GetCytobands.df <- function(input.df, return.genomic.ranges = FALSE){
 
     amplicon.gr <- GenomicRanges::GRanges(seqnames = S4Vectors::Rle(input.df$seqnames),
                                           ranges = IRanges::IRanges(start = input.df$start,

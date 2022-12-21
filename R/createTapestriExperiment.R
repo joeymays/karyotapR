@@ -60,7 +60,7 @@
 #' tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")
 #' }
 createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y"),
-                                     filter.variants = T) {
+                                     filter.variants = TRUE) {
 
     # read panel ID
     panel.id.output <- .GetPanelID(panel.id = panel.id)
@@ -83,7 +83,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
   read.counts.raw <- t(matrix(
     data = tapestri.h5$"/assays/dna_read_counts/layers/read_counts",
     ncol = length(tapestri.h5$"/assays/dna_read_counts/ca/id"),
-    byrow = T
+    byrow = TRUE
   ))
 
   read.counts.raw.colData <- S4Vectors::DataFrame(
@@ -137,7 +137,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
   tapestri.object@grnaProbe <- grnaProbe
 
   # if keeping only variants that passed thresholds
-  if (filter.variants == T) {
+  if (filter.variants == TRUE) {
     # variant filtering; filtered == TRUE in h5 object means "filtered out".
     filtered.variants <- as.logical(tapestri.h5$"/assays/dna_variants/ca/filtered")
     filtered.variants <- !filtered.variants
@@ -190,7 +190,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
   allele.frequency@barcodeProbe <- barcodeProbe
   allele.frequency@grnaProbe <- grnaProbe
 
-  SingleCellExperiment::altExp(tapestri.object, "alleleFrequency", withDimnames = T) <- allele.frequency
+  SingleCellExperiment::altExp(tapestri.object, "alleleFrequency", withDimnames = TRUE) <- allele.frequency
 
   # close h5
   rhdf5::H5Fclose(tapestri.h5)
@@ -201,7 +201,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
   }
 
   # move non-genomic probes to altExp slots
-  if (!identical(move.non.genome.probes, F)) {
+  if (!identical(move.non.genome.probes, FALSE)) {
     tapestri.object <- moveNonGenomeProbes(tapestri.object, move.non.genome.probes)
   }
 

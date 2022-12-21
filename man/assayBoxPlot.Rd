@@ -8,8 +8,8 @@ assayBoxPlot(
   TapestriExperiment,
   alt.exp = NULL,
   assay = NULL,
-  log.y = T,
-  split.features = F,
+  log.y = TRUE,
+  split.features = FALSE,
   split.x.by = NULL
 )
 }

@@ -31,7 +31,7 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
         }
     }
 
-    pca.assay <- getTidyData(TapestriExperiment, alt.exp = alt.exp, assay = assay, feature.id.as.factor = F)
+    pca.assay <- getTidyData(TapestriExperiment, alt.exp = alt.exp, assay = assay, feature.id.as.factor = FALSE)
     pca.assay <- pca.assay %>% tidyr::pivot_wider(id_cols = "feature.id", names_from = "cell.barcode", values_from = {{assay}}) %>% tibble::column_to_rownames("feature.id") %>%
         as.data.frame()
 
@@ -47,11 +47,11 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
 
     # save PCA to main experiment
     if(is.null(alt.exp)){
-        SingleCellExperiment::reducedDim(TapestriExperiment, "PCA", withDimnames = T) <- pca.result$x
+        SingleCellExperiment::reducedDim(TapestriExperiment, "PCA", withDimnames = TRUE) <- pca.result$x
         S4Vectors::metadata(TapestriExperiment)$pca.proportion.of.variance <- summary(pca.result)$importance["Proportion of Variance", ]
         S4Vectors::metadata(TapestriExperiment)$pca.assay <- assay
     } else { # save PCA to alt experiment
-        SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, alt.exp), "PCA", withDimnames = T) <- pca.result$x
+        SingleCellExperiment::reducedDim(SingleCellExperiment::altExp(TapestriExperiment, alt.exp), "PCA", withDimnames = TRUE) <- pca.result$x
         S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$pca.proportion.of.variance <- summary(pca.result)$importance["Proportion of Variance", ]
         S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$pca.assay <- assay
     }
@@ -158,10 +158,10 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
 
     # save UMAP to main experiment
     if(is.null(alt.exp)){
-        SingleCellExperiment::reducedDim(TapestriExperiment, "UMAP", withDimnames = T) <- umap.embeddings
+        SingleCellExperiment::reducedDim(TapestriExperiment, "UMAP", withDimnames = TRUE) <- umap.embeddings
         S4Vectors::metadata(TapestriExperiment)$"umap.assay" <- ifelse(use.pca.dims, "PCA", assay)
     } else { # save UMAP to alt experiment
-        SingleCellExperiment::reducedDim(altExp(TapestriExperiment, alt.exp), "UMAP", withDimnames = T) <- umap.embeddings
+        SingleCellExperiment::reducedDim(altExp(TapestriExperiment, alt.exp), "UMAP", withDimnames = TRUE) <- umap.embeddings
         S4Vectors::metadata(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$"umap.assay" <- ifelse(use.pca.dims, "PCA", assay)
     }
 

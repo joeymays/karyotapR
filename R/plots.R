@@ -95,13 +95,13 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #'   split.features = T, split.x.by = "cluster"
 #' )
 #' }
-assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = T, split.features = F, split.x.by = NULL) {
+assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = TRUE, split.features = FALSE, split.x.by = NULL) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
   tidy.data <- getTidyData(TapestriExperiment, alt.exp, assay)
 
   if (log.y) {
-    tidy.data[, assay] <- log1p(tidy.data[, assay, drop = T])
+    tidy.data[, assay] <- log1p(tidy.data[, assay, drop = TRUE])
     y.label <- paste0("log(", assay, ") + 1")
   } else {
     y.label <- assay
@@ -218,7 +218,7 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
     color.list <- list(color.vector)
     names(color.list)[1] <- annotate.row.by
     row.annotation <- ComplexHeatmap::rowAnnotation(
-      df = row.annotation.data, col = color.list, border = T, na_col = "white",
+      df = row.annotation.data, col = color.list, border = TRUE, na_col = "white",
       annotation_name_side = "top", annotation_name_gp = grid::gpar(fontsize = 8)
     )
   }

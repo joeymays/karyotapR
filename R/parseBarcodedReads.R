@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' \dontrun{counts <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
-parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = T){
+parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = TRUE){
 
     # set bam parameters
     which <- GenomicRanges::GRanges(contig, IRanges::IRanges(1,536870912))
@@ -42,7 +42,7 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
     # parse barcode lookup table by column index
     barcode.lut.vector <- barcode.lookup[,2]
     names(barcode.lut.vector) <- barcode.lookup[,1]
-    barcode.set <- Biostrings::DNAStringSet(x = barcode.lut.vector, use.names = T)
+    barcode.set <- Biostrings::DNAStringSet(x = barcode.lut.vector, use.names = TRUE)
 
     # match input barcodes to reads and convert to logical
     sequence.matches <- lapply(barcode.set, function(x){
@@ -78,7 +78,7 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
     sequence.match.counts <- sequence.match.counts[!vapply(sequence.match.counts, is.null, logical(1))]
 
     # combine count tables
-    sequence.match.counts <- Reduce(function(x, y) merge(x, y, by="cell.barcode", all = T), sequence.match.counts)
+    sequence.match.counts <- Reduce(function(x, y) merge(x, y, by="cell.barcode", all = TRUE), sequence.match.counts)
     rownames(sequence.match.counts) <- sequence.match.counts$cell.barcode
     sequence.match.counts[is.na(sequence.match.counts)] <- 0
 
@@ -112,7 +112,7 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @examples
 #' \dontrun{counts <- parseBarcodedReads(TapestriExperiment,
 #' bam.file, barcode.lookup, "gRNA")}
-parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, return.table = F, ...){
+parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, return.table = FALSE, ...){
 
     probe.tag <- tolower(probe.tag)
 
@@ -137,7 +137,7 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
         existing.cell.data <- existing.cell.data[,!colnames(existing.cell.data) %in% setdiff(colnames(result), "cell.barcode")]
 
         # merge result and existing colData
-        updated.cell.data <- merge(existing.cell.data, result, by = "cell.barcode", all.x = T, sort = F)
+        updated.cell.data <- merge(existing.cell.data, result, by = "cell.barcode", all.x = TRUE, sort = FALSE)
 
         # set NAs to 0
         ids <- setdiff(colnames(result), "cell.barcode")
@@ -180,7 +180,7 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #'   sample.label = "sample.grna"
 #' )
 #' }
-callSampleLables <- function(TapestriExperiment, label.features, sample.label = "sample.call", return.table = F, neg.label = NA, method = "max", ties.method = "first") {
+callSampleLables <- function(TapestriExperiment, label.features, sample.label = "sample.call", return.table = FALSE, neg.label = NA, method = "max", ties.method = "first") {
   if (method != "max") {
     stop("Method not recognized. Only 'max' currently supported.")
   } else {
@@ -213,7 +213,7 @@ callSampleLables <- function(TapestriExperiment, label.features, sample.label = 
       existing.cell.data <- existing.cell.data[, !colnames(existing.cell.data) %in% setdiff(colnames(sample.calls), "cell.barcode")]
 
       # merge result and existing colData
-      updated.cell.data <- merge(existing.cell.data, sample.calls, by = "cell.barcode", all.x = T, sort = F)
+      updated.cell.data <- merge(existing.cell.data, sample.calls, by = "cell.barcode", all.x = TRUE, sort = FALSE)
 
       # reorder to match colData
       rownames(updated.cell.data) <- updated.cell.data$cell.barcode

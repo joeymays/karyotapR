@@ -8,7 +8,7 @@ callSampleLables(
   TapestriExperiment,
   label.features,
   sample.label = "sample.call",
-  return.table = F,
+  return.table = FALSE,
   neg.label = NA,
   method = "max",
   ties.method = "first"

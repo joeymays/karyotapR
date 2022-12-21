@@ -81,10 +81,10 @@ getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "clu
 
   # get median normalized counts for each amplicon based on control.ploidy
   probe.table <- as.data.frame(SummarizedExperiment::rowData(TapestriExperiment))[, c("probe.id", "arm")]
-  probe.table <- merge(probe.table, control.ploidy, by = "arm", all.x = T, sort = F)
+  probe.table <- merge(probe.table, control.ploidy, by = "arm", all.x = TRUE, sort = FALSE)
   rownames(probe.table) <- probe.table$probe.id
 
-  sample.category.lookup <- SummarizedExperiment::colData(TapestriExperiment)[, sample.category, drop = F]
+  sample.category.lookup <- SummarizedExperiment::colData(TapestriExperiment)[, sample.category, drop = FALSE]
 
   # define function for calculating median from cell subset
   getProbeMedian <- function(idx) {
@@ -179,8 +179,8 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
   smoothed.ploidy.chr <- .TapestriExperiment(smoothed.ploidy.chr)
   smoothed.ploidy.arm <- .TapestriExperiment(smoothed.ploidy.arm)
 
-  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByChrom", withDimnames = T) <- smoothed.ploidy.chr
-  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByArm", withDimnames = T) <- smoothed.ploidy.arm
+  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByChrom", withDimnames = TRUE) <- smoothed.ploidy.chr
+  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByArm", withDimnames = TRUE) <- smoothed.ploidy.arm
 
   return(TapestriExperiment)
 }

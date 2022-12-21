@@ -50,7 +50,7 @@ normalizeCounts <- function(TapestriExperiment, method = "mb"){
 
     # get "good barcodes", barcodes that have at least 10% the counts of the 11th barcode ranked for highest number of counts
     barcode.sums <- apply(input.matrix, MARGIN = 2, sum)
-    barcode.sorted <- sort(barcode.sums, decreasing = T)
+    barcode.sorted <- sort(barcode.sums, decreasing = TRUE)
     good.barcodes <- barcode.sums > (barcode.sorted[11] / 10)
 
     # normalize barcodes relative to barcode means

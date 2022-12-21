@@ -10,7 +10,7 @@ createTapestriExperiment(
   get.cytobands = TRUE,
   genome = "hg19",
   move.non.genome.probes = c("grna", "sample.barcode", "Y"),
-  filter.variants = T
+  filter.variants = TRUE
 )
 }
 \arguments{

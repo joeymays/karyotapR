@@ -10,7 +10,7 @@ parseBarcodedReads(
   bam.file,
   barcode.lookup,
   probe.tag,
-  return.table = F,
+  return.table = FALSE,
   ...
 )
 
@@ -20,7 +20,7 @@ parseBarcodedReadsFromContig(
   contig,
   cell.barcode.tag = "RG",
   max.mismatch = 2,
-  with.indels = T
+  with.indels = TRUE
 )
 }
 \arguments{
