@@ -148,12 +148,16 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
     dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
     tidyr::pivot_wider(id_cols = dplyr::all_of("chr"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("chr")
+  
+  smoothed.ploidy.chr <- smoothed.ploidy.chr[,colnames(ploidy.counts)] #reorder to match input matrix
 
   smoothed.ploidy.arm <- ploidy.tidy %>%
     dplyr::group_by(.data$cell.barcode, .data$arm) %>%
     dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
     tidyr::pivot_wider(id_cols = dplyr::all_of("arm"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("arm")
+  
+  smoothed.ploidy.arm <- smoothed.ploidy.arm[,colnames(ploidy.counts)] #reorder to match input matrix
 
   discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
   discrete.ploidy.arm <- round(smoothed.ploidy.arm, 0)
