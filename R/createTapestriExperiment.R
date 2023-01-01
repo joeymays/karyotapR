@@ -403,6 +403,28 @@ newTapestriExperimentExample <- function(){
   # move non-genomic probes to altExp slots
   tapestri.object <- moveNonGenomeProbes(tapestri.object, c("Y"))
   
+  
+  # allele frequency
+  af.matrix <- matrix(0, nrow = 75, ncol = 300)
+  af.matrix[1:25, 1:75] <- 100
+  af.matrix[26:50, 76:175] <- 100
+  af.matrix[51:75, 175:300] <- 100
+  
+  colnames(af.matrix) <- colnames(tapestri.object)
+  
+  variant.metadata <- data.frame(variant.id = paste0("var_", 1:75))
+  
+  allele.frequency <- SingleCellExperiment::SingleCellExperiment(list(alleleFrequency = af.matrix),
+                                                                 rowData = S4Vectors::DataFrame(variant.metadata),
+                                                                 colData = S4Vectors::DataFrame(cell.barcode = colnames(tapestri.object))
+  )
+  
+  allele.frequency <- .TapestriExperiment(allele.frequency)
+  allele.frequency@barcodeProbe <- barcodeProbe
+  allele.frequency@grnaProbe <- grnaProbe
+  
+  SingleCellExperiment::altExp(tapestri.object, "alleleFrequency", withDimnames = TRUE) <- allele.frequency
+  
   return(tapestri.object)
 }
 
