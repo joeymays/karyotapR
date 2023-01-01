@@ -7,10 +7,14 @@
 \usage{
 getPloidy(TapestriExperiment, control.ploidy, sample.category = "cluster")
 
-generateControlPloidyTemplate(ploidy.all = 2, sample.label.all = "cluster")
+generateControlPloidyTemplate(
+  TapestriExperiment,
+  ploidy.all = 2,
+  sample.label.all = "cluster"
+)
 }
 \arguments{
-\item{TapestriExperiment}{\code{TapestriExperiment} object.}
+\item{TapestriExperiment}{A \code{TapestriExperiment} object.}
 
 \item{control.ploidy}{A \code{data.frame} with columns \code{arm}, \code{ploidy}, and \code{sample.label}. See details.}
 
@@ -33,7 +37,8 @@ cell population to a known ploidy value, e.g. 2, and then calculate the ploidy f
 cells relative to that control population. This occurs individually for each probe,
 such that the result is one ploidy value per cell barcode per probe.
 \code{control.ploidy} is a \code{data.frame} lookup table used to indicate the ploidy value and cell barcodes
-to use as the reference. A template for \code{control.ploidy} can be generated using \code{\link[=generateControlPloidyTemplate]{generateControlPloidyTemplate()}}.
+to use as the reference. A template for \code{control.ploidy} can be generated using \code{\link[=generateControlPloidyTemplate]{generateControlPloidyTemplate()}},
+which will have a row for each chromosome arm represented in \code{TapestriExperiment}.
 
 The \code{control.ploidy} data.frame should include 3 columns named \code{arm}, \code{ploidy}, and \code{sample.label}.
 \code{arm} is chromosome arms from chr1p through chrXq, \code{ploidy} is the reference ploidy value, and \code{sample.label} is the

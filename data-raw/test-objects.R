@@ -86,7 +86,7 @@ getTidyData(exp3.subset, alt.exp = "smoothedPloidyByChrom")
 
 # readme test
 
-example.exp <- newDummyTapestriExperiment2()
+example.exp <- newTapestriExperimentExample()
 assayHeatmap(example.exp, split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster")
 
 example.exp <- normalizeCounts(example.exp)
@@ -97,7 +97,6 @@ example.exp <- smoothPloidy(example.exp)
 assayHeatmap(example.exp, assay = "ploidy", split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
 assayHeatmap(example.exp, alt.exp = "smoothedPloidyByArm", assay = "discretePloidy", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
 assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "test.cluster")
-assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = F, split.x.by = "test.cluster")
 
 
 

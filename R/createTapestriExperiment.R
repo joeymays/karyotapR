@@ -297,9 +297,23 @@ newDummyTapestriExperiment <- function(){
   return(tapestri.object)
 }
 
-#create Dummy TapestriExperiment
-#3 clusters of 75, 100, and 125 cells; XY, XX, XY respectively; diploid, +7, -1p respectively
-newDummyTapestriExperiment2 <- function(){
+#' Create Example `TapestriExperiment`
+#' 
+#' Creates a `TapestriExperiment` object for demonstration purposes, 
+#' which includes 240 probes across the genome, and 300 cells of 3 types.
+#' Raw counts are generated randomly. 
+#' Type 1 has 75 cells, all XY, all diploid.
+#' Type 2 has 100 cells, all XX, with 3 copies of chr 7, otherwise diploid.
+#' Type 3 has 125 cells, all XY, with 1 copy of chr 1p, otherwise diploid.
+#'
+#' @importFrom stats rnorm
+#'
+#' @return A `TapestriExperiment` object.
+#' @export
+#'
+#' @examples
+#' tapExperiment <- newTapestriExperimentExample()
+newTapestriExperimentExample <- function(){
   
   # panel ID
   barcodeProbe <- "dummyBCprobe"
@@ -328,7 +342,7 @@ newDummyTapestriExperiment2 <- function(){
   # raw counts
   results.list <- list()
   for(i in 1:n.probes){
-    results.list[[i]] <- round(rnorm(300, 100, 5),0)
+    results.list[[i]] <- round(stats::rnorm(300, 100, 5),0)
     names(results.list)[i] <- paste0("probe_", i)
   }
   
@@ -340,7 +354,7 @@ newDummyTapestriExperiment2 <- function(){
   # chr7 gain
   results.list <- list()
   for(i in 1:10){
-    results.list[[i]] <- round(rnorm(100, 200, 5),0)
+    results.list[[i]] <- round(stats::rnorm(100, 200, 5),0)
   }
   
   read.counts.raw[which(read.counts.raw.rowData$chr == "7"), c(76:175)] <- t(as.matrix(as.data.frame(results.list, row.names = NULL)))
@@ -348,7 +362,7 @@ newDummyTapestriExperiment2 <- function(){
   # chr 1p loss
   results.list <- list()
   for(i in 1:5){
-    results.list[[i]] <- round(rnorm(125, 50, 5),0)
+    results.list[[i]] <- round(stats::rnorm(125, 50, 5),0)
   }
   
   read.counts.raw[which(read.counts.raw.rowData$arm == "chr1p"), c(176:300)] <- t(as.matrix(as.data.frame(results.list, row.names = NULL)))
