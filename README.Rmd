@@ -108,7 +108,7 @@ assayHeatmap(example.exp, assay = "ploidy", split.col.by = "arm", split.row.by =
 assayHeatmap(example.exp, alt.exp = "smoothedPloidyByArm", assay = "discretePloidy", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "ploidy")
 ```
 
-Visualize chrY counts. Visualization reveals that celline 2 has chr Y and is therefore male, while the other two cell lines are female. 
+Visualize chrY counts. Visualization reveals that cellline 2 has chr Y and is therefore male, while the other two cell lines are female. 
 
 ```{r boxplot}
 assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "cluster")

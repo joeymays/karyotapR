@@ -122,7 +122,7 @@ assayHeatmap(example.exp, alt.exp = "smoothedPloidyByArm", assay = "discretePloi
 
 <img src="man/figures/README-heatmaps1-2.png" width="100%" />
 
-Visualize chrY counts. Visualization reveals that celline 2 has chr Y
+Visualize chrY counts. Visualization reveals that cellline 2 has chr Y
 and is therefore male, while the other two cell lines are female.
 
 ``` r
