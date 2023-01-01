@@ -82,3 +82,22 @@ getTidyData(exp3.subset)
 getTidyData(exp3.subset, alt.exp = "alleleFrequency")
 getTidyData(exp3.subset, alt.exp = "chrYCounts")
 getTidyData(exp3.subset, alt.exp = "smoothedPloidyByChrom")
+
+
+# readme test
+
+example.exp <- newDummyTapestriExperiment2()
+assayHeatmap(example.exp, split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster")
+
+example.exp <- normalizeCounts(example.exp)
+control.ploidy <- generateControlPloidyTemplate(example.exp, sample.label.all = "cellline1", ploidy.all = 2)
+example.exp <- getPloidy(example.exp, control.ploidy = control.ploidy, sample.category = "test.cluster")
+example.exp <- smoothPloidy(example.exp)
+
+assayHeatmap(example.exp, assay = "ploidy", split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, alt.exp = "smoothedPloidyByArm", assay = "discretePloidy", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
+assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "test.cluster")
+assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = F, split.x.by = "test.cluster")
+
+
+
