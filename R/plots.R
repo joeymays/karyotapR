@@ -237,31 +237,67 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
     hm.col <- color.custom
   }
 
-  hm <- ComplexHeatmap::Heatmap(
-    matrix = t(hm.matrix),
-    cluster_rows = TRUE,
-    cluster_row_slices = FALSE,
-    show_row_names = FALSE,
-    show_row_dend = FALSE,
-    row_split = row.split,
-    row_title_gp = grid::gpar(fontsize = 10),
-    #
-    cluster_columns = FALSE,
-    show_column_names = show.column.names,
-    column_names_side = "top",
-    show_column_dend = FALSE,
-    column_split = column.split,
-    column_title_gp = grid::gpar(fontsize = 8),
-    column_names_gp = grid::gpar(fontsize = 10),
-    column_title_rot = 90,
-    column_gap = unit(0, "mm"),
-    #
-    left_annotation = row.annotation,
-    name = assay,
-    border = TRUE,
-    col = hm.col,
-    ...
-  )
+  hm <- .ComplexHeatmap.default(matrix = t(hm.matrix),
+                                row_split = row.split,
+                                show_column_names = show.column.names,
+                                column_split = column.split,
+                                left_annotation = row.annotation,
+                                name = assay,
+                                col = hm.col,
+                                ...)
 
   return(hm)
 }
+
+# Internal ComplexHeatmap call with defaults
+.ComplexHeatmap.default <- function(matrix,
+                                    cluster_rows = TRUE,
+                                    cluster_row_slices = FALSE,
+                                    show_row_names = FALSE,
+                                    show_row_dend = FALSE,
+                                    row_split,
+                                    row_title_gp = grid::gpar(fontsize = 10),
+                                    cluster_columns = FALSE,
+                                    show_column_names,
+                                    column_names_side = "top",
+                                    show_column_dend = FALSE,
+                                    column_split,
+                                    column_title_gp = grid::gpar(fontsize = 8),
+                                    column_names_gp = grid::gpar(fontsize = 10),
+                                    column_title_rot = 90,
+                                    column_gap = unit(0, "mm"),
+                                    left_annotation,
+                                    name,
+                                    border = TRUE,
+                                    col
+                                    ){
+
+    complex.hm <- ComplexHeatmap::Heatmap(
+
+        matrix = matrix,
+        cluster_rows = cluster_rows,
+        cluster_row_slices = cluster_row_slices,
+        show_row_names = show_row_names,
+        show_row_dend = show_row_dend,
+        row_split = row_split,
+        row_title_gp = grid::gpar(fontsize = 10),
+        cluster_columns = FALSE,
+        show_column_names = show_column_names,
+        column_names_side = "top",
+        show_column_dend = FALSE,
+        column_split = column_split,
+        column_title_gp = grid::gpar(fontsize = 8),
+        column_names_gp = grid::gpar(fontsize = 10),
+        column_title_rot = 90,
+        column_gap = unit(0, "mm"),
+        left_annotation = left_annotation,
+        name = name,
+        border = TRUE,
+        col = col
+    )
+
+    return(complex.hm)
+}
+
+
+
