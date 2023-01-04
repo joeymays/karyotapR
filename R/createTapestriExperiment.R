@@ -233,3 +233,205 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
     return(list(barcode.probe = barcodeProbe, grna.probe = grnaProbe))
 }
+
+#create Dummy TapestriExperiment with CO293 metadata
+newDummyTapestriExperiment <- function(){
+  
+  panel.id <- "CO293"
+  
+  # read panel ID
+  panel.id.output <- .GetPanelID(panel.id = panel.id)
+  barcodeProbe <- panel.id.output[["barcode.probe"]]
+  grnaProbe <- panel.id.output[["grna.probe"]]
+  
+  # raw counts, 300 cells, panel CO293
+  read.counts.raw <- matrix(data = 1:91200, ncol = 300)
+  
+  read.counts.raw.colData <- S4Vectors::DataFrame(
+    cell.barcode = as.character(paste0("cell_", 1:300)),
+    row.names = as.character(paste0("cell_", 1:300))
+  )
+  
+  read.counts.raw.rowData <- S4Vectors::DataFrame(
+    probe.id = as.character(co293.metadata$probe.id),
+    chr = co293.metadata$chr,
+    start.pos = as.numeric(co293.metadata$start.pos),
+    end.pos = as.numeric(co293.metadata$end.pos),
+    row.names = as.character(co293.metadata$probe.id)
+  )
+  
+  chr.order <- getChrOrder(read.counts.raw.rowData$chr) # reorder amplicon metadata by chromosome order
+  
+  read.counts.raw.rowData <- read.counts.raw.rowData[chr.order, ]
+  
+  read.counts.raw <- read.counts.raw[chr.order, ]
+  
+  read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr, levels = unique(read.counts.raw.rowData$chr))
+  
+  # basic metrics
+  read.counts.raw.colData$total.reads <- colSums(read.counts.raw) # total reads per cell
+  read.counts.raw.rowData$total.reads <- rowSums(read.counts.raw) # total reads per probe
+  read.counts.raw.rowData$median.reads <- apply(read.counts.raw, 1, median) # median reads per probe
+  mean.reads <- round(mean(colMeans(read.counts.raw)), 2) # mean reads/cell/probe(or amplicon)
+  
+  sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
+                                                    colData = read.counts.raw.colData,
+                                                    rowData = read.counts.raw.rowData
+  )
+  
+  tapestri.object <- .TapestriExperiment(sce)
+  
+  SingleCellExperiment::mainExpName(tapestri.object) <- "CNV"
+  
+  # save experiment metadata
+  S4Vectors::metadata(tapestri.object)$sample.name <- "test object"
+  S4Vectors::metadata(tapestri.object)$pipeline.panel.name <- "test object"
+  S4Vectors::metadata(tapestri.object)$pipeline.version <- "test object"
+  S4Vectors::metadata(tapestri.object)$number.of.cells <- 300
+  S4Vectors::metadata(tapestri.object)$number.of.probes <- 304
+  S4Vectors::metadata(tapestri.object)$date.h5.created <- "test object"
+  S4Vectors::metadata(tapestri.object)$mean.reads.per.cell.per.probe <- as.character(mean.reads)
+  
+  # apply panel ID probe shortcuts
+  tapestri.object@barcodeProbe <- barcodeProbe
+  tapestri.object@grnaProbe <- grnaProbe
+  
+  tapestri.object <- getCytobands(tapestri.object)
+  
+  # move non-genomic probes to altExp slots
+  tapestri.object <- moveNonGenomeProbes(tapestri.object, c("grna", "sample.barcode", "Y"))
+  
+  return(tapestri.object)
+}
+
+#' Create Example `TapestriExperiment`
+#' 
+#' Creates a `TapestriExperiment` object for demonstration purposes, 
+#' which includes 240 probes across the genome, and 300 cells of 3 types.
+#' Raw counts are generated randomly. 
+#' Type 1 has 75 cells, all XY, all diploid.
+#' Type 2 has 100 cells, all XX, with 3 copies of chr 7, otherwise diploid.
+#' Type 3 has 125 cells, all XY, with 1 copy of chr 1p, otherwise diploid.
+#'
+#' @importFrom stats rnorm
+#'
+#' @return A `TapestriExperiment` object.
+#' @export
+#'
+#' @examples
+#' tapExperiment <- newTapestriExperimentExample()
+newTapestriExperimentExample <- function(){
+  
+  # panel ID
+  barcodeProbe <- "dummyBCprobe"
+  grnaProbe <- "dummyGRNAprobe"
+  
+  # probe metadata
+  read.counts.raw.rowData <- S4Vectors::DataFrame(
+    probe.id = paste0("probe_", 1:240),
+    chr = rep(c(1:22, "X", "Y"), each = 10), 
+    arm = paste0("chr", gtools::mixedsort(c(rep(paste0(c(1:22, "X", "Y"), "p"), each = 5), rep(paste0(c(1:22, "X", "Y"), "q"), each = 5)))),
+    row.names = paste0("probe_", 1:240)
+  )
+  
+  read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr, levels = unique(read.counts.raw.rowData$chr))
+  read.counts.raw.rowData$arm <- factor(read.counts.raw.rowData$arm, levels = unique(read.counts.raw.rowData$arm))
+  
+  n.probes <- 240
+  
+  # cell metadata
+  read.counts.raw.colData <- S4Vectors::DataFrame(
+    cell.barcode = as.character(paste0("cell_", 1:300)),
+    test.cluster = c(rep("cellline1", 75), rep("cellline2", 100), rep("cellline3", 125)),
+    row.names = as.character(paste0("cell_", 1:300))
+  )
+  
+  # raw counts
+  results.list <- list()
+  for(i in 1:n.probes){
+    results.list[[i]] <- round(stats::rnorm(300, 100, 5),0)
+    names(results.list)[i] <- paste0("probe_", i)
+  }
+  
+  read.counts.raw <- t(as.matrix(as.data.frame(results.list, row.names = NULL)))
+
+  # Y counts
+  read.counts.raw[which(read.counts.raw.rowData$chr == "Y"), c(1:75, 176:300)] <- 0
+  
+  # chr7 gain
+  results.list <- list()
+  for(i in 1:10){
+    results.list[[i]] <- round(stats::rnorm(100, 200, 5),0)
+  }
+  
+  read.counts.raw[which(read.counts.raw.rowData$chr == "7"), c(76:175)] <- t(as.matrix(as.data.frame(results.list, row.names = NULL)))
+  
+  # chr 1p loss
+  results.list <- list()
+  for(i in 1:5){
+    results.list[[i]] <- round(stats::rnorm(125, 50, 5),0)
+  }
+  
+  read.counts.raw[which(read.counts.raw.rowData$arm == "chr1p"), c(176:300)] <- t(as.matrix(as.data.frame(results.list, row.names = NULL)))
+  
+
+  # lentiviral probes
+  ## skip for now
+
+  # basic metrics
+  read.counts.raw.colData$total.reads <- colSums(read.counts.raw) # total reads per cell
+  read.counts.raw.rowData$total.reads <- rowSums(read.counts.raw) # total reads per probe
+  read.counts.raw.rowData$median.reads <- apply(read.counts.raw, 1, median) # median reads per probe
+  mean.reads <- round(mean(colMeans(read.counts.raw)), 2) # mean reads/cell/probe(or amplicon)
+  
+  sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
+                                                    colData = read.counts.raw.colData,
+                                                    rowData = read.counts.raw.rowData
+  )
+  
+  # construction
+  tapestri.object <- .TapestriExperiment(sce)
+  
+  SingleCellExperiment::mainExpName(tapestri.object) <- "CNV"
+  
+  # save experiment metadata
+  S4Vectors::metadata(tapestri.object)$sample.name <- "test object"
+  S4Vectors::metadata(tapestri.object)$pipeline.panel.name <- "test object"
+  S4Vectors::metadata(tapestri.object)$pipeline.version <- "test object"
+  S4Vectors::metadata(tapestri.object)$number.of.cells <- 300
+  S4Vectors::metadata(tapestri.object)$number.of.probes <- 240
+  S4Vectors::metadata(tapestri.object)$date.h5.created <- "test object"
+  S4Vectors::metadata(tapestri.object)$mean.reads.per.cell.per.probe <- as.character(mean.reads)
+  
+  # apply panel ID probe shortcuts
+  tapestri.object@barcodeProbe <- barcodeProbe
+  tapestri.object@grnaProbe <- grnaProbe
+  
+  # move non-genomic probes to altExp slots
+  tapestri.object <- moveNonGenomeProbes(tapestri.object, c("Y"))
+  
+  
+  # allele frequency
+  af.matrix <- matrix(0, nrow = 75, ncol = 300)
+  af.matrix[1:25, 1:75] <- 100
+  af.matrix[26:50, 76:175] <- 100
+  af.matrix[51:75, 175:300] <- 100
+  
+  colnames(af.matrix) <- colnames(tapestri.object)
+  
+  variant.metadata <- data.frame(variant.id = paste0("var_", 1:75))
+  
+  allele.frequency <- SingleCellExperiment::SingleCellExperiment(list(alleleFrequency = af.matrix),
+                                                                 rowData = S4Vectors::DataFrame(variant.metadata),
+                                                                 colData = S4Vectors::DataFrame(cell.barcode = colnames(tapestri.object))
+  )
+  
+  allele.frequency <- .TapestriExperiment(allele.frequency)
+  allele.frequency@barcodeProbe <- barcodeProbe
+  allele.frequency@grnaProbe <- grnaProbe
+  
+  SingleCellExperiment::altExp(tapestri.object, "alleleFrequency", withDimnames = TRUE) <- allele.frequency
+  
+  return(tapestri.object)
+}
+

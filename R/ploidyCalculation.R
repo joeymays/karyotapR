@@ -1,3 +1,4 @@
+#' @param TapestriExperiment A `TapestriExperiment` object.
 #' @param ploidy.all Numeric, sets all entries of `ploidy` column in output. Default 2.
 #' @param sample.label.all Character, sets all entries of `sample.label` column in output. Default "cluster".
 #'
@@ -7,18 +8,9 @@
 #' @describeIn getPloidy generates a `data.frame` template for `control.ploidy` in `getPloidy()`.
 #' @order 2
 #'
-generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cluster") {
+generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sample.label.all = "cluster") {
   ploidy.template <- data.frame(
-    arm = c(
-      "chr1p", "chr1q", "chr2p",
-      "chr2q", "chr3p", "chr3q", "chr4p", "chr4q", "chr5p", "chr5q",
-      "chr6p", "chr6q", "chr7p", "chr7q", "chr8p", "chr8q",
-      "chr9p", "chr9q", "chr10p", "chr10q", "chr11p", "chr11q",
-      "chr12p", "chr12q", "chr13q", "chr14q", "chr15q",
-      "chr16p", "chr16q", "chr17p", "chr17q", "chr18p", "chr18q",
-      "chr19p", "chr19q", "chr20p", "chr20q", "chr21q", "chr22q",
-      "chrXp", "chrXq"
-    ),
+    arm = levels(SummarizedExperiment::rowData(TapestriExperiment)$arm),
     ploidy = ploidy.all,
     sample.label = sample.label.all
   )
@@ -38,7 +30,8 @@ generateControlPloidyTemplate <- function(ploidy.all = 2, sample.label.all = "cl
 #' cells relative to that control population. This occurs individually for each probe,
 #' such that the result is one ploidy value per cell barcode per probe.
 #' `control.ploidy` is a `data.frame` lookup table used to indicate the ploidy value and cell barcodes
-#' to use as the reference. A template for `control.ploidy` can be generated using [`generateControlPloidyTemplate()`].
+#' to use as the reference. A template for `control.ploidy` can be generated using [`generateControlPloidyTemplate()`], 
+#' which will have a row for each chromosome arm represented in `TapestriExperiment`.
 #'
 #' The `control.ploidy` data.frame should include 3 columns named `arm`, `ploidy`, and `sample.label`.
 #' `arm` is chromosome arms from chr1p through chrXq, `ploidy` is the reference ploidy value, and `sample.label` is the
@@ -155,12 +148,16 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
     dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
     tidyr::pivot_wider(id_cols = dplyr::all_of("chr"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("chr")
+  
+  smoothed.ploidy.chr <- smoothed.ploidy.chr[,colnames(ploidy.counts)] #reorder to match input matrix
 
   smoothed.ploidy.arm <- ploidy.tidy %>%
     dplyr::group_by(.data$cell.barcode, .data$arm) %>%
     dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
     tidyr::pivot_wider(id_cols = dplyr::all_of("arm"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("arm")
+  
+  smoothed.ploidy.arm <- smoothed.ploidy.arm[,colnames(ploidy.counts)] #reorder to match input matrix
 
   discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
   discrete.ploidy.arm <- round(smoothed.ploidy.arm, 0)
