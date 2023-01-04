@@ -70,7 +70,7 @@ fct_count(colData(exp3.subset)$cluster)
 summary(rowData(exp3.subset)$median.reads > 0)
 exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #1 probe filtered for exp 3
 exp3.subset <- normalizeCounts(exp3.subset)
-control.ploidy <- generateControlPloidyTemplate(sample.label.all = "RPE1")
+control.ploidy <- generateControlPloidyTemplate(exp3.subset, sample.label.all = "RPE1")
 control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, sample.category = "cluster")
 exp3.subset <- smoothPloidy(exp3.subset)

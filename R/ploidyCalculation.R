@@ -9,7 +9,12 @@
 #' @order 2
 #'
 generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sample.label.all = "cluster") {
-  ploidy.template <- data.frame(
+
+    if(any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))){
+        stop("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating ploidy.")
+    }
+
+    ploidy.template <- data.frame(
     arm = levels(SummarizedExperiment::rowData(TapestriExperiment)$arm),
     ploidy = ploidy.all,
     sample.label = sample.label.all
