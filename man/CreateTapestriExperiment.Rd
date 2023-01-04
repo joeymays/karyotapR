@@ -47,8 +47,15 @@ See details for full explanation of construction.
 
 \subsection{CO293}{
 \itemize{
-\item \code{barcodeProbe} = AMPL205334
-\item \code{grnaProbe} = AMPL205666
+\item \code{barcodeProbe} = "AMPL205334"
+\item \code{grnaProbe} = "AMPL205666"
+}
+}
+
+\subsection{CO610}{
+\itemize{
+\item \code{barcodeProbe} = "CO610_AMP351"
+\item \code{grnaProbe} = "CO610_AMP350"
 }
 }
 }
