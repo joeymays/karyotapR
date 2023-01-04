@@ -13,8 +13,12 @@
 #' - `grnaProbe` = "not specified"
 #'
 #' ## CO293
-#' - `barcodeProbe` = AMPL205334
-#' - `grnaProbe` = AMPL205666
+#' - `barcodeProbe` = "AMPL205334"
+#' - `grnaProbe` = "AMPL205666"
+#'
+#' ## CO610
+#' - `barcodeProbe` = "CO610_AMP351"
+#' - `grnaProbe` = "CO610_AMP350"
 #'
 #' # Automatic Operations
 #' ## Raw Data
@@ -220,6 +224,9 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     } else if (panel.id == "CO261") {
         barcodeProbe <- "not specified"
         grnaProbe <- "not specified"
+    } else if (panel.id == "CO610") {
+        barcodeProbe <- "CO610_AMP351"
+        grnaProbe <- "CO610_AMP350"
     } else {
         stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL to set speciality probes manually."))
     }

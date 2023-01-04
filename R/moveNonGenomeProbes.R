@@ -32,7 +32,7 @@ moveNonGenomeProbes <- function(TapestriExperiment, move.non.genome.probes = c("
 
   move.non.genome.probes <- tolower(move.non.genome.probes)
 
-  if (any(!move.non.genome.probes %in% c("grna", "sample.barcode", "y"))) {
+  if (any(!move.non.genome.probes %in% c("grna", "sample.barcode", "y", "chry"))) {
     stop(paste(move.non.genome.probes, "<- Non-genomic probes not recognized. Use a combination of 'grna', 'sample.barcode', and/or 'Y'."))
   }
 
@@ -63,7 +63,7 @@ moveNonGenomeProbes <- function(TapestriExperiment, move.non.genome.probes = c("
     }
   }
 
-  if ("y" %in% move.non.genome.probes) {
+  if (any(c("y", "chry") %in% move.non.genome.probes)) {
     probe.index <- which(rowData(TapestriExperiment)$chr == "Y")
 
     if (S4Vectors::isEmpty(probe.index)) {
