@@ -102,7 +102,7 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 
   if (log.y) {
     tidy.data[, assay] <- log1p(tidy.data[, assay, drop = TRUE])
-    y.label <- paste0("log(", assay, ") + 1")
+    y.label <- paste0("log(", assay, "+ 1)")
   } else {
     y.label <- assay
   }
