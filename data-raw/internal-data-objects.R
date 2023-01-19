@@ -19,6 +19,3 @@ co293.metadata <- co293.metadata[,1:4]
 
 usethis::use_data(cytoband.hg19.genomicRanges, co293.metadata, overwrite = TRUE, internal = TRUE)
 
-
-# 912 Randomized Numbers
-# 1-10,000 in random order
