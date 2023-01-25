@@ -5,7 +5,12 @@
 \alias{generateControlPloidyTemplate}
 \title{Calculate ploidy for each cell-chromosome pair using baseline control}
 \usage{
-getPloidy(TapestriExperiment, control.ploidy, sample.category = "cluster")
+getPloidy(
+  TapestriExperiment,
+  control.ploidy,
+  sample.category = "cluster",
+  remove.bad.probes = F
+)
 
 generateControlPloidyTemplate(
   TapestriExperiment,
@@ -19,6 +24,8 @@ generateControlPloidyTemplate(
 \item{control.ploidy}{A \code{data.frame} with columns \code{arm}, \code{ploidy}, and \code{sample.label}. See details.}
 
 \item{sample.category}{Character, \code{colData} column to use for subsetting cell.barcodes. Default "cluster".}
+
+\item{remove.bad.probes}{Logical, if TRUE, probes with median normalized counts = 0 are removed from \code{TapestriExperiment}. If FALSE (default), probes with median normalized counts = 0 throw error and stop function.}
 
 \item{ploidy.all}{Numeric, sets all entries of \code{ploidy} column in output. Default 2.}
 

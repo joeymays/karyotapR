@@ -15,7 +15,7 @@ generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sa
     }
 
     ploidy.template <- data.frame(
-    arm = levels(SummarizedExperiment::rowData(TapestriExperiment)$arm),
+    arm = unique(SummarizedExperiment::rowData(TapestriExperiment)$arm),
     ploidy = ploidy.all,
     sample.label = sample.label.all
   )
@@ -35,7 +35,7 @@ generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sa
 #' cells relative to that control population. This occurs individually for each probe,
 #' such that the result is one ploidy value per cell barcode per probe.
 #' `control.ploidy` is a `data.frame` lookup table used to indicate the ploidy value and cell barcodes
-#' to use as the reference. A template for `control.ploidy` can be generated using [`generateControlPloidyTemplate()`], 
+#' to use as the reference. A template for `control.ploidy` can be generated using [`generateControlPloidyTemplate()`],
 #' which will have a row for each chromosome arm represented in `TapestriExperiment`.
 #'
 #' The `control.ploidy` data.frame should include 3 columns named `arm`, `ploidy`, and `sample.label`.
@@ -48,6 +48,7 @@ generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sa
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param control.ploidy A `data.frame` with columns `arm`, `ploidy`, and `sample.label`. See details.
 #' @param sample.category Character, `colData` column to use for subsetting cell.barcodes. Default "cluster".
+#' @param remove.bad.probes Logical, if TRUE, probes with median normalized counts = 0 are removed from `TapestriExperiment`. If FALSE (default), probes with median normalized counts = 0 throw error and stop function.
 #'
 #' @return `TapestriExperiment` object with ploidy values in `ploidy` assay slot.
 #' @export
@@ -63,7 +64,7 @@ generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sa
 #'   sample.category = "cluster"
 #' )
 #' }
-getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "cluster") {
+getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "cluster", remove.bad.probes = F) {
   sample.category <- tolower(sample.category)
 
   # error checks
@@ -95,8 +96,15 @@ getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "clu
   probe.medians <- unlist(probe.medians)
   names(probe.medians) <- probe.table$probe.id
 
+
+  # check for probes with median = 0
+  bad.probes <- NULL
   if (any(probe.medians == 0)) {
-    stop(paste0(names(probe.medians[probe.medians == 0]), " control cell median equal to 0. Filter out prior to proceeding.\n"))
+      if(remove.bad.probes == F){
+          stop(paste0(names(probe.medians[probe.medians == 0]), " control cell median equal to 0. Filter out prior to proceeding.\n"))
+      } else {
+          bad.probes <- names(probe.medians)[which(probe.medians == 0)]
+      }
   }
 
   probe.medians <- probe.medians[rownames(SummarizedExperiment::rowData(TapestriExperiment))] # reorder based on rowData
@@ -105,6 +113,12 @@ getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "clu
   counts.ploidy <- sweep(x = counts.ploidy, 1, probe.table$ploidy, "*") # scale to control ploidy
 
   SummarizedExperiment::assay(TapestriExperiment, "ploidy") <- counts.ploidy
+
+  if(!is.null(bad.probes)){
+      TapestriExperiment <- TapestriExperiment[setdiff(rownames(TapestriExperiment), bad.probes),]
+      message("Probes removed for 0 median value:")
+      message(paste(bad.probes, collapse = ", "))
+  }
 
   return(TapestriExperiment)
 }
@@ -153,7 +167,7 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
     dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
     tidyr::pivot_wider(id_cols = dplyr::all_of("chr"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("chr")
-  
+
   smoothed.ploidy.chr <- smoothed.ploidy.chr[,colnames(ploidy.counts)] #reorder to match input matrix
 
   smoothed.ploidy.arm <- ploidy.tidy %>%
@@ -161,7 +175,7 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
     dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
     tidyr::pivot_wider(id_cols = dplyr::all_of("arm"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("arm")
-  
+
   smoothed.ploidy.arm <- smoothed.ploidy.arm[,colnames(ploidy.counts)] #reorder to match input matrix
 
   discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
