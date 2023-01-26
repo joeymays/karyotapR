@@ -11,8 +11,6 @@
 CNweaveR enables basic analysis of CNVs using custom genome-wide
 targeted DNA sequencing panels for the Mission Bio Tapestri system.
 
-![CNweaveR Logo](/man/figures/logo.png?raw=true "CNweaveR")
-
 ## Installation
 
 You can install the development version of CNweaveR from

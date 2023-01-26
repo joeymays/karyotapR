@@ -14,6 +14,7 @@ CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of sin
 Useful links:
 \itemize{
   \item \url{https://github.com/joeymays/CNweaveR}
+  \item \url{http://joeymays.xyz/CNweaveR/}
   \item Report bugs at \url{https://github.com/joeymays/CNweaveR/issues}
 }
 
