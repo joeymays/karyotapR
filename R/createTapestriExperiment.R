@@ -235,7 +235,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 }
 
 #create TapestriExperiment with manual counts, CO293 metadata
-createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y")) {
+.createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y")) {
 
     # x <- matrix(data = 5, nrow = 304, ncol = 100, dimnames = list(rownames(co293.metadata), paste0("cell_", 1:100)))
 
@@ -248,7 +248,6 @@ createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, pan
     }
 
     #overwrite panel ID
-    message("panel ID forced to CO293. Metadata imported.")
     panel.id <- "CO293"
 
     # read panel ID
@@ -264,12 +263,22 @@ createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, pan
         row.names = colnames(read.counts.raw)
     )
 
+    #subset probe metadata in case not all probes present in count data
+
+    probe.metadata <- co293.metadata
+
+    if(!all(rownames(read.counts.raw) %in% probe.metadata$probe.id)){
+        stop("Unknown probe ID in read counts.")
+    }
+
+    probe.metadata <- probe.metadata[probe.metadata$probe.id %in% rownames(read.counts.raw),]
+
     read.counts.raw.rowData <- S4Vectors::DataFrame(
-        probe.id = co293.metadata$probe.id,
-        chr = co293.metadata$chr,
-        start.pos = co293.metadata$start.pos,
-        end.pos = co293.metadata$end.pos,
-        row.names = rownames(co293.metadata)
+        probe.id = probe.metadata$probe.id,
+        chr = probe.metadata$chr,
+        start.pos = probe.metadata$start.pos,
+        end.pos = probe.metadata$end.pos,
+        row.names = rownames(probe.metadata)
     )
 
     chr.order <- getChrOrder(read.counts.raw.rowData$chr) # reorder amplicon metadata by chromosome order
