@@ -129,14 +129,14 @@ getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "clu
 #' and chromosome arm, resulting in one ploidy value per chromosome and chromosome arm for each cell barcode.
 #' Values are then discretized into integers by conventional rounding.
 #' Smoothed ploidy and discretized smoothed ploidy values are stored as `smoothPloidy` and `DiscretePloidy` assays,
-#' in `altExp` slots `smoothedPloidyByChrom` for chromosome-level smoothing, and `smoothedPloidyByArm` for chromosome arm-level smoothing.
+#' in `altExp` slots `smoothedPloidyByChr` for chromosome-level smoothing, and `smoothedPloidyByArm` for chromosome arm-level smoothing.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param method Character, smoothing method. Supports median (default) or mean.
 #'
 #' @importFrom rlang .data
 #'
-#' @return `TapestriExperiment` with `smoothPloidy` and `DiscretePloidy` assays in `altExp` slots `smoothedPloidyByChrom` and `smoothedPloidyByArm`.
+#' @return `TapestriExperiment` with `smoothPloidy` and `DiscretePloidy` assays in `altExp` slots `smoothedPloidyByChr` and `smoothedPloidyByArm`.
 #' @export
 #'
 #' @examples
@@ -195,7 +195,7 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
   smoothed.ploidy.chr <- .TapestriExperiment(smoothed.ploidy.chr)
   smoothed.ploidy.arm <- .TapestriExperiment(smoothed.ploidy.arm)
 
-  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByChrom", withDimnames = TRUE) <- smoothed.ploidy.chr
+  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByChr", withDimnames = TRUE) <- smoothed.ploidy.chr
   SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByArm", withDimnames = TRUE) <- smoothed.ploidy.arm
 
   return(TapestriExperiment)
