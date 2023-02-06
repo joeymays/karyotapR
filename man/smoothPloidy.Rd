@@ -12,14 +12,14 @@ smoothPloidy(TapestriExperiment, method = "median")
 \item{method}{Character, smoothing method. Supports median (default) or mean.}
 }
 \value{
-\code{TapestriExperiment} with \code{smoothPloidy} and \code{DiscretePloidy} assays in \code{altExp} slots \code{smoothedPloidyByChrom} and \code{smoothedPloidyByArm}.
+\code{TapestriExperiment} with \code{smoothPloidy} and \code{DiscretePloidy} assays in \code{altExp} slots \code{smoothedPloidyByChr} and \code{smoothedPloidyByArm}.
 }
 \description{
 \code{smoothPloidy()} takes \code{ploidy} slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
 and chromosome arm, resulting in one ploidy value per chromosome and chromosome arm for each cell barcode.
 Values are then discretized into integers by conventional rounding.
 Smoothed ploidy and discretized smoothed ploidy values are stored as \code{smoothPloidy} and \code{DiscretePloidy} assays,
-in \code{altExp} slots \code{smoothedPloidyByChrom} for chromosome-level smoothing, and \code{smoothedPloidyByArm} for chromosome arm-level smoothing.
+in \code{altExp} slots \code{smoothedPloidyByChr} for chromosome-level smoothing, and \code{smoothedPloidyByArm} for chromosome arm-level smoothing.
 }
 \examples{
 \dontrun{
