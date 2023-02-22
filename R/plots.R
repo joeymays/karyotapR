@@ -237,39 +237,43 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
     hm.col <- color.custom
   }
 
-  hm <- .ComplexHeatmap.default(matrix = t(hm.matrix),
-                                row_split = row.split,
-                                show_column_names = show.column.names,
-                                column_split = column.split,
-                                left_annotation = row.annotation,
-                                name = assay,
-                                col = hm.col,
-                                ...)
+  # set default params here to allow overwriting in function call
+  hm.defaults <- list("name" = assay,
+                      "hm.col" = hm.col,
+                      "left.annotation" = row.annotation,
+                      "row.split" = row.split,
+                      "show.column.names" = show.column.names,
+                      "column.split" = column.split)
+
+  hm <- .ComplexHeatmap.default(matrix = t(hm.matrix), hm.defaults = hm.defaults, ...)
 
   return(hm)
 }
 
-# Internal ComplexHeatmap call with defaults
+# Internal ComplexHeatmap call with reasonable default settings
 .ComplexHeatmap.default <- function(matrix,
                                     cluster_rows = TRUE,
                                     cluster_row_slices = FALSE,
                                     show_row_names = FALSE,
                                     show_row_dend = FALSE,
-                                    row_split,
+                                    row_split = hm.defaults[["row.split"]],
                                     row_title_gp = grid::gpar(fontsize = 10),
                                     cluster_columns = FALSE,
-                                    show_column_names,
+                                    show_column_names = hm.defaults[["show.column.names"]],
                                     column_names_side = "top",
                                     show_column_dend = FALSE,
-                                    column_split,
+                                    column_split = hm.defaults[["column.split"]],
                                     column_title_gp = grid::gpar(fontsize = 8),
                                     column_names_gp = grid::gpar(fontsize = 10),
+                                    column_names_rot = 90,
                                     column_title_rot = 90,
                                     column_gap = unit(0, "mm"),
-                                    left_annotation,
-                                    name,
+                                    left_annotation = hm.defaults[["left.annotation"]],
+                                    name = hm.defaults[["name"]],
                                     border = TRUE,
-                                    col
+                                    col = hm.defaults[["hm.col"]],
+                                    hm.defaults = hm.defaults,
+                                    ...
                                     ){
 
     complex.hm <- ComplexHeatmap::Heatmap(
@@ -280,21 +284,23 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
         show_row_names = show_row_names,
         show_row_dend = show_row_dend,
         row_split = row_split,
-        row_title_gp = grid::gpar(fontsize = 10),
-        cluster_columns = FALSE,
+        row_title_gp = row_title_gp,
+        cluster_columns = cluster_columns,
         show_column_names = show_column_names,
-        column_names_side = "top",
-        show_column_dend = FALSE,
+        column_names_side = column_names_side,
+        show_column_dend = show_column_dend,
         column_split = column_split,
-        column_title_gp = grid::gpar(fontsize = 8),
-        column_names_gp = grid::gpar(fontsize = 10),
-        column_title_rot = 90,
-        column_gap = unit(0, "mm"),
+        column_title_gp = column_title_gp,
+        column_names_gp = column_names_gp,
+        column_title_rot = column_title_rot,
+        column_gap = column_gap,
         left_annotation = left_annotation,
         name = name,
-        border = TRUE,
-        col = col
-    )
+        border = border,
+        col = col,
+        column_names_rot = column_names_rot,
+        ...
+        )
 
     return(complex.hm)
 }
