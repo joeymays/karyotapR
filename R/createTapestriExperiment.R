@@ -51,6 +51,7 @@
 #' @param genome Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.
 #' @param move.non.genome.probes Character vector,  non-genomic probes to move counts and metadata to `altExp` slots, if available. Default `c("grna", "sample.barcode", "Y")`.
 #' @param filter.variants Logical, if `TRUE`, only loads variants that have passed Tapestri Pipeline filters. Default `TRUE`.
+#' @param verbose Logical, if `TRUE` (default), metadata is output as messages.
 #'
 #' @return Constructed `TapestriExperiment` object.
 #' @export
@@ -64,7 +65,7 @@
 #' tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")
 #' }
 createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y"),
-                                     filter.variants = TRUE) {
+                                     filter.variants = TRUE, verbose = TRUE) {
 
     # read panel ID
     panel.id.output <- .GetPanelID(panel.id = panel.id)
@@ -76,12 +77,14 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
   tapestri.h5 <- rhdf5::H5Fopen(file.path(h5.filename))
 
   # report data
-  message(paste("sample name:", tapestri.h5$"/assays/dna_read_counts/metadata/sample_name"))
-  message(paste("pipeline panel name:", tapestri.h5$"/assays/dna_read_counts/metadata/panel_name"))
-  message(paste("pipeline version:", tapestri.h5$"/assays/dna_read_counts/metadata/pipeline_version"))
-  message(paste("number of cells:", tapestri.h5$"/assays/dna_read_counts/metadata/n_cells"))
-  message(paste("number of probes:", tapestri.h5$"/assays/dna_read_counts/metadata/n_amplicons"))
-  message(paste("date created:", tapestri.h5$"/metadata/date_created"))
+  if(verbose){
+      message(paste("sample name:", tapestri.h5$"/assays/dna_read_counts/metadata/sample_name"))
+      message(paste("pipeline panel name:", tapestri.h5$"/assays/dna_read_counts/metadata/panel_name"))
+      message(paste("pipeline version:", tapestri.h5$"/assays/dna_read_counts/metadata/pipeline_version"))
+      message(paste("number of cells:", tapestri.h5$"/assays/dna_read_counts/metadata/n_cells"))
+      message(paste("number of probes:", tapestri.h5$"/assays/dna_read_counts/metadata/n_amplicons"))
+      message(paste("date created:", tapestri.h5$"/metadata/date_created"))
+  }
 
   # construct object
   read.counts.raw <- t(matrix(
@@ -116,7 +119,10 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
   read.counts.raw.rowData$total.reads <- rowSums(read.counts.raw) # total reads per probe
   read.counts.raw.rowData$median.reads <- apply(read.counts.raw, 1, median) # median reads per probe
   mean.reads <- round(mean(colMeans(read.counts.raw)), 2) # mean reads/cell/probe(or amplicon)
-  message(paste("mean reads per cell per probe:", mean.reads))
+
+  if(verbose){
+      message(paste("mean reads per cell per probe:", mean.reads))
+  }
 
   sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
     colData = read.counts.raw.colData,
@@ -201,7 +207,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
   # get cytobands
   if (get.cytobands) {
-    tapestri.object <- getCytobands(tapestri.object)
+    tapestri.object <- getCytobands(tapestri.object, verbose = verbose)
   }
 
   # move non-genomic probes to altExp slots
@@ -235,7 +241,8 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 }
 
 #create TapestriExperiment with manual counts, CO293 metadata
-.createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y")) {
+.createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y"),
+                                             verbose = TRUE) {
 
     # x <- matrix(data = 5, nrow = 304, ncol = 100, dimnames = list(rownames(co293.metadata), paste0("cell_", 1:100)))
 
@@ -294,8 +301,10 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     read.counts.raw.rowData$total.reads <- rowSums(read.counts.raw) # total reads per probe
     read.counts.raw.rowData$median.reads <- apply(read.counts.raw, 1, median) # median reads per probe
     mean.reads <- round(mean(colMeans(read.counts.raw)), 2) # mean reads/cell/probe(or amplicon)
-    message(paste("mean reads per cell per probe:", mean.reads))
 
+    if(verbose){
+        message(paste("mean reads per cell per probe:", mean.reads))
+    }
     ## BUILD OBJECT
 
     sce <- SingleCellExperiment::SingleCellExperiment(list(counts = read.counts.raw),
@@ -331,12 +340,14 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     }
 
     # report data
-    message(paste("sample name:", S4Vectors::metadata(tapestri.object)$sample.name))
-    message(paste("pipeline panel name:", S4Vectors::metadata(tapestri.object)$pipeline.panel.name))
-    message(paste("pipeline version:", S4Vectors::metadata(tapestri.object)$pipeline.version))
-    message(paste("number of cells:", S4Vectors::metadata(tapestri.object)$number.of.cells))
-    message(paste("number of probes:", S4Vectors::metadata(tapestri.object)$number.of.probes))
-    message(paste("date created:", S4Vectors::metadata(tapestri.object)$date.h5.created))
+    if(verbose){
+        message(paste("sample name:", S4Vectors::metadata(tapestri.object)$sample.name))
+        message(paste("pipeline panel name:", S4Vectors::metadata(tapestri.object)$pipeline.panel.name))
+        message(paste("pipeline version:", S4Vectors::metadata(tapestri.object)$pipeline.version))
+        message(paste("number of cells:", S4Vectors::metadata(tapestri.object)$number.of.cells))
+        message(paste("number of probes:", S4Vectors::metadata(tapestri.object)$number.of.probes))
+        message(paste("date created:", S4Vectors::metadata(tapestri.object)$date.h5.created))
+    }
 
     return(tapestri.object)
 

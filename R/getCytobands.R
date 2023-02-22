@@ -6,13 +6,14 @@
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param genome Character, reference genome to use. Only hg19 is currently supported.
+#' @param verbose Logical, if `TRUE` (default), progress is output as messages.
 #'
 #' @return `TapestriExperiment` object with `rowData` updated to include chromosome arms and cytobands.
 #' @export
 #'
 #' @examples
 #' \dontrun{tapObject <- getCytobands(tapObject, genome = "hg19")}
-getCytobands <- function(TapestriExperiment, genome = "hg19"){
+getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE){
 
     genome <- tolower(genome)
 
@@ -20,10 +21,11 @@ getCytobands <- function(TapestriExperiment, genome = "hg19"){
         stop(paste(genome, "not found. Only hg19 is currently supported."))
     }
 
+if(verbose){
     if(genome == "hg19"){
         message("Adding cytobands from hg19.")
     }
-
+}
     #only add chr label for arms to chrs 1-22, X, Y
     chr.vector <- as.character(SingleCellExperiment::rowData(TapestriExperiment)$chr)
     chr.vector <- ifelse(chr.vector %in% c(1:22, "X", "Y"), paste0("chr", chr.vector), chr.vector)

@@ -10,7 +10,8 @@ createTapestriExperiment(
   get.cytobands = TRUE,
   genome = "hg19",
   move.non.genome.probes = c("grna", "sample.barcode", "Y"),
-  filter.variants = TRUE
+  filter.variants = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ createTapestriExperiment(
 \item{move.non.genome.probes}{Character vector,  non-genomic probes to move counts and metadata to \code{altExp} slots, if available. Default \code{c("grna", "sample.barcode", "Y")}.}
 
 \item{filter.variants}{Logical, if \code{TRUE}, only loads variants that have passed Tapestri Pipeline filters. Default \code{TRUE}.}
+
+\item{verbose}{Logical, if \code{TRUE} (default), metadata is output as messages.}
 }
 \value{
 Constructed \code{TapestriExperiment} object.
