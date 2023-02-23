@@ -29,7 +29,7 @@ assayHeatmap(
 
 \item{annotate.row.by}{Character, \code{colData} column to use for annotation. Default \code{NULL}.}
 
-\item{color.preset}{Character, color preset to use to color heatmap, either "ploidy" or "ploidy.denoise" (see \code{Details}). Overrides \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} coloring.}
+\item{color.preset}{Character, color preset to use to color heatmap, either "copy.number" or "copy.number.denoise" (see \code{Details}). Overrides \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} coloring.}
 
 \item{color.custom}{Color mapping function given by \code{\link[circlize:colorRamp2]{circlize::colorRamp2()}}. \code{color.preset} must be \code{NULL}.}
 
@@ -43,7 +43,7 @@ Creates a heatmap of matrix data in a \code{TapestriObject} using the \code{Comp
 Heatmaps are generated as transposed (i.e. x-y flipped) representations of the indicated matrix.
 }
 \section{\code{color.preset} Options}{
-\subsection{"ploidy"}{
+\subsection{"copy.number"}{
 
 Blue-white-red gradient from 0-2-4. 4 to 8+ is red-black gradient.
 
@@ -52,9 +52,9 @@ c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))
 }\if{html}{\out{</div>}}
 }
 
-\subsection{"ploidy.denoise"}{
+\subsection{"copy.number.denoise"}{
 
-Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
+Similar to 'copy.number' present, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8),
 c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))

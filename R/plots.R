@@ -137,14 +137,14 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #'
 #' @details
 #' # `color.preset` Options
-#' ## "ploidy"
+#' ## "copy.number"
 #' Blue-white-red gradient from 0-2-4. 4 to 8+ is red-black gradient.
 #' ```
 #' circlize::colorRamp2(c(0,1,2,3,4,8),
 #' c('#2c7bb6','#abd9e9','#ffffff','#fdae61','#d7191c', "black"))
 #' ```
-#' ## "ploidy.denoise"
-#' Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
+#' ## "copy.number.denoise"
+#' Similar to 'copy.number' present, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.
 #' ```
 #' circlize::colorRamp2(c(0,1,1.5,2,2.5,3,4,8),
 #' c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"))
@@ -156,7 +156,7 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #' @param split.col.by Character, `rowData` column to split columns by, usually "chr" or "arm". Default `NULL`.
 #' @param split.row.by Character, `colData` column to split rows by, usually "cluster". Default `NULL`.
 #' @param annotate.row.by Character, `colData` column to use for annotation. Default `NULL`.
-#' @param color.preset Character, color preset to use to color heatmap, either "ploidy" or "ploidy.denoise" (see `Details`). Overrides `color.custom`. `NULL` (default) uses default `ComplexHeatmap` coloring.
+#' @param color.preset Character, color preset to use to color heatmap, either "copy.number" or "copy.number.denoise" (see `Details`). Overrides `color.custom`. `NULL` (default) uses default `ComplexHeatmap` coloring.
 #' @param color.custom Color mapping function given by [`circlize::colorRamp2()`]. `color.preset` must be `NULL`.
 #' @param ... Additional parameters to pass to [`ComplexHeatmap::Heatmap()`].
 #'
@@ -229,9 +229,9 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
     } else {
       hm.col <- color.custom
     }
-  } else if (color.preset == "ploidy") {
+  } else if (color.preset == "copy.number") {
     hm.col <- circlize::colorRamp2(c(0, 1, 2, 3, 4, 8), c("#2c7bb6", "#abd9e9", "#ffffff", "#fdae61", "#d7191c", "black"))
-  } else if (color.preset == "ploidy.denoise") {
+  } else if (color.preset == "copy.number.denoise") {
     hm.col <- circlize::colorRamp2(c(0, 1, 1.5, 2, 2.5, 3, 4, 8), c("#2c7bb6", "#abd9e9", "#ffffff", "#ffffff", "#ffffff", "#fdae61", "#d7191c", "black"))
   } else {
     hm.col <- color.custom

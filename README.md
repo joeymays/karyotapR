@@ -94,11 +94,11 @@ Rename cluster labels by renaming the factor levels of “cluster”. The
 colData(example.exp)$cluster <- forcats::fct_recode(colData(example.exp)$cluster, cellline1 = "1", cellline2 = "2", cellline3 = "3")
 ```
 
-## Ploidy Calculation
+## Copy Number Calculation
 
-Normalize counts and calculate ploidy relative to cellline 3, which is
-diploid. `control.copy.number` gives the cluster label and ploidy value
-to normalize each chromosome arm to.
+Normalize counts and calculate copy number relative to cellline 3, which
+is diploid. `control.copy.number` gives the cluster label and copy
+number value to normalize each chromosome arm to.
 
 ``` r
 example.exp <- calcNormCounts(example.exp)
@@ -107,17 +107,17 @@ example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.nu
 example.exp <- calcSmoothCopyNumber(example.exp)
 ```
 
-Visualize ploidy. Visualization reveals that cell line 1 has 1 copy of
-chromosome arm 1p, and cell line 2 has three copies of chromosome 7.
+Visualize copy number. Visualization reveals that cell line 1 has 1 copy
+of chromosome arm 1p, and cell line 2 has three copies of chromosome 7.
 
 ``` r
-assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "copy.number")
 ```
 
 <img src="man/figures/README-heatmaps1-1.png" width="100%" />
 
 ``` r
-assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "copy.number")
 ```
 
 <img src="man/figures/README-heatmaps1-2.png" width="100%" />
