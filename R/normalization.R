@@ -15,8 +15,8 @@
 #' @importFrom stats median sd
 #'
 #' @examples
-#' \dontrun{TapestriExperiment <- normalizeCounts(TapestriExperiment)}
-normalizeCounts <- function(TapestriExperiment, method = "mb"){
+#' \dontrun{TapestriExperiment <- calcNormCounts(TapestriExperiment)}
+calcNormCounts <- function(TapestriExperiment, method = "mb"){
 
     method <- tolower(method)
 

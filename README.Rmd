@@ -95,7 +95,7 @@ colData(example.exp)$cluster <- forcats::fct_recode(colData(example.exp)$cluster
 Normalize counts and calculate ploidy relative to cellline 3, which is diploid. `control.ploidy` gives the cluster label and ploidy value to normalize each chromosome arm to. 
 
 ```{r}
-example.exp <- normalizeCounts(example.exp)
+example.exp <- calcNormCounts(example.exp)
 control.ploidy <- generateControlPloidyTemplate(example.exp, sample.label.all = "cellline3", ploidy.all = 2)
 example.exp <- getPloidy(example.exp, control.ploidy = control.ploidy, sample.category = "cluster")
 example.exp <- smoothPloidy(example.exp)

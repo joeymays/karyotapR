@@ -101,7 +101,7 @@ diploid. `control.ploidy` gives the cluster label and ploidy value to
 normalize each chromosome arm to.
 
 ``` r
-example.exp <- normalizeCounts(example.exp)
+example.exp <- calcNormCounts(example.exp)
 control.ploidy <- generateControlPloidyTemplate(example.exp, sample.label.all = "cellline3", ploidy.all = 2)
 example.exp <- getPloidy(example.exp, control.ploidy = control.ploidy, sample.category = "cluster")
 example.exp <- smoothPloidy(example.exp)

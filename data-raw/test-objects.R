@@ -69,7 +69,7 @@ colData(exp3.subset)$cluster <- fct_drop(colData(exp3.subset)$cluster)
 fct_count(colData(exp3.subset)$cluster)
 summary(rowData(exp3.subset)$median.reads > 0)
 exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #1 probe filtered for exp 3
-exp3.subset <- normalizeCounts(exp3.subset)
+exp3.subset <- calcNormCounts(exp3.subset)
 control.ploidy <- generateControlPloidyTemplate(exp3.subset, sample.label.all = "RPE1")
 control.ploidy["chr10q", "ploidy"] <- 3
 exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, sample.category = "cluster")
@@ -97,7 +97,7 @@ example.exp <- getClusters(example.exp, eps = 0.9)
 reducedDimPlot(example.exp, dim.reduction = "umap", group.label = "cluster")
 colData(example.exp)$cluster <- forcats::fct_recode(colData(example.exp)$cluster, cellline1 = "1", cellline2 = "2", cellline3 = "3")
 
-example.exp <- normalizeCounts(example.exp)
+example.exp <- calcNormCounts(example.exp)
 control.ploidy <- generateControlPloidyTemplate(example.exp, sample.label.all = "cellline3", ploidy.all = 2)
 example.exp <- getPloidy(example.exp, control.ploidy = control.ploidy, sample.category = "cluster")
 example.exp <- smoothPloidy(example.exp)

@@ -18,6 +18,6 @@ test_that("NA in normalization input triggers message", {
     x[1,1] <- NA
     assay(tap.object) <- x
 
-    expect_warning(normalizeCounts(tap.object), "NAs found in count data.")
+    expect_warning(calcNormCounts(tap.object), "NAs found in count data.")
 
 })
