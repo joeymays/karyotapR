@@ -1,22 +1,22 @@
 #' @param TapestriExperiment A `TapestriExperiment` object.
-#' @param ploidy.all Numeric, sets all entries of `ploidy` column in output. Default 2.
+#' @param copy.number.all Numeric, sets all entries of `copy.number` column in output. Default 2.
 #' @param sample.label.all Character, sets all entries of `sample.label` column in output. Default "cluster".
 #'
-#' @return `data.frame` with 3 columns named `arm`, `ploidy`, and `sample.label`
+#' @return `data.frame` with 3 columns named `arm`, `copy.number`, and `sample.label`
 #' @export
 #'
-#' @describeIn getPloidy generates a `data.frame` template for `control.ploidy` in `getPloidy()`.
+#' @describeIn calcCopyNumber generates a `data.frame` template for `control.copy.number` in `calcCopyNumber()`.
 #' @order 2
 #'
-generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sample.label.all = "cluster") {
+generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number.all = 2, sample.label.all = "cluster") {
 
     if(any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))){
-        stop("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating ploidy.")
+        stop("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
     }
 
     ploidy.template <- data.frame(
     arm = unique(SummarizedExperiment::rowData(TapestriExperiment)$arm),
-    ploidy = ploidy.all,
+    copy.number = copy.number.all,
     sample.label = sample.label.all
   )
   rownames(ploidy.template) <- ploidy.template$arm
@@ -24,47 +24,47 @@ generateControlPloidyTemplate <- function(TapestriExperiment, ploidy.all = 2, sa
   return(ploidy.template)
 }
 
-#' @name getPloidy
+#' @name calcCopyNumber
 #'
-#' @title Calculate ploidy for each cell-chromosome pair using baseline control
+#' @title Calculate copy number value for each cell-chromosome using baseline control sample
 #'
-#' @description `getPloidy()` transforms the normalized count matrix of a `TapestriExperiment` object
-#' into ploidy values based on a reference subset of cell barcodes and given ploidy value (e.g. 2 for diploid).
-#' This is practically used to set the median ploidy of a usually diploid reference/control
-#' cell population to a known ploidy value, e.g. 2, and then calculate the ploidy for all the
+#' @description `calcCopyNumber()` transforms the normalized count matrix of a `TapestriExperiment` object
+#' into copy number values based on a reference subset of cell barcodes and given copy number value (e.g. 2 for diploid).
+#' This is practically used to set the median copy number of a usually diploid reference/control
+#' cell population to a known copy number value, e.g. 2, and then calculate the copy number for all the
 #' cells relative to that control population. This occurs individually for each probe,
-#' such that the result is one ploidy value per cell barcode per probe.
-#' `control.ploidy` is a `data.frame` lookup table used to indicate the ploidy value and cell barcodes
-#' to use as the reference. A template for `control.ploidy` can be generated using [`generateControlPloidyTemplate()`],
+#' such that the result is one copy number value per cell barcode per probe.
+#' `control.copy.number` is a `data.frame` lookup table used to indicate the copy number value and cell barcodes
+#' to use as the reference. A template for `control.copy.number` can be generated using [`generateControlCopyNumberTemplate()`],
 #' which will have a row for each chromosome arm represented in `TapestriExperiment`.
 #'
-#' The `control.ploidy` data.frame should include 3 columns named `arm`, `ploidy`, and `sample.label`.
-#' `arm` is chromosome arms from chr1p through chrXq, `ploidy` is the reference ploidy value, and `sample.label` is the
-#' value corresponding to the `colData` column given in `sample.category` to indicate the cell barcode subset to use to set the ploidy.
+#' The `control.copy.number` data.frame should include 3 columns named `arm`, `copy.number`, and `sample.label`.
+#' `arm` is chromosome arms from chr1p through chrXq, `copy.number` is the reference copy number value, and `sample.label` is the
+#' value corresponding to the `colData` column given in `sample.category` to indicate the cell barcode subset to use to set the copy number.
 #' This is best used in a workflow where the cells are clustered first, and then one cluster is used as the reference population
-#' the other clusters. This also allows for the baseline ploidy to be set for each chromosome individually in the case where the
+#' the other clusters. This also allows for the baseline copy number to be set for each chromosome individually in the case where the
 #' reference population is not completely diploid.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
-#' @param control.ploidy A `data.frame` with columns `arm`, `ploidy`, and `sample.label`. See details.
+#' @param control.copy.number A `data.frame` with columns `arm`, `copy.number`, and `sample.label`. See details.
 #' @param sample.category Character, `colData` column to use for subsetting cell.barcodes. Default "cluster".
 #' @param remove.bad.probes Logical, if TRUE, probes with median normalized counts = 0 are removed from `TapestriExperiment`. If FALSE (default), probes with median normalized counts = 0 throw error and stop function.
 #'
-#' @return `TapestriExperiment` object with ploidy values in `ploidy` assay slot.
+#' @return `TapestriExperiment` object with copy number values in `copyNumber` assay slot.
 #' @export
 #'
-#' @rdname getPloidy
+#' @rdname calcCopyNumber
 #' @order 1
 #'
 #' @examples
 #' \dontrun{
-#' control.ploidy <- generateControlPloidyTemplate()
-#' TapestriExperiment <- getPloidy(TapestriExperiment,
-#'   control.ploidy,
+#' control.copy.number <- generateControlCopyNumberTemplate()
+#' TapestriExperiment <- calcCopyNumber(TapestriExperiment,
+#'   control.copy.number,
 #'   sample.category = "cluster"
 #' )
 #' }
-getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "cluster", remove.bad.probes = F) {
+calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.category = "cluster", remove.bad.probes = F) {
   sample.category <- tolower(sample.category)
 
   # error checks
@@ -72,15 +72,15 @@ getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "clu
     stop(paste0("sample.category '", sample.category, "' not found in colData"))
   }
 
-  if (any(!unique(control.ploidy$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.category]))) {
-    stop(paste0("control.ploidy sample.label elements not found in colData. Check control.ploidy."))
+  if (any(!unique(control.copy.number$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.category]))) {
+    stop(paste0("control.copy.number sample.label elements not found in colData. Check control.copy.number."))
   }
 
   counts.mat <- SummarizedExperiment::assay(TapestriExperiment, "normcounts")
 
-  # get median normalized counts for each amplicon based on control.ploidy
+  # get median normalized counts for each probe based on control.copy.number
   probe.table <- as.data.frame(SummarizedExperiment::rowData(TapestriExperiment))[, c("probe.id", "arm")]
-  probe.table <- merge(probe.table, control.ploidy, by = "arm", all.x = TRUE, sort = FALSE)
+  probe.table <- merge(probe.table, control.copy.number, by = "arm", all.x = TRUE, sort = FALSE)
   rownames(probe.table) <- probe.table$probe.id
 
   sample.category.lookup <- SummarizedExperiment::colData(TapestriExperiment)[, sample.category, drop = FALSE]
@@ -110,9 +110,9 @@ getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "clu
   probe.medians <- probe.medians[rownames(SummarizedExperiment::rowData(TapestriExperiment))] # reorder based on rowData
   counts.ploidy <- sweep(x = counts.mat, 1, probe.medians, "/") # normalize relative to medians
   probe.table <- probe.table[rownames(SummarizedExperiment::rowData(TapestriExperiment)), ] # reorder based on rowData
-  counts.ploidy <- sweep(x = counts.ploidy, 1, probe.table$ploidy, "*") # scale to control ploidy
+  counts.ploidy <- sweep(x = counts.ploidy, 1, probe.table$copy.number, "*") # scale to control copy number
 
-  SummarizedExperiment::assay(TapestriExperiment, "ploidy") <- counts.ploidy
+  SummarizedExperiment::assay(TapestriExperiment, "copyNumber") <- counts.ploidy
 
   if(!is.null(bad.probes)){
       TapestriExperiment <- TapestriExperiment[setdiff(rownames(TapestriExperiment), bad.probes),]
@@ -123,27 +123,27 @@ getPloidy <- function(TapestriExperiment, control.ploidy, sample.category = "clu
   return(TapestriExperiment)
 }
 
-#' Smooth ploidy values by chromosome and chromosome arm
+#' Smooth copy numbers values by chromosome and chromosome arm
 #'
-#' `smoothPloidy()` takes `ploidy` slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
-#' and chromosome arm, resulting in one ploidy value per chromosome and chromosome arm for each cell barcode.
+#' `calcSmoothCopyNumber()` takes `copyNumber` slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
+#' and chromosome arm, resulting in one copy number value per chromosome and chromosome arm for each cell barcode.
 #' Values are then discretized into integers by conventional rounding.
-#' Smoothed ploidy and discretized smoothed ploidy values are stored as `smoothPloidy` and `DiscretePloidy` assays,
-#' in `altExp` slots `smoothedPloidyByChr` for chromosome-level smoothing, and `smoothedPloidyByArm` for chromosome arm-level smoothing.
+#' Smoothed copy number and discretized smoothed copy number values are stored as `smoothedCopyNumber` and `discreteCopyNumber` assays,
+#' in `altExp` slots `smoothedCopyNumberByChr` for chromosome-level smoothing, and `smoothedCopyNumberByArm` for chromosome arm-level smoothing.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param method Character, smoothing method. Supports median (default) or mean.
 #'
 #' @importFrom rlang .data
 #'
-#' @return `TapestriExperiment` with `smoothPloidy` and `DiscretePloidy` assays in `altExp` slots `smoothedPloidyByChr` and `smoothedPloidyByArm`.
+#' @return `TapestriExperiment` with `smoothedCopyNumber` and `discreteCopyNumber` assays in `altExp` slots `smoothedCopyNumberByChr` and `smoothedCopyNumberByArm`.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' TapestriExperiment <- smoothPloidy(TapestriExperiment)
+#' TapestriExperiment <- calcSmoothCopyNumber(TapestriExperiment)
 #' }
-smoothPloidy <- function(TapestriExperiment, method = "median") {
+calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
   method <- tolower(method)
 
   if (method == "median") {
@@ -154,7 +154,7 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
     stop(paste0("method '", method, "' not recognized. Please use mean or median."))
   }
 
-  ploidy.counts <- SummarizedExperiment::assay(TapestriExperiment, "ploidy")
+  ploidy.counts <- SummarizedExperiment::assay(TapestriExperiment, "copyNumber")
 
   ploidy.tidy <- ploidy.counts %>%
     as.data.frame() %>%
@@ -183,20 +183,20 @@ smoothPloidy <- function(TapestriExperiment, method = "median") {
 
 
   smoothed.ploidy.chr <- SingleCellExperiment::SingleCellExperiment(list(
-    smoothedPloidy = smoothed.ploidy.chr,
-    discretePloidy = discrete.ploidy.chr
+      smoothedCopyNumber = smoothed.ploidy.chr,
+      discreteCopyNumber = discrete.ploidy.chr
   ))
 
   smoothed.ploidy.arm <- SingleCellExperiment::SingleCellExperiment(list(
-    smoothedPloidy = smoothed.ploidy.arm,
-    discretePloidy = discrete.ploidy.arm
+      smoothedCopyNumber = smoothed.ploidy.arm,
+      discreteCopyNumber = discrete.ploidy.arm
   ))
 
   smoothed.ploidy.chr <- .TapestriExperiment(smoothed.ploidy.chr)
   smoothed.ploidy.arm <- .TapestriExperiment(smoothed.ploidy.arm)
 
-  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByChr", withDimnames = TRUE) <- smoothed.ploidy.chr
-  SingleCellExperiment::altExp(TapestriExperiment, "smoothedPloidyByArm", withDimnames = TRUE) <- smoothed.ploidy.arm
+  SingleCellExperiment::altExp(TapestriExperiment, "smoothedCopyNumberByChr", withDimnames = TRUE) <- smoothed.ploidy.chr
+  SingleCellExperiment::altExp(TapestriExperiment, "smoothedCopyNumberByArm", withDimnames = TRUE) <- smoothed.ploidy.arm
 
   return(TapestriExperiment)
 }

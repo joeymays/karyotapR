@@ -65,8 +65,8 @@ c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"
 \examples{
 \dontrun{
 assayHeatmap(TapestriExperiment,
-  alt.exp = "smoothedPloidyByArm",
-  assay = "discretePloidy", split.row.by = "cluster"
+  alt.exp = "smoothedCopyNumberByArm",
+  assay = "discreteCopyNumber", split.row.by = "cluster"
 )
 }
 }

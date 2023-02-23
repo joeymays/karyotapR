@@ -70,18 +70,18 @@ fct_count(colData(exp3.subset)$cluster)
 summary(rowData(exp3.subset)$median.reads > 0)
 exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #1 probe filtered for exp 3
 exp3.subset <- calcNormCounts(exp3.subset)
-control.ploidy <- generateControlPloidyTemplate(exp3.subset, sample.label.all = "RPE1")
-control.ploidy["chr10q", "ploidy"] <- 3
-exp3.subset <- getPloidy(exp3.subset, control.ploidy = control.ploidy, sample.category = "cluster")
-exp3.subset <- smoothPloidy(exp3.subset)
-assayHeatmap(exp3.subset, assay = "ploidy", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
-assayHeatmap(exp3.subset, alt.exp = "smoothedPloidyByChrom", assay = "discretePloidy", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
+control.copy.number <- generateControlCopyNumberTemplate(exp3.subset, sample.label.all = "RPE1")
+control.copy.number["chr10q", "ploidy"] <- 3
+exp3.subset <- calcCopyNumber(exp3.subset, control.copy.number = control.copy.number, sample.category = "cluster")
+exp3.subset <- calcSmoothCopyNumber(exp3.subset)
+assayHeatmap(exp3.subset, assay = "copyNumber", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
+assayHeatmap(exp3.subset, alt.exp = "smoothedCopyNumberByChrom", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
 assayBoxPlot(exp3.subset, alt.exp = "chrYCounts", split.features = T, split.x.by = "cluster")
 
 getTidyData(exp3.subset)
 getTidyData(exp3.subset, alt.exp = "alleleFrequency")
 getTidyData(exp3.subset, alt.exp = "chrYCounts")
-getTidyData(exp3.subset, alt.exp = "smoothedPloidyByChrom")
+getTidyData(exp3.subset, alt.exp = "smoothedCopyNumberByChrom")
 
 
 # readme test
@@ -98,12 +98,12 @@ reducedDimPlot(example.exp, dim.reduction = "umap", group.label = "cluster")
 colData(example.exp)$cluster <- forcats::fct_recode(colData(example.exp)$cluster, cellline1 = "1", cellline2 = "2", cellline3 = "3")
 
 example.exp <- calcNormCounts(example.exp)
-control.ploidy <- generateControlPloidyTemplate(example.exp, sample.label.all = "cellline3", ploidy.all = 2)
-example.exp <- getPloidy(example.exp, control.ploidy = control.ploidy, sample.category = "cluster")
-example.exp <- smoothPloidy(example.exp)
+control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.label.all = "cellline3", copy.number.all = 2)
+example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.category = "cluster")
+example.exp <- calcSmoothCopyNumber(example.exp)
 
-assayHeatmap(example.exp, assay = "ploidy", split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
-assayHeatmap(example.exp, alt.exp = "smoothedPloidyByArm", assay = "discretePloidy", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
 assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "test.cluster")
 
 

@@ -168,8 +168,8 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #' @examples
 #' \dontrun{
 #' assayHeatmap(TapestriExperiment,
-#'   alt.exp = "smoothedPloidyByArm",
-#'   assay = "discretePloidy", split.row.by = "cluster"
+#'   alt.exp = "smoothedCopyNumberByArm",
+#'   assay = "discreteCopyNumber", split.row.by = "cluster"
 #' )
 #' }
 assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL, annotate.row.by = NULL, color.preset = NULL, color.custom = NULL, ...) {

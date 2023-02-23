@@ -97,27 +97,27 @@ colData(example.exp)$cluster <- forcats::fct_recode(colData(example.exp)$cluster
 ## Ploidy Calculation
 
 Normalize counts and calculate ploidy relative to cellline 3, which is
-diploid. `control.ploidy` gives the cluster label and ploidy value to
-normalize each chromosome arm to.
+diploid. `control.copy.number` gives the cluster label and ploidy value
+to normalize each chromosome arm to.
 
 ``` r
 example.exp <- calcNormCounts(example.exp)
-control.ploidy <- generateControlPloidyTemplate(example.exp, sample.label.all = "cellline3", ploidy.all = 2)
-example.exp <- getPloidy(example.exp, control.ploidy = control.ploidy, sample.category = "cluster")
-example.exp <- smoothPloidy(example.exp)
+control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.label.all = "cellline3", copy.number.all = 2)
+example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.category = "cluster")
+example.exp <- calcSmoothCopyNumber(example.exp)
 ```
 
 Visualize ploidy. Visualization reveals that cell line 1 has 1 copy of
 chromosome arm 1p, and cell line 2 has three copies of chromosome 7.
 
 ``` r
-assayHeatmap(example.exp, assay = "ploidy", split.col.by = "arm", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "ploidy")
 ```
 
 <img src="man/figures/README-heatmaps1-1.png" width="100%" />
 
 ``` r
-assayHeatmap(example.exp, alt.exp = "smoothedPloidyByArm", assay = "discretePloidy", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "ploidy")
 ```
 
 <img src="man/figures/README-heatmaps1-2.png" width="100%" />
