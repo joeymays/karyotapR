@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of single cells, using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system. This package allows users to easily parse, manipulate, and visualize datasets produced from the automated Tapestri Pipeline, with support for normalization, clustering, and ploidy calling.
+CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of single cells, using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system. This package allows users to easily parse, manipulate, and visualize datasets produced from the automated Tapestri Pipeline, with support for normalization, clustering, and copy number calling.
 }
 \seealso{
 Useful links:

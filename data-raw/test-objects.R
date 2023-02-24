@@ -71,7 +71,7 @@ summary(rowData(exp3.subset)$median.reads > 0)
 exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #1 probe filtered for exp 3
 exp3.subset <- calcNormCounts(exp3.subset)
 control.copy.number <- generateControlCopyNumberTemplate(exp3.subset, sample.label.all = "RPE1")
-control.copy.number["chr10q", "ploidy"] <- 3
+control.copy.number["chr10q", "copy.number"] <- 3
 exp3.subset <- calcCopyNumber(exp3.subset, control.copy.number = control.copy.number, sample.category = "cluster")
 exp3.subset <- calcSmoothCopyNumber(exp3.subset)
 assayHeatmap(exp3.subset, assay = "copyNumber", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "copy.number.denoise")
@@ -103,8 +103,8 @@ control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.lab
 example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.category = "cluster")
 example.exp <- calcSmoothCopyNumber(example.exp)
 
-assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
-assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "ploidy")
+assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "copy.number")
+assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "copy.number")
 assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "test.cluster")
 
 
