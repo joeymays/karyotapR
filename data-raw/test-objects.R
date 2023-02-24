@@ -74,14 +74,15 @@ control.copy.number <- generateControlCopyNumberTemplate(exp3.subset, sample.lab
 control.copy.number["chr10q", "ploidy"] <- 3
 exp3.subset <- calcCopyNumber(exp3.subset, control.copy.number = control.copy.number, sample.category = "cluster")
 exp3.subset <- calcSmoothCopyNumber(exp3.subset)
-assayHeatmap(exp3.subset, assay = "copyNumber", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
-assayHeatmap(exp3.subset, alt.exp = "smoothedCopyNumberByChrom", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "ploidy")
+assayHeatmap(exp3.subset, assay = "copyNumber", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "copy.number.denoise")
+assayHeatmap(exp3.subset, alt.exp = "smoothedCopyNumberByChr", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "copy.number")
 assayBoxPlot(exp3.subset, alt.exp = "chrYCounts", split.features = T, split.x.by = "cluster")
 
 getTidyData(exp3.subset)
 getTidyData(exp3.subset, alt.exp = "alleleFrequency")
+getTidyData(exp3.subset, assay = "copyNumber")
 getTidyData(exp3.subset, alt.exp = "chrYCounts")
-getTidyData(exp3.subset, alt.exp = "smoothedCopyNumberByChrom")
+getTidyData(exp3.subset, alt.exp = "smoothedCopyNumberByChr")
 
 
 # readme test
