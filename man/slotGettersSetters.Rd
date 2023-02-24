@@ -39,7 +39,7 @@ grnaProbe(x) <- value
 Get and set custom slots in \code{TapestriExperiment}. Currently supported slots
 are \code{barcodeProbe} for a sample barcode probe ID
 and \code{grnaProbe} for a gRNA-associated probe ID. These are used as shortcuts for
-\code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}} and \code{\link[=parseBarcodedReads]{parseBarcodedReads()}}.
+\code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}} and \code{\link[=countBarcodedReads]{countBarcodedReads()}}.
 }
 \section{Functions}{
 \itemize{

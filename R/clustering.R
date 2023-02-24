@@ -240,8 +240,9 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 #' @seealso [`dbscan::dbscan()`]
 #'
 #' @examples
-#' \dontrun{TapestriExperiment <- getClusters(TapestriExperiment, dim.reduction = "UMAP", eps = 0.8)}
-getClusters <- function(TapestriExperiment, alt.exp = "alleleFrequency", dim.reduction = "UMAP", eps = 0.8, dim.1 = 1, dim.2 = 2, ...){
+#' \dontrun{TapestriExperiment <- runClustering(TapestriExperiment,
+#' dim.reduction = "UMAP", eps = 0.8)}
+runClustering <- function(TapestriExperiment, alt.exp = "alleleFrequency", dim.reduction = "UMAP", eps = 0.8, dim.1 = 1, dim.2 = 2, ...){
 
     dim.reduction <- toupper(dim.reduction)
 

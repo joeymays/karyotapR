@@ -71,10 +71,10 @@ example.exp <- runUMAP(example.exp, pca.dims = 1:2)
 reducedDimPlot(example.exp, dim.reduction = "umap")
 ```
 
-Run `getClusters()` to cluster with dbscan.
+Run `runClustering()` to cluster with dbscan.
 
 ```{r}
-example.exp <- getClusters(example.exp, eps = 0.9)
+example.exp <- runClustering(example.exp, eps = 0.9)
 ```
 
 Visualize UMAP, using "cluster" label to color.

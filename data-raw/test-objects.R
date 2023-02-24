@@ -18,9 +18,9 @@ barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2"),
 barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2"),
            sequences = c("GATGTAACCATATACTTACG", "CTGGATCTTCTCCCGCGAAT", "TTTAACCCTCACCAACTACG", "AGATTTGAGGTAAACCAAAT"))
 
-parsed.bc <- parseBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "GRNA")
+parsed.bc <- countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "GRNA")
 
-parseBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "sample.barcode")
+countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "sample.barcode")
 
 
 bam.matches <- bam.filter$tag[sequence.matches[[x]]]
@@ -32,7 +32,7 @@ load_all()
 tap.file <- "~/Documents/data-and-analyses/tapestri/data/20220331-CO293/20220331-CO293-reference20220419.dna.h5"
 
 tap <- createTapestriExperiment(tap.file, "CO293")
-tap <- parseBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe.tag = "grna")
+tap <- countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe.tag = "grna")
 colData(tap)$sample.grna <- callSampleLables(tap, coldata.labels = c(coldata.labels, "g9p21L2", "g9p21R2"))
 tap1 <- runPCA(tap, sd.min.threshold = 35)
 PCAKneePlot(tap1)
@@ -52,13 +52,13 @@ barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3"
 label.features <- c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3")
 
 exp3 <- createTapestriExperiment(tap.file, "CO293")
-exp3 <- parseBarcodedReads(exp3, bam.file = bam.file, barcode.lookup = barcode.lookup, probe.tag = "grna")
+exp3 <- countBarcodedReads(exp3, bam.file = bam.file, barcode.lookup = barcode.lookup, probe.tag = "grna")
 exp3 <- callSampleLables(exp3, label.features = c("g7x3", "gNC"), sample.label = "sample.grna")
 exp3 <- runPCA(exp3, sd.min.threshold = 40)
 PCAKneePlot(exp3)
 exp3 <- runUMAP(exp3, pca.dims = 1:2)
 reducedDimPlot(exp3, dim.reduction = "umap")
-exp3 <- getClusters(exp3, eps = 0.9)
+exp3 <- runClustering(exp3, eps = 0.9)
 reducedDimPlot(exp3, dim.reduction = "umap", group.label = "cluster")
 reducedDimPlot(exp3, dim.reduction = "umap", group.label = "sample.grna")
 fct_count(colData(exp3)$cluster)
@@ -94,7 +94,7 @@ example.exp <- runPCA(example.exp)
 PCAKneePlot(example.exp)
 example.exp <- runUMAP(example.exp, pca.dims = 1:2)
 reducedDimPlot(example.exp, dim.reduction = "umap")
-example.exp <- getClusters(example.exp, eps = 0.9)
+example.exp <- runClustering(example.exp, eps = 0.9)
 reducedDimPlot(example.exp, dim.reduction = "umap", group.label = "cluster")
 colData(example.exp)$cluster <- forcats::fct_recode(colData(example.exp)$cluster, cellline1 = "1", cellline2 = "2", cellline3 = "3")
 

@@ -34,7 +34,7 @@ A \code{TapestriExperiment} object with sample calls added to \code{colData} col
 }
 \description{
 \code{callSampleLables()} determines sample labels by comparing auxiliary feature count data,
-most likely generated from barcoded reads (see \link{parseBarcodedReads}).
+most likely generated from barcoded reads (see \link{countBarcodedReads}).
 For \code{method = max}, labels are dictated by whichever \code{label.features} column has the highest number of counts.
 By default, ties are broken by choosing whichever label has the lowest index position (\code{ties.method = "first"}).
 Samples with 0 counts for all \code{label.features} columns are labeled according to \code{neg.label}.

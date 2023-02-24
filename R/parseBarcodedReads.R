@@ -10,14 +10,14 @@
 #' @return A data.frame of read counts for each specified barcode.
 #' @export
 #'
-#' @rdname parseBarcodedReads
+#' @rdname countBarcodedReads
 #' @order 2
 #'
 #' @seealso [Biostrings::matchPattern()]
 #'
 #' @examples
-#' \dontrun{counts <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
-parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = TRUE){
+#' \dontrun{counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
+countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = TRUE){
 
     # set bam parameters
     which <- GenomicRanges::GRanges(contig, IRanges::IRanges(1,536870912))
@@ -85,13 +85,13 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
     return(sequence.match.counts)
 }
 
-#' @name parseBarcodedReads
+#' @name countBarcodedReads
 #'
 #' @title Get read counts from barcoded reads
 #'
-#' @description `parseBarcodedReads()` and `parseBarcodedReadsFromContig()` match exogenous DNA barcode sequences to their associated
+#' @description `countBarcodedReads()` and `countBarcodedReadsFromContig()` match exogenous DNA barcode sequences to their associated
 #' cell barcodes and saves them to the `colData` (cell barcode metadata) of `TapestriExperiment`.
-#' `parseBarcodedReads()` is a shortcut for `parseBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode'
+#' `countBarcodedReads()` is a shortcut for `countBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode'
 #' to use the grnaCounts or sampleBarcodeCounts `altExp` slots.
 #' The entries in the `barcode.lookup` table do not have to be present in the sample,
 #' allowing users to keep one master table/file of available barcode sequences for use in all experiments.
@@ -99,20 +99,20 @@ parseBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location.
 #' @param barcode.lookup `data.frame`, first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
 #' @param probe.tag Character, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or sampleBarcodeCounts `altExp` slots, respectively.
-#' @param ... Arguments to pass on to `parseBarcodedReadsFromContig()`.
+#' @param ... Arguments to pass on to `countBarcodedReadsFromContig()`.
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param return.table Logical, if `TRUE`, returns table of read counts per barcode. If `FALSE`, returns `TapestriExperiment.` Default `FALSE`.
 #'
 #' @return `TapestriExperiment` with barcoded read counts added to `colData`.
 #' @export
 #'
-#' @rdname parseBarcodedReads
+#' @rdname countBarcodedReads
 #' @order 1
 #'
 #' @examples
-#' \dontrun{counts <- parseBarcodedReads(TapestriExperiment,
+#' \dontrun{counts <- countBarcodedReads(TapestriExperiment,
 #' bam.file, barcode.lookup, "gRNA")}
-parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, return.table = FALSE, ...){
+countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, return.table = FALSE, ...){
 
     probe.tag <- tolower(probe.tag)
 
@@ -125,7 +125,7 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
         stop(paste0("Probe tag '", probe.tag, "' not recognized. Try probe = 'grna' or 'sample.barcode'."))
     }
 
-    result <- parseBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, ...)
+    result <- countBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, ...)
 
     if(return.table){
         return(result)
@@ -157,7 +157,7 @@ parseBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' Call sample labels based on feature counts
 #'
 #' `callSampleLables()` determines sample labels by comparing auxiliary feature count data,
-#' most likely generated from barcoded reads (see [parseBarcodedReads]).
+#' most likely generated from barcoded reads (see [countBarcodedReads]).
 #' For `method = max`, labels are dictated by whichever `label.features` column has the highest number of counts.
 #' By default, ties are broken by choosing whichever label has the lowest index position (`ties.method = "first"`).
 #' Samples with 0 counts for all `label.features` columns are labeled according to `neg.label`.

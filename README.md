@@ -72,10 +72,10 @@ reducedDimPlot(example.exp, dim.reduction = "umap")
 
 <img src="man/figures/README-umap1-1.png" width="100%" />
 
-Run `getClusters()` to cluster with dbscan.
+Run `runClustering()` to cluster with dbscan.
 
 ``` r
-example.exp <- getClusters(example.exp, eps = 0.9)
+example.exp <- runClustering(example.exp, eps = 0.9)
 #> Finding clusters using on: alleleFrequency UMAP
 ```
 
