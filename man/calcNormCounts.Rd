@@ -4,22 +4,27 @@
 \alias{calcNormCounts}
 \title{Normalize raw counts}
 \usage{
-calcNormCounts(TapestriExperiment, method = "mb")
+calcNormCounts(TapestriExperiment, method = "mb", scaling.factor = NULL)
 }
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
 \item{method}{Character, normalization method. Default "mb".}
+
+\item{scaling.factor}{Numeric, optional number to scale normalized counts if \code{method == "libNorm"}. Default \code{NULL}.}
 }
 \value{
 \code{TapestriExperiment} object with normalized counts added to \code{normcounts} slot.
 }
 \description{
 Normalizes raw counts from \code{counts} slot in \code{TapestriExperiment} and returns the object with normalized counts in the \code{normcounts} slot.
-"mb" is the only method supported currently.
-This method performs the same normalization scheme as in Mission Bio's mosaic package for python.
+The standard deviation for each probe using normalized counts and adds it to \code{rowData}.
+}
+\details{
+"mb" method performs the same normalization scheme as in Mission Bio's mosaic package for python:
 Counts for each barcode are normalized relative to their barcode's mean and probe counts are normalized relative to their probe's median.
-Also calculates the standard deviation for each probe using normalized counts and adds it to \code{rowData}.
+"libNorm" method preforms library size normalization, returning the proportion of counts of each probe within a cell.
+The proportion is multiplied by \code{scaling.factor} if provided.
 }
 \examples{
 \dontrun{TapestriExperiment <- calcNormCounts(TapestriExperiment)}

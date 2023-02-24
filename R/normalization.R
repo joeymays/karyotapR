@@ -1,13 +1,16 @@
 #' Normalize raw counts
 #'
 #' Normalizes raw counts from `counts` slot in `TapestriExperiment` and returns the object with normalized counts in the `normcounts` slot.
-#' "mb" is the only method supported currently.
-#' This method performs the same normalization scheme as in Mission Bio's mosaic package for python.
+#' The standard deviation for each probe using normalized counts and adds it to `rowData`.
+#'
+#' "mb" method performs the same normalization scheme as in Mission Bio's mosaic package for python:
 #' Counts for each barcode are normalized relative to their barcode's mean and probe counts are normalized relative to their probe's median.
-#' Also calculates the standard deviation for each probe using normalized counts and adds it to `rowData`.
+#' "libNorm" method preforms library size normalization, returning the proportion of counts of each probe within a cell.
+#' The proportion is multiplied by `scaling.factor` if provided.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param method Character, normalization method. Default "mb".
+#' @param scaling.factor Numeric, optional number to scale normalized counts if `method == "libNorm"`. Default `NULL`.
 #'
 #' @return `TapestriExperiment` object with normalized counts added to `normcounts` slot.
 #' @export
@@ -16,7 +19,7 @@
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- calcNormCounts(TapestriExperiment)}
-calcNormCounts <- function(TapestriExperiment, method = "mb"){
+calcNormCounts <- function(TapestriExperiment, method = "mb", scaling.factor = NULL){
 
     method <- tolower(method)
 
@@ -28,8 +31,10 @@ calcNormCounts <- function(TapestriExperiment, method = "mb"){
 
     if(method == "mb"){
         read.counts.normal <- .MBNormCounts(raw.count.matrix)
+    } else if(method == "libnorm"){
+        read.counts.normal <- .LibSizeNorm(raw.count.matrix, scaling.factor = scaling.factor)
     } else {
-        stop("Only method 'mb' is currently supported.")
+        warning("Method not recognized. Set method to 'mb' or libNorm'")
     }
 
     # add to normalized counts slot
@@ -63,6 +68,18 @@ calcNormCounts <- function(TapestriExperiment, method = "mb"){
 
     # scale all counts by 2X for diploid baseline
     matrix.normal <- matrix.normal * 2
+
+    return(matrix.normal)
+}
+
+.LibSizeNorm <- function(input.matrix, scaling.factor = NULL){
+
+    column.sums <- colSums(input.matrix)
+    matrix.normal <- sweep(input.matrix, 2, column.sums, "/")
+
+    if(!is.null(scaling.factor)){
+        matrix.normal <- matrix.normal * scaling.factor
+    }
 
     return(matrix.normal)
 }
