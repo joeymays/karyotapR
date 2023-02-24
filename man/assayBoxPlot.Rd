@@ -10,7 +10,8 @@ assayBoxPlot(
   assay = NULL,
   log.y = TRUE,
   split.features = FALSE,
-  split.x.by = NULL
+  split.x.by = NULL,
+  split.y.by = NULL
 )
 }
 \arguments{
@@ -24,7 +25,9 @@ assayBoxPlot(
 
 \item{split.features}{Logical, if \code{TRUE}, splits plot by \code{rowData} features. Default \code{FALSE.}}
 
-\item{split.x.by}{Character, \code{colData} column to use for X axis categories. Default \code{NULL}.}
+\item{split.x.by}{Character, \code{colData} column to use for X-axis categories. Default \code{NULL}.}
+
+\item{split.y.by}{Character, \code{colData} column to use for Y-axis splitting/faceting. Default \code{NULL}.}
 }
 \value{
 A ggplot object using \code{\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot()}}.

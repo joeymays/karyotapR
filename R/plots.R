@@ -81,7 +81,8 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' @param assay Character, assay to plot. `NULL` (default) selects first assay listed `TapestriExperiment`.
 #' @param log.y Logical, if `TRUE`, scales data using `log1p()`. Default `TRUE.`
 #' @param split.features Logical, if `TRUE`, splits plot by `rowData` features. Default `FALSE.`
-#' @param split.x.by Character, `colData` column to use for X axis categories. Default `NULL`.
+#' @param split.x.by Character, `colData` column to use for X-axis categories. Default `NULL`.
+#' @param split.y.by Character, `colData` column to use for Y-axis splitting/faceting. Default `NULL`.
 #'
 #' @return A ggplot object using [`ggplot2::geom_boxplot()`].
 #' @export
@@ -95,7 +96,7 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #'   split.features = T, split.x.by = "cluster"
 #' )
 #' }
-assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = TRUE, split.features = FALSE, split.x.by = NULL) {
+assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = TRUE, split.features = FALSE, split.x.by = NULL, split.y.by = NULL) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
   tidy.data <- getTidyData(TapestriExperiment, alt.exp, assay)
@@ -113,6 +114,10 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
     g1 <- ggplot(tidy.data, aes(x = .data[[split.x.by]], y = .data[[assay]]))
   }
 
+  if (!is.null(split.y.by)) {
+      g1 <- g1 + facet_wrap(facets = split.y.by, ncol = 1)
+  }
+
   if (split.features) {
     g1 <- g1 + geom_boxplot(aes(fill = .data$feature.id))
   } else {
@@ -128,7 +133,6 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 
   return(g1)
 }
-
 
 #' Generate heatmap of matrix data
 #'
