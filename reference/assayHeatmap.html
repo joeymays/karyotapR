@@ -91,7 +91,7 @@ Heatmaps are generated as transposed (i.e. x-y flipped) representations of the i
 
 
 <dt>color.preset</dt>
-<dd><p>Character, color preset to use to color heatmap, either "ploidy" or "ploidy.denoise" (see <code>Details</code>). Overrides <code>color.custom</code>. <code>NULL</code> (default) uses default <code>ComplexHeatmap</code> coloring.</p></dd>
+<dd><p>Character, color preset to use to color heatmap, either "copy.number" or "copy.number.denoise" (see <code>Details</code>). Overrides <code>color.custom</code>. <code>NULL</code> (default) uses default <code>ComplexHeatmap</code> coloring.</p></dd>
 
 
 <dt>color.custom</dt>
@@ -112,7 +112,7 @@ Heatmaps are generated as transposed (i.e. x-y flipped) representations of the i
     <h2 id="color-preset-options"><code>color.preset</code> Options<a class="anchor" aria-label="anchor" href="#color-preset-options"></a></h2>
     
 <div class="section">
-<h3 id="-ploidy-">"ploidy"<a class="anchor" aria-label="anchor" href="#-ploidy-"></a></h3>
+<h3 id="-copy-number-">"copy.number"<a class="anchor" aria-label="anchor" href="#-copy-number-"></a></h3>
 
 
 <p>Blue-white-red gradient from 0-2-4. 4 to 8+ is red-black gradient.</p>
@@ -121,10 +121,10 @@ Heatmaps are generated as transposed (i.e. x-y flipped) representations of the i
 </div>
 
 <div class="section">
-<h3 id="-ploidy-denoise-">"ploidy.denoise"<a class="anchor" aria-label="anchor" href="#-ploidy-denoise-"></a></h3>
+<h3 id="-copy-number-denoise-">"copy.number.denoise"<a class="anchor" aria-label="anchor" href="#-copy-number-denoise-"></a></h3>
 
 
-<p>Similar to ploidy, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.</p>
+<p>Similar to 'copy.number' present, but white range is from 1.5-2.5 to reduce the appearance of noise around diploid cells.</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>circlize<span class="sc">::</span><span class="fu">colorRamp2</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">1.5</span>,<span class="dv">2</span>,<span class="fl">2.5</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">8</span>),</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">'#2c7bb6'</span>,<span class="st">'#abd9e9'</span>,<span class="st">'#ffffff'</span>,<span class="st">'#ffffff'</span>,<span class="st">'#ffffff'</span>,<span class="st">'#fdae61'</span>,<span class="st">'#d7191c'</span>, <span class="st">"black"</span>))</span></code></pre><p></p></div>
 </div>
@@ -139,8 +139,8 @@ Heatmaps are generated as transposed (i.e. x-y flipped) representations of the i
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="fu">assayHeatmap</span><span class="op">(</span><span class="va">TapestriExperiment</span>,</span></span>
-<span class="r-in"><span>  alt.exp <span class="op">=</span> <span class="st">"smoothedPloidyByArm"</span>,</span></span>
-<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"discretePloidy"</span>, split.row.by <span class="op">=</span> <span class="st">"cluster"</span></span></span>
+<span class="r-in"><span>  alt.exp <span class="op">=</span> <span class="st">"smoothedCopyNumberByArm"</span>,</span></span>
+<span class="r-in"><span>  assay <span class="op">=</span> <span class="st">"discreteCopyNumber"</span>, split.row.by <span class="op">=</span> <span class="st">"cluster"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

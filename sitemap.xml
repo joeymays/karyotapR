@@ -34,22 +34,28 @@
     <loc>http://joeymays.xyz/CNweaveR/reference/assayHeatmap.html</loc>
   </url>
   <url>
+    <loc>http://joeymays.xyz/CNweaveR/reference/calcCopyNumber.html</loc>
+  </url>
+  <url>
+    <loc>http://joeymays.xyz/CNweaveR/reference/calcNormCounts.html</loc>
+  </url>
+  <url>
+    <loc>http://joeymays.xyz/CNweaveR/reference/calcSmoothCopyNumber.html</loc>
+  </url>
+  <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/callSampleLables.html</loc>
   </url>
   <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/corner.html</loc>
   </url>
   <url>
+    <loc>http://joeymays.xyz/CNweaveR/reference/countBarcodedReads.html</loc>
+  </url>
+  <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/getChrOrder.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/getClusters.html</loc>
-  </url>
-  <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/getCytobands.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/getPloidy.html</loc>
   </url>
   <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/getTidyData.html</loc>
@@ -64,13 +70,10 @@
     <loc>http://joeymays.xyz/CNweaveR/reference/newTapestriExperimentExample.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/normalizeCounts.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/parseBarcodedReads.html</loc>
-  </url>
-  <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/reducedDimPlot.html</loc>
+  </url>
+  <url>
+    <loc>http://joeymays.xyz/CNweaveR/reference/runClustering.html</loc>
   </url>
   <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/runPCA.html</loc>
@@ -80,8 +83,5 @@
   </url>
   <url>
     <loc>http://joeymays.xyz/CNweaveR/reference/slotGettersSetters.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/smoothPloidy.html</loc>
   </url>
 </urlset>
