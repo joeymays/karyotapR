@@ -65,7 +65,7 @@ See details for full explanation of construction.</p>
 <span>  panel.id <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  get.cytobands <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  genome <span class="op">=</span> <span class="st">"hg19"</span>,</span>
-<span>  move.non.genome.probes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grna"</span>, <span class="st">"sample.barcode"</span>, <span class="st">"Y"</span><span class="op">)</span>,</span>
+<span>  move.non.genome.probes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  filter.variants <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -90,7 +90,7 @@ See details for full explanation of construction.</p>
 
 
 <dt>move.non.genome.probes</dt>
-<dd><p>Character vector,  non-genomic probes to move counts and metadata to <code>altExp</code> slots, if available. Default <code>c("grna", "sample.barcode", "Y")</code>.</p></dd>
+<dd><p>Logical, if <code>TRUE</code> (default), move counts and metadata from non-genomic probes to <code>altExp</code> slots (see <code><a href="moveNonGenomeProbes.html">moveNonGenomeProbes()</a></code>).</p></dd>
 
 
 <dt>filter.variants</dt>
@@ -161,15 +161,15 @@ saving RAM and reducing operation time.</p>
 <code>get.cytobands == TRUE</code> (default) calls <code><a href="getCytobands.html">getCytobands()</a></code>, which retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in <code>rowData</code>.
 Some downstream smoothing and plotting functions may fail if chromosome arms are not present in <code>rowData</code>, so this generally should always be run.
 <code>move.non.genome.probes</code> calls <code><a href="moveNonGenomeProbes.html">moveNonGenomeProbes()</a></code>, which moves probes corresponding to the specified tags to <code>altExp</code> (alternative experiment) slots in the <code>TapestriExperiment</code> object.
-These probes should be those which do not correspond to a chromosome and therefore would not be used to call copy number variants.
-The exception is probes on chromosome Y; chrY does not generally experience CNVs, so we move it to an <code>altExp</code> for separate analysis.
+The exception is probes on chromosome Y; CNVs of chrY are more rare, so we move it to an <code>altExp</code> for separate analysis.
 Probes corresponding to the <code>barcodeProbe</code> and <code>grnaProbe</code> slots, which are specified by the <code>panel.id</code> shortcut or manually (see <a href="slotGettersSetters.html">Custom Slot Getters and Setters</a>),
 are automatically moved to <code>altExp</code> by this operation as well.
-If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.</p>
+If such probes are not present, the function will only generate a warning message, so it is always safe (and recommended) to run by default.
+Any remaining probes that are not targeting a human chromosome and are not specified by the shortcut tags are moved to the <code>otherProbeCounts</code> slot.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="moveNonGenomeProbes.html">moveNonGenomeProbes()</a></code>, <code><a href="getCytobands.html">getCytobands()</a></code>, which are run as part of this function by default for convenience.</p></div>
+    <div class="dont-index"><p><code><a href="moveNonGenomeProbes.html">moveNonGenomeProbes()</a></code>, <code><a href="getCytobands.html">getCytobands()</a></code>, which are run as part of this function by default.</p></div>
     </div>
 
     <div class="section level2">
