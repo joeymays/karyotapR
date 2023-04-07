@@ -4,15 +4,10 @@
 \alias{moveNonGenomeProbes}
 \title{Move non-genome probes counts and metadata to altExp slots}
 \usage{
-moveNonGenomeProbes(
-  TapestriExperiment,
-  move.non.genome.probes = c("grna", "sample.barcode", "Y")
-)
+moveNonGenomeProbes(TapestriExperiment)
 }
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object.}
-
-\item{move.non.genome.probes}{Character vector, a combination of "grna", "sample.barcode", and/or "Y" (default), or \code{FALSE}.}
 }
 \value{
 A \code{TapestriExperiment} with \code{altExp} slots filled with counts and metadata for the specified probes.
@@ -20,17 +15,18 @@ A \code{TapestriExperiment} with \code{altExp} slots filled with counts and meta
 \description{
 \code{moveNonGenomeProbes()} takes the probe IDs corresponding to \code{grnaProbe} and \code{barcodeProbe} slots of the \code{TapestriExperiment} object,
 as well as probes on chrY, and moves them to their own \code{altExp} slots in the object.
-This allows those counts and associated metadata to be manipulated separately without interfering with the other probes in the panel.
+This allows those counts and associated metadata to be manipulated separately without interfering with the probes used for CNV measurements which target the endogenous genome.
 \code{\link[SingleCellExperiment:splitAltExps]{SingleCellExperiment::splitAltExps()}} can be used for manual specification of probes to move to \code{altExp} slots if the shortcut slots are not used.
 }
 \details{
 \code{moveNonGenomeProbes()} moves probes corresponding to the specified tags to \code{altExp} (alternative experiment) slots in the \code{TapestriExperiment} object.
 These probes should be those which do not correspond to a chromosome and therefore would not be used to call copy number variants.
-The exception is probes on chromosome Y; chrY does not generally experience CNVs, so we move it to an \code{altExp} for separate analysis.
+The exception is probes on chromosome Y; CNVs of chrY are more rare, so we move it to an \code{altExp} for separate analysis.
 Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, which are specified by the \code{panel.id} shortcut or manually (see \link{Custom Slot Getters and Setters}),
 are automatically moved to \code{altExp} by this operation as well.
-If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
-This is run automatically by default and with default behavior as part of \code{\link[=createTapestriExperiment]{createTapestriExperiment()}}.
+If such probes are not present, the function will only generate a warning message, so it is always safe (and recommended) to run by default.
+Any remaining probes that are not targeting a human chromosome and are not specified by the shortcut tags are moved to the \code{otherProbeCounts} slot.
+This function is run automatically by default and with default behavior as part of \code{\link[=createTapestriExperiment]{createTapestriExperiment()}}.
 }
 \examples{
 \dontrun{

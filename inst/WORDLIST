@@ -48,7 +48,7 @@ ploidy
 pos
 reducedDims
 rowData
-sampleBarcodeCounts
+barcodeCounts
 sd
 smoothPloidy
 tibble

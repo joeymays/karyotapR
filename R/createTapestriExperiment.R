@@ -39,17 +39,17 @@
 #' `get.cytobands == TRUE` (default) calls [getCytobands()], which retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in `rowData`.
 #' Some downstream smoothing and plotting functions may fail if chromosome arms are not present in `rowData`, so this generally should always be run.
 #' `move.non.genome.probes` calls [moveNonGenomeProbes()], which moves probes corresponding to the specified tags to `altExp` (alternative experiment) slots in the `TapestriExperiment` object.
-#' These probes should be those which do not correspond to a chromosome and therefore would not be used to call copy number variants.
-#' The exception is probes on chromosome Y; chrY does not generally experience CNVs, so we move it to an `altExp` for separate analysis.
+#' The exception is probes on chromosome Y; CNVs of chrY are more rare, so we move it to an `altExp` for separate analysis.
 #' Probes corresponding to the `barcodeProbe` and `grnaProbe` slots, which are specified by the `panel.id` shortcut or manually (see [Custom Slot Getters and Setters]),
 #' are automatically moved to `altExp` by this operation as well.
-#' If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
+#' If such probes are not present, the function will only generate a warning message, so it is always safe (and recommended) to run by default.
+#' Any remaining probes that are not targeting a human chromosome and are not specified by the shortcut tags are moved to the `otherProbeCounts` slot.
 #'
 #' @param h5.filename File path for `.h5` file from Tapestri Pipeline output.
 #' @param panel.id Character, Tapestri panel name, either CO261, CO293, or `NULL`. Acts as shortcut for setting custom slots. Default `NULL`.
 #' @param get.cytobands Logical, whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default `TRUE`.
 #' @param genome Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.
-#' @param move.non.genome.probes Character vector,  non-genomic probes to move counts and metadata to `altExp` slots, if available. Default `c("grna", "sample.barcode", "Y")`.
+#' @param move.non.genome.probes Logical, if `TRUE` (default), move counts and metadata from non-genomic probes to `altExp` slots (see [moveNonGenomeProbes()]).
 #' @param filter.variants Logical, if `TRUE`, only loads variants that have passed Tapestri Pipeline filters. Default `TRUE`.
 #' @param verbose Logical, if `TRUE` (default), metadata is output as messages.
 #'
@@ -58,13 +58,13 @@
 #'
 #' @import SingleCellExperiment
 #'
-#' @seealso [moveNonGenomeProbes()], [getCytobands()], which are run as part of this function by default for convenience.
+#' @seealso [moveNonGenomeProbes()], [getCytobands()], which are run as part of this function by default.
 #'
 #' @examples
 #' \dontrun{
 #' tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")
 #' }
-createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y"),
+createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = TRUE,
                                      filter.variants = TRUE, verbose = TRUE) {
 
     # read panel ID
@@ -212,7 +212,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
   # move non-genomic probes to altExp slots
   if (!identical(move.non.genome.probes, FALSE)) {
-    tapestri.object <- moveNonGenomeProbes(tapestri.object, move.non.genome.probes)
+    tapestri.object <- moveNonGenomeProbes(tapestri.object)
   }
 
   return(tapestri.object)
@@ -234,14 +234,14 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
         barcodeProbe <- "CO610_AMP351"
         grnaProbe <- "CO610_AMP350"
     } else {
-        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL to set speciality probes manually."))
+        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL for manual settings."))
     }
 
     return(list(barcode.probe = barcodeProbe, grna.probe = grnaProbe))
 }
 
 #create TapestriExperiment with manual counts, CO293 metadata
-.createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = c("grna", "sample.barcode", "Y"),
+.createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = TRUE,
                                              verbose = TRUE) {
 
     # x <- matrix(data = 5, nrow = 304, ncol = 100, dimnames = list(rownames(co293.metadata), paste0("cell_", 1:100)))
@@ -336,7 +336,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
     # move non-genomic probes to altExp slots
     if (!identical(move.non.genome.probes, FALSE)) {
-        tapestri.object <- moveNonGenomeProbes(tapestri.object, move.non.genome.probes)
+        tapestri.object <- moveNonGenomeProbes(tapestri.object)
     }
 
     # report data
@@ -461,7 +461,7 @@ newDummyTapestriExperiment <- function(){
   tapestri.object <- getCytobands(tapestri.object)
 
   # move non-genomic probes to altExp slots
-  tapestri.object <- moveNonGenomeProbes(tapestri.object, c("grna", "sample.barcode", "Y"))
+  tapestri.object <- moveNonGenomeProbes(tapestri.object)
 
   return(tapestri.object)
 }
@@ -570,7 +570,7 @@ newTapestriExperimentExample <- function(){
   tapestri.object@grnaProbe <- grnaProbe
 
   # move non-genomic probes to altExp slots
-  tapestri.object <- moveNonGenomeProbes(tapestri.object, c("Y"))
+  tapestri.object <- moveNonGenomeProbes(tapestri.object)
 
 
   # allele frequency

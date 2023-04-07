@@ -9,7 +9,7 @@ createTapestriExperiment(
   panel.id = NULL,
   get.cytobands = TRUE,
   genome = "hg19",
-  move.non.genome.probes = c("grna", "sample.barcode", "Y"),
+  move.non.genome.probes = TRUE,
   filter.variants = TRUE,
   verbose = TRUE
 )
@@ -23,7 +23,7 @@ createTapestriExperiment(
 
 \item{genome}{Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.}
 
-\item{move.non.genome.probes}{Character vector,  non-genomic probes to move counts and metadata to \code{altExp} slots, if available. Default \code{c("grna", "sample.barcode", "Y")}.}
+\item{move.non.genome.probes}{Logical, if \code{TRUE} (default), move counts and metadata from non-genomic probes to \code{altExp} slots (see \code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}).}
 
 \item{filter.variants}{Logical, if \code{TRUE}, only loads variants that have passed Tapestri Pipeline filters. Default \code{TRUE}.}
 
@@ -89,11 +89,11 @@ Two additional major operations are called by default during \code{TapestriExper
 \code{get.cytobands == TRUE} (default) calls \code{\link[=getCytobands]{getCytobands()}}, which retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in \code{rowData}.
 Some downstream smoothing and plotting functions may fail if chromosome arms are not present in \code{rowData}, so this generally should always be run.
 \code{move.non.genome.probes} calls \code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, which moves probes corresponding to the specified tags to \code{altExp} (alternative experiment) slots in the \code{TapestriExperiment} object.
-These probes should be those which do not correspond to a chromosome and therefore would not be used to call copy number variants.
-The exception is probes on chromosome Y; chrY does not generally experience CNVs, so we move it to an \code{altExp} for separate analysis.
+The exception is probes on chromosome Y; CNVs of chrY are more rare, so we move it to an \code{altExp} for separate analysis.
 Probes corresponding to the \code{barcodeProbe} and \code{grnaProbe} slots, which are specified by the \code{panel.id} shortcut or manually (see \link{Custom Slot Getters and Setters}),
 are automatically moved to \code{altExp} by this operation as well.
-If such probes are not present, the function will generate a message but not throw an error, so it is always safe to run by default.
+If such probes are not present, the function will only generate a warning message, so it is always safe (and recommended) to run by default.
+Any remaining probes that are not targeting a human chromosome and are not specified by the shortcut tags are moved to the \code{otherProbeCounts} slot.
 }
 
 \examples{
@@ -102,5 +102,5 @@ tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")
 }
 }
 \seealso{
-\code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, \code{\link[=getCytobands]{getCytobands()}}, which are run as part of this function by default for convenience.
+\code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, \code{\link[=getCytobands]{getCytobands()}}, which are run as part of this function by default.
 }
