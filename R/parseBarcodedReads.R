@@ -91,14 +91,14 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #'
 #' @description `countBarcodedReads()` and `countBarcodedReadsFromContig()` match exogenous DNA barcode sequences to their associated
 #' cell barcodes and saves them to the `colData` (cell barcode metadata) of `TapestriExperiment`.
-#' `countBarcodedReads()` is a shortcut for `countBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'sample.barcode'
+#' `countBarcodedReads()` is a shortcut for `countBarcodedReadsFromContig()`, allowing the user to specify 'gRNA' or 'barcode'
 #' to use the grnaCounts or barcodeCounts `altExp` slots.
 #' The entries in the `barcode.lookup` table do not have to be present in the sample,
 #' allowing users to keep one master table/file of available barcode sequences for use in all experiments.
 #'
 #' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location.
 #' @param barcode.lookup `data.frame`, first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
-#' @param probe.tag Character, either "gRNA" or "sample.barcode" to parse counts from grnaCounts or barcodeCounts `altExp` slots, respectively.
+#' @param probe Character, either "gRNA" or "barcode" to parse counts from grnaCounts or barcodeCounts `altExp` slots, respectively.
 #' @param ... Arguments to pass on to `countBarcodedReadsFromContig()`.
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param return.table Logical, if `TRUE`, returns table of read counts per barcode. If `FALSE`, returns `TapestriExperiment.` Default `FALSE`.
@@ -112,17 +112,17 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @examples
 #' \dontrun{counts <- countBarcodedReads(TapestriExperiment,
 #' bam.file, barcode.lookup, "gRNA")}
-countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe.tag, return.table = FALSE, ...){
+countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe, return.table = FALSE, ...){
 
-    probe.tag <- tolower(probe.tag)
+    probe <- tolower(probe)
 
     # get contig
-    if(probe.tag == "grna"){
+    if(probe == "grna"){
         contig <- as.character(rowData(altExp(TapestriExperiment, "grnaCounts"))[grnaProbe(TapestriExperiment),"chr"])
-    } else if(probe.tag == "sample.barcode"){
+    } else if(probe == "barcode"){
         contig <- as.character(rowData(altExp(TapestriExperiment, "barcodeCounts"))[barcodeProbe(TapestriExperiment),"chr"])
     } else {
-        stop(paste0("Probe tag '", probe.tag, "' not recognized. Try probe = 'grna' or 'sample.barcode'."))
+        stop(paste0("Probe tag '", probe, "' not recognized. Try probe = 'grna' or 'barcode'."))
     }
 
     result <- countBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, ...)

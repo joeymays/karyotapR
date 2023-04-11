@@ -20,7 +20,7 @@ barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2"),
 
 parsed.bc <- countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "GRNA")
 
-countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "sample.barcode")
+countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "barcode")
 
 
 bam.matches <- bam.filter$tag[sequence.matches[[x]]]
@@ -32,7 +32,7 @@ load_all()
 tap.file <- "~/Documents/data-and-analyses/tapestri/data/20220331-CO293/20220331-CO293-reference20220419.dna.h5"
 
 tap <- createTapestriExperiment(tap.file, "CO293")
-tap <- countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe.tag = "grna")
+tap <- countBarcodedReads(tap, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "grna")
 colData(tap)$sample.grna <- callSampleLables(tap, coldata.labels = c(coldata.labels, "g9p21L2", "g9p21R2"))
 tap1 <- runPCA(tap, sd.min.threshold = 35)
 PCAKneePlot(tap1)
@@ -52,7 +52,7 @@ barcode.lookup <- data.frame(ids = c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3"
 label.features <- c("g7x1", "gNC", "g9p21L2", "g9p21R2", "g7x3")
 
 exp3 <- createTapestriExperiment(tap.file, "CO293")
-exp3 <- countBarcodedReads(exp3, bam.file = bam.file, barcode.lookup = barcode.lookup, probe.tag = "grna")
+exp3 <- countBarcodedReads(exp3, bam.file = bam.file, barcode.lookup = barcode.lookup, probe = "grna")
 exp3 <- callSampleLables(exp3, label.features = c("g7x3", "gNC"), sample.label = "sample.grna")
 exp3 <- runPCA(exp3, sd.min.threshold = 40)
 PCAKneePlot(exp3)
