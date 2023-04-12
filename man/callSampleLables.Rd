@@ -11,7 +11,8 @@ callSampleLables(
   return.table = FALSE,
   neg.label = NA,
   method = "max",
-  ties.method = "first"
+  ties.method = "first",
+  min.count.threshold = 1
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ callSampleLables(
 \item{method}{Character, call method. Only "max" currently supported, calls based on whichever \code{label.features} column has the most counts.}
 
 \item{ties.method}{Character, passed to \code{max.col()} indicating how to break ties. Default "first".}
+
+\item{min.count.threshold}{Numeric, minimum number of counts per cell to use for call. Default 1.}
 }
 \value{
 A \code{TapestriExperiment} object with sample calls added to \code{colData} column \code{sample.name}. If \code{return.table == TRUE}, a \code{data.frame} of sample calls.

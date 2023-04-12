@@ -169,6 +169,7 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @param neg.label Character, label for samples with no counts. Default `NA`.
 #' @param sample.label Character, column name to use for the sample call output. Default "sample.call".
 #' @param return.table Logical, if `TRUE`, returns a data.frame of the sample.calls. If `FALSE` (default), returns updated `TapestriExperiment` object.
+#' @param min.count.threshold Numeric, minimum number of counts per cell to use for call. Default 1.
 #'
 #' @return A `TapestriExperiment` object with sample calls added to `colData` column `sample.name`. If `return.table == TRUE`, a `data.frame` of sample calls.
 #' @export
@@ -180,7 +181,7 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #'   sample.label = "sample.grna"
 #' )
 #' }
-callSampleLables <- function(TapestriExperiment, label.features, sample.label = "sample.call", return.table = FALSE, neg.label = NA, method = "max", ties.method = "first") {
+callSampleLables <- function(TapestriExperiment, label.features, sample.label = "sample.call", return.table = FALSE, neg.label = NA, method = "max", ties.method = "first", min.count.threshold = 1) {
   if (method != "max") {
     stop("Method not recognized. Only 'max' currently supported.")
   } else {
@@ -196,6 +197,13 @@ callSampleLables <- function(TapestriExperiment, label.features, sample.label = 
     # check if numeric
     if (any(!apply(coldata.subset, 2, is.numeric))) {
       stop("Selected label.features are not numeric.")
+    }
+
+    # apply min threshold, set counts to 0
+    if(min.count.threshold < 1){
+        stop("min.count.threshold must be positive.")
+    } else {
+        coldata.subset[coldata.subset < min.count.threshold] <- 0
     }
 
     # make calls
