@@ -191,7 +191,7 @@ callSampleLables <- function(TapestriExperiment, label.features, sample.label = 
 
     # subset colData
     existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
-    coldata.subset <- existing.cell.data[, label.features]
+    coldata.subset <- existing.cell.data[, label.features, drop = F]
 
     # check if numeric
     if (any(!apply(coldata.subset, 2, is.numeric))) {
