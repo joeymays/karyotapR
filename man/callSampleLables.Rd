@@ -6,8 +6,8 @@
 \usage{
 callSampleLables(
   TapestriExperiment,
-  label.features,
-  sample.label = "sample.call",
+  input.features,
+  output.feature = "sample.call",
   return.table = FALSE,
   neg.label = NA,
   method = "max",
@@ -18,15 +18,15 @@ callSampleLables(
 \arguments{
 \item{TapestriExperiment}{A \code{TapestriExperiment} object.}
 
-\item{label.features}{Character vector, column names in \code{colData} to evaluate.}
+\item{input.features}{Character vector, column names in \code{colData} to evaluate.}
 
-\item{sample.label}{Character, column name to use for the sample call output. Default "sample.call".}
+\item{output.feature}{Character, column name to use for the call output. Default "sample.call".}
 
 \item{return.table}{Logical, if \code{TRUE}, returns a data.frame of the sample.calls. If \code{FALSE} (default), returns updated \code{TapestriExperiment} object.}
 
 \item{neg.label}{Character, label for samples with no counts. Default \code{NA}.}
 
-\item{method}{Character, call method. Only "max" currently supported, calls based on whichever \code{label.features} column has the most counts.}
+\item{method}{Character, call method. Only "max" currently supported, calls based on whichever \code{input.features} column has the most counts.}
 
 \item{ties.method}{Character, passed to \code{max.col()} indicating how to break ties. Default "first".}
 
@@ -36,17 +36,18 @@ callSampleLables(
 A \code{TapestriExperiment} object with sample calls added to \code{colData} column \code{sample.name}. If \code{return.table == TRUE}, a \code{data.frame} of sample calls.
 }
 \description{
-\code{callSampleLables()} determines sample labels by comparing auxiliary feature count data,
-most likely generated from barcoded reads (see \link{countBarcodedReads}).
-For \code{method = max}, labels are dictated by whichever \code{label.features} column has the highest number of counts.
+\code{callSampleLables()} assigns labels to cells (stored as \code{colData} column) using feature count data in \code{colData}.
+This is most useful for assigning barcode labels based on barcoded reads (see \link{countBarcodedReads}).
+For \code{method = max}, labels are dictated by whichever \code{input.features} column has the highest number of counts.
 By default, ties are broken by choosing whichever label has the lowest index position (\code{ties.method = "first"}).
-Samples with 0 counts for all \code{label.features} columns are labeled according to \code{neg.label}.
+Samples with 0 counts for all \code{input.features} columns are labeled according to \code{neg.label}.
+If only one feature column is used, labels are assigned to cells with counts > \code{min.count.threshold}, and \code{neg.label} otherwise.
 }
 \examples{
 \dontrun{
 TapestriExperiment <- callSampleLables(TapestriExperiment,
-  label.features = c("g7", "gNC"),
-  sample.label = "sample.grna"
+  input.features = c("g7", "gNC"),
+  output.feature = "sample.grna"
 )
 }
 }
