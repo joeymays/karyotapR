@@ -67,7 +67,8 @@ Samples with 0 counts for all <code>label.features</code> columns are labeled ac
 <span>  return.table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  neg.label <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"max"</span>,</span>
-<span>  ties.method <span class="op">=</span> <span class="st">"first"</span></span>
+<span>  ties.method <span class="op">=</span> <span class="st">"first"</span>,</span>
+<span>  min.count.threshold <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,6 +100,10 @@ Samples with 0 counts for all <code>label.features</code> columns are labeled ac
 
 <dt>ties.method</dt>
 <dd><p>Character, passed to <code><a href="https://rdrr.io/r/base/maxCol.html" class="external-link">max.col()</a></code> indicating how to break ties. Default "first".</p></dd>
+
+
+<dt>min.count.threshold</dt>
+<dd><p>Numeric, minimum number of counts per cell to use for call. Default 1.</p></dd>
 
 </dl></div>
     <div class="section level2">
