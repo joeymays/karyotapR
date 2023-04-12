@@ -21,13 +21,13 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
 
     assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
-    message(paste("Running PCA on:", alt.exp, assay))
-
     # filter by sd.min.threshold
     if(!is.null(sd.min.threshold)){
         feature.set.filter <- SingleCellExperiment::rowData(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$allelefreq.sd >= sd.min.threshold
         if(all(!feature.set.filter)){
-            stop("All features filtered out. Reduce threshold.")
+            stop("All features filtered out. Reduce sd.min.threshold.")
+        } else {
+            message("Running PCA on ", alt.exp, " ", assay, " with ", sum(feature.set.filter), " features.", appendLF = T)
         }
     }
 
@@ -229,7 +229,7 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param alt.exp Character, `altExp` slot to use. `NULL` uses top-level/main experiment. Default "alleleFrequency".
 #' @param dim.reduction Character, reduced dimension data to use. Default "UMAP".
-#' @param eps Numeric, `dbscan` `eps` parameter. Change to adjust cluster granularity. See [dbscan::dbscan()]. Default 0.8.
+#' @param eps Numeric, `dbscan` `eps` parameter. Lower to increase cluster granularity. See [dbscan::dbscan()]. Default 0.8.
 #' @param ... Additional parameters to pass to [dbscan::dbscan()].
 #' @param dim.1 Numeric, index of data dimension to use. Default 1.
 #' @param dim.2 Numeric, index of data dimension to use. Default 2.

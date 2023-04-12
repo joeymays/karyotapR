@@ -21,7 +21,7 @@ runClustering(
 
 \item{dim.reduction}{Character, reduced dimension data to use. Default "UMAP".}
 
-\item{eps}{Numeric, \code{dbscan} \code{eps} parameter. Change to adjust cluster granularity. See \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. Default 0.8.}
+\item{eps}{Numeric, \code{dbscan} \code{eps} parameter. Lower to increase cluster granularity. See \code{\link[dbscan:dbscan]{dbscan::dbscan()}}. Default 0.8.}
 
 \item{dim.1}{Numeric, index of data dimension to use. Default 1.}
 
