@@ -70,22 +70,24 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
   return(g2)
 }
 
-#' Generate a box plot from matrix data
+#' Generate a box plot from assay data
 #'
-#' Draws box plot of matrix data stored in a `TapestriExperiment`.
+#' Draws box plot of data from indicated `TapestriExperiment` `assay` slot.
 #' This is especially useful for visualizing `altExp` count data, such as counts from
-#' probes on chrY.
+#' probes on chrY or barcode probe counts.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param alt.exp Character, `altExp` to plot. `NULL` (default) uses the top-level experiment in `TapestriExperiment`.
 #' @param assay Character, assay to plot. `NULL` (default) selects first assay listed `TapestriExperiment`.
 #' @param log.y Logical, if `TRUE`, scales data using `log1p()`. Default `TRUE.`
-#' @param split.features Logical, if `TRUE`, splits plot by `rowData` features. Default `FALSE.`
+#' @param split.features Logical, if `TRUE`, splits plot by `rowData` features if slot has more than one row feature/probe. Default `FALSE.`
 #' @param split.x.by Character, `colData` column to use for X-axis categories. Default `NULL`.
 #' @param split.y.by Character, `colData` column to use for Y-axis splitting/faceting. Default `NULL`.
 #'
-#' @return A ggplot object using [`ggplot2::geom_boxplot()`].
+#' @return ggplot object
 #' @export
+#'
+#' @seealso [`ggplot2::geom_boxplot()`]
 #'
 #' @import ggplot2
 #'
@@ -134,13 +136,14 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
   return(g1)
 }
 
-#' Generate heatmap of matrix data
+#' Generate heatmap of assay data
 #'
-#' Creates a heatmap of matrix data in a `TapestriObject` using the `ComplexHeatmap` package.
-#' Heatmaps are generated as transposed (i.e. x-y flipped) representations of the indicated matrix.
+#' Creates a heatmap of data from the indicated `TapestriObject` `assay` slot using the `ComplexHeatmap` package.
+#' Heatmaps are generated as transposed (i.e. x-y flipped) representations of the `assay` matrix.
+#' Additional [`ComplexHeatmap::Heatmap()`] parameters can be passed in to overwrite defaults.
 #'
 #' @details
-#' # `color.preset` Options
+#' # Options for `color.preset`
 #' ## "copy.number"
 #' Blue-white-red gradient from 0-2-4. 4 to 8+ is red-black gradient.
 #' ```
@@ -157,10 +160,10 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param alt.exp Character, `altExp` slot to use. `NULL` (default) uses top-level/main experiment.
 #' @param assay Character, `assay` slot to use. `NULL` (default) uses first-indexed assay (usually "counts").
-#' @param split.col.by Character, `rowData` column to split columns by, usually "chr" or "arm". Default `NULL`.
-#' @param split.row.by Character, `colData` column to split rows by, usually "cluster". Default `NULL`.
-#' @param annotate.row.by Character, `colData` column to use for annotation. Default `NULL`.
-#' @param color.preset Character, color preset to use to color heatmap, either "copy.number" or "copy.number.denoise" (see `Details`). Overrides `color.custom`. `NULL` (default) uses default `ComplexHeatmap` coloring.
+#' @param split.col.by Character, `rowData` column to split columns by, i.e. "chr" or "arm". Default `NULL`.
+#' @param split.row.by Character, `colData` column to split rows by, i.e. "cluster". Default `NULL`.
+#' @param annotate.row.by Character, `colData` column to use for block annotation. Default `NULL`.
+#' @param color.preset Character, color preset to use for heatmap color, either "copy.number" or "copy.number.denoise" (see `Details`). Overrides `color.custom`. `NULL` (default) uses default `ComplexHeatmap` coloring.
 #' @param color.custom Color mapping function given by [`circlize::colorRamp2()`]. `color.preset` must be `NULL`.
 #' @param ... Additional parameters to pass to [`ComplexHeatmap::Heatmap()`].
 #'

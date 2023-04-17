@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{assayHeatmap}
 \alias{assayHeatmap}
-\title{Generate heatmap of matrix data}
+\title{Generate heatmap of assay data}
 \usage{
 assayHeatmap(
   TapestriExperiment,
@@ -23,13 +23,13 @@ assayHeatmap(
 
 \item{assay}{Character, \code{assay} slot to use. \code{NULL} (default) uses first-indexed assay (usually "counts").}
 
-\item{split.col.by}{Character, \code{rowData} column to split columns by, usually "chr" or "arm". Default \code{NULL}.}
+\item{split.col.by}{Character, \code{rowData} column to split columns by, i.e. "chr" or "arm". Default \code{NULL}.}
 
-\item{split.row.by}{Character, \code{colData} column to split rows by, usually "cluster". Default \code{NULL}.}
+\item{split.row.by}{Character, \code{colData} column to split rows by, i.e. "cluster". Default \code{NULL}.}
 
-\item{annotate.row.by}{Character, \code{colData} column to use for annotation. Default \code{NULL}.}
+\item{annotate.row.by}{Character, \code{colData} column to use for block annotation. Default \code{NULL}.}
 
-\item{color.preset}{Character, color preset to use to color heatmap, either "copy.number" or "copy.number.denoise" (see \code{Details}). Overrides \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} coloring.}
+\item{color.preset}{Character, color preset to use for heatmap color, either "copy.number" or "copy.number.denoise" (see \code{Details}). Overrides \code{color.custom}. \code{NULL} (default) uses default \code{ComplexHeatmap} coloring.}
 
 \item{color.custom}{Color mapping function given by \code{\link[circlize:colorRamp2]{circlize::colorRamp2()}}. \code{color.preset} must be \code{NULL}.}
 
@@ -39,10 +39,11 @@ assayHeatmap(
 A \code{ComplexHeatmap} object
 }
 \description{
-Creates a heatmap of matrix data in a \code{TapestriObject} using the \code{ComplexHeatmap} package.
-Heatmaps are generated as transposed (i.e. x-y flipped) representations of the indicated matrix.
+Creates a heatmap of data from the indicated \code{TapestriObject} \code{assay} slot using the \code{ComplexHeatmap} package.
+Heatmaps are generated as transposed (i.e. x-y flipped) representations of the \code{assay} matrix.
+Additional \code{\link[ComplexHeatmap:Heatmap]{ComplexHeatmap::Heatmap()}} parameters can be passed in to overwrite defaults.
 }
-\section{\code{color.preset} Options}{
+\section{Options for \code{color.preset}}{
 \subsection{"copy.number"}{
 
 Blue-white-red gradient from 0-2-4. 4 to 8+ is red-black gradient.

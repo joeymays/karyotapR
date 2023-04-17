@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{assayBoxPlot}
 \alias{assayBoxPlot}
-\title{Generate a box plot from matrix data}
+\title{Generate a box plot from assay data}
 \usage{
 assayBoxPlot(
   TapestriExperiment,
@@ -23,19 +23,19 @@ assayBoxPlot(
 
 \item{log.y}{Logical, if \code{TRUE}, scales data using \code{log1p()}. Default \code{TRUE.}}
 
-\item{split.features}{Logical, if \code{TRUE}, splits plot by \code{rowData} features. Default \code{FALSE.}}
+\item{split.features}{Logical, if \code{TRUE}, splits plot by \code{rowData} features if slot has more than one row feature/probe. Default \code{FALSE.}}
 
 \item{split.x.by}{Character, \code{colData} column to use for X-axis categories. Default \code{NULL}.}
 
 \item{split.y.by}{Character, \code{colData} column to use for Y-axis splitting/faceting. Default \code{NULL}.}
 }
 \value{
-A ggplot object using \code{\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot()}}.
+ggplot object
 }
 \description{
-Draws box plot of matrix data stored in a \code{TapestriExperiment}.
+Draws box plot of data from indicated \code{TapestriExperiment} \code{assay} slot.
 This is especially useful for visualizing \code{altExp} count data, such as counts from
-probes on chrY.
+probes on chrY or barcode probe counts.
 }
 \examples{
 \dontrun{
@@ -44,4 +44,7 @@ assayBoxPlot(TapestriExperiment, "chrYCounts",
   split.features = T, split.x.by = "cluster"
 )
 }
+}
+\seealso{
+\code{\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot()}}
 }
