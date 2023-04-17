@@ -477,7 +477,7 @@ newDummyTapestriExperiment <- function(){
 #'
 #' @importFrom stats rnorm
 #'
-#' @return A `TapestriExperiment` object.
+#' @return `TapestriExperiment` object.
 #' @export
 #'
 #' @examples

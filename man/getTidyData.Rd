@@ -12,22 +12,22 @@ getTidyData(
 )
 }
 \arguments{
-\item{TapestriExperiment}{A \code{TapestriExperiment} object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
 \item{alt.exp}{Character, \code{altExp} slot to use. \code{NULL} (default) uses top-level/main experiment.}
 
 \item{assay}{Character, \code{assay} slot to use. \code{NULL} (default) uses first-indexed assay (often "counts").}
 
-\item{feature.id.as.factor}{Logical, whether the feature.id column should be output as a factor. Default TRUE.}
+\item{feature.id.as.factor}{Logical, if \code{TRUE} (default), the feature.id column is returned as a factor.}
 }
 \value{
 A \code{tibble} of tidy data with corresponding metadata from \code{colData} and \code{rowData}.
 }
 \description{
-\code{getTidyData()} pulls the matrix from the indicated \code{assay} and/or \code{altExp} slot(s), and rearranges it into tidy format.
-\code{colData} from the top-level/main experiment is merged.
-\code{rowData} from the indicated \code{assay} and/or \code{altExp} slot(s) is merged.
-Attempts are made to sort by "chr" and "start.pos" columns if they are present to simplify downstream operations, e.g. plotting.
+\code{getTidyData()} pulls data from the indicated \code{assay} and/or \code{altExp} slot(s), and rearranges it into tidy format.
+\code{colData} (cell metadata) from the top-level/main experiment is included.
+\code{rowData} (probe metadata) from the indicated \code{assay} and/or \code{altExp} slot(s) is included.
+Attempts are made to sort by "chr" and "start.pos" columns if they are present to simplify plotting and other downstream operations.
 }
 \examples{
 \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}

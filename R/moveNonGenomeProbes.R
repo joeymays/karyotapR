@@ -16,7 +16,7 @@
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #'
-#' @return A `TapestriExperiment` with `altExp` slots filled with counts and metadata for the specified probes.
+#' @return `TapestriExperiment` with `altExp` slots filled with counts and metadata for non-genomic probes.
 #' @export
 #'
 #' @seealso [SingleCellExperiment::splitAltExps()] for manual specification of probes to move to `altExp` slots.

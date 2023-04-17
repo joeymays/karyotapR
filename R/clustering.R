@@ -1,15 +1,15 @@
-#' Cluster matrix data by Principal Components Analysis
+#' Cluster assay data by Principal Components Analysis
 #'
-#' Analyzes matrix data by Principal Components Analysis (PCA) and saves results to `reducedDims` slot of `TapestriObject`.
+#' Analyzes assay data by Principal Components Analysis (PCA) and saves results to `reducedDims` slot of `TapestriObject`.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param alt.exp Character, `altExp` to use, `NULL` uses top-level/main experiment. Default "alleleFrequency".
 #' @param assay Character, `assay` to use. `NULL` (default) uses first-indexed assay.
-#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to `NULL` if not using for alleleFrequency slot. Default `NULL`.
-#' @param center Logical, whether the variables should be shifted to be zero centered. See [stats::prcomp()].
-#' @param scale. Logical, whether the variables should be scaled to have unit variance before the analysis takes place. See [stats::prcomp()].
+#' @param sd.min.threshold Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, more variable dimensions. Set to `NULL` if not using for alleleFrequency slot. Default `NULL`.
+#' @param center Logical, if `TRUE` (default), variables are shifted to be zero centered. See [stats::prcomp()].
+#' @param scale. Logical,if `TRUE` (default), variables are scaled to have unit variance prior to PCA. See [stats::prcomp()].
 #'
-#' @return `TapestriExperiment` with PCA results saved to `reducedDims` slot of `altExp`, and proportion of variance saved to `metadata` slot of `altExp.`
+#' @return `TapestriExperiment` with PCA results saved to `reducedDims` slot of `altExp`, and proportion of variance explained by each PC saved to `metadata` slot of `altExp.`
 #' @export
 #'
 #' @seealso [stats::prcomp()] for PCA method details.
@@ -59,9 +59,9 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
     return(TapestriExperiment)
 }
 
-#' Plot of PCA variance explained
+#' Plot of PCA proportion of variance explained
 #'
-#' Draws "knee plot" of PCA variance explained to determine which principal components (PCs) to include for downstream applications e.g. clustering.
+#' Draws "knee plot" of PCA proportion of variance explained to determine which principal components (PCs) to include for downstream applications e.g. clustering.
 #' Variance explained for each PC is indicated by the line.
 #' Cumulative variance explained is indicated by the bars.
 #'
@@ -174,7 +174,7 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
 #'
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param dim.reduction Character, dimension reduction to plot, either "PCA" or "UMAP".
-#' @param group.label Character, `colData` column for coloring samples. Default `NULL`.
+#' @param group.label Character, `colData` column for grouping samples by color. Default `NULL`.
 #' @param alt.exp Character, `altExp` to use, `NULL` uses top-level/main experiment. Default "alleleFrequency".
 #' @param dim.x Numeric, index of dimensional reduction data to plot on X axis. Default 1.
 #' @param dim.y Numeric, index of dimensional reduction data to plot on Y axis. Default 2.

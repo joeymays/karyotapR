@@ -10,7 +10,7 @@ moveNonGenomeProbes(TapestriExperiment)
 \item{TapestriExperiment}{\code{TapestriExperiment} object.}
 }
 \value{
-A \code{TapestriExperiment} with \code{altExp} slots filled with counts and metadata for the specified probes.
+\code{TapestriExperiment} with \code{altExp} slots filled with counts and metadata for non-genomic probes.
 }
 \description{
 \code{moveNonGenomeProbes()} takes the probe IDs corresponding to \code{grnaProbe} and \code{barcodeProbe} slots of the \code{TapestriExperiment} object,

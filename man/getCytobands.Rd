@@ -11,7 +11,7 @@ getCytobands(TapestriExperiment, genome = "hg19", verbose = TRUE)
 
 \item{genome}{Character, reference genome to use. Only hg19 is currently supported.}
 
-\item{verbose}{Logical, if \code{TRUE} (default), progress is output as messages.}
+\item{verbose}{Logical, if \code{TRUE} (default), progress is output as message text.}
 }
 \value{
 \code{TapestriExperiment} object with \code{rowData} updated to include chromosome arms and cytobands.

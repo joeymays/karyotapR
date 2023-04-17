@@ -2,7 +2,7 @@
 % Please edit documentation in R/helperFunctions.R
 \name{corner}
 \alias{corner}
-\title{Glimpse the top-left corner of a matrix}
+\title{Print the top-left corner of a matrix}
 \usage{
 corner(input.mat)
 }

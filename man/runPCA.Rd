@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{runPCA}
 \alias{runPCA}
-\title{Cluster matrix data by Principal Components Analysis}
+\title{Cluster assay data by Principal Components Analysis}
 \usage{
 runPCA(
   TapestriExperiment,
@@ -20,17 +20,17 @@ runPCA(
 
 \item{assay}{Character, \code{assay} to use. \code{NULL} (default) uses first-indexed assay.}
 
-\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, increasingly variable dimensions. Set to \code{NULL} if not using for alleleFrequency slot. Default \code{NULL}.}
+\item{sd.min.threshold}{Numeric, minimum threshold for allelefreq.sd. Increase to run PCA on fewer, more variable dimensions. Set to \code{NULL} if not using for alleleFrequency slot. Default \code{NULL}.}
 
-\item{center}{Logical, whether the variables should be shifted to be zero centered. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
+\item{center}{Logical, if \code{TRUE} (default), variables are shifted to be zero centered. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
 
-\item{scale.}{Logical, whether the variables should be scaled to have unit variance before the analysis takes place. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
+\item{scale.}{Logical,if \code{TRUE} (default), variables are scaled to have unit variance prior to PCA. See \code{\link[stats:prcomp]{stats::prcomp()}}.}
 }
 \value{
-\code{TapestriExperiment} with PCA results saved to \code{reducedDims} slot of \code{altExp}, and proportion of variance saved to \code{metadata} slot of \code{altExp.}
+\code{TapestriExperiment} with PCA results saved to \code{reducedDims} slot of \code{altExp}, and proportion of variance explained by each PC saved to \code{metadata} slot of \code{altExp.}
 }
 \description{
-Analyzes matrix data by Principal Components Analysis (PCA) and saves results to \code{reducedDims} slot of \code{TapestriObject}.
+Analyzes assay data by Principal Components Analysis (PCA) and saves results to \code{reducedDims} slot of \code{TapestriObject}.
 }
 \examples{
 \dontrun{TapestriExperiment <- runPCA(TapestriExperiment,

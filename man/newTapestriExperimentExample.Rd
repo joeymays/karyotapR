@@ -7,7 +7,7 @@
 newTapestriExperimentExample()
 }
 \value{
-A \code{TapestriExperiment} object.
+\code{TapestriExperiment} object.
 }
 \description{
 Creates a \code{TapestriExperiment} object for demonstration purposes,

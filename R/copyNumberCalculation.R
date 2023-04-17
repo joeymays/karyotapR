@@ -123,16 +123,16 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.categ
   return(TapestriExperiment)
 }
 
-#' Smooth copy numbers values by chromosome and chromosome arm
+#' Smooth copy number values across chromosomes and chromosome arms
 #'
 #' `calcSmoothCopyNumber()` takes `copyNumber` slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
 #' and chromosome arm, resulting in one copy number value per chromosome and chromosome arm for each cell barcode.
-#' Values are then discretized into integers by conventional rounding.
+#' Cell-chromosome values are then discretized into integers by conventional rounding (1.5 <= x < 2.5 rounds to 2).
 #' Smoothed copy number and discretized smoothed copy number values are stored as `smoothedCopyNumber` and `discreteCopyNumber` assays,
 #' in `altExp` slots `smoothedCopyNumberByChr` for chromosome-level smoothing, and `smoothedCopyNumberByArm` for chromosome arm-level smoothing.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
-#' @param method Character, smoothing method. Supports median (default) or mean.
+#' @param method Character, smoothing method: median (default) or mean.
 #'
 #' @importFrom rlang .data
 #'

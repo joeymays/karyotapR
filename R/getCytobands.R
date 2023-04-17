@@ -6,7 +6,7 @@
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param genome Character, reference genome to use. Only hg19 is currently supported.
-#' @param verbose Logical, if `TRUE` (default), progress is output as messages.
+#' @param verbose Logical, if `TRUE` (default), progress is output as message text.
 #'
 #' @return `TapestriExperiment` object with `rowData` updated to include chromosome arms and cytobands.
 #' @export

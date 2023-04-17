@@ -24,7 +24,7 @@ reducedDimPlot(
 
 \item{dim.y}{Numeric, index of dimensional reduction data to plot on Y axis. Default 2.}
 
-\item{group.label}{Character, \code{colData} column for coloring samples. Default \code{NULL}.}
+\item{group.label}{Character, \code{colData} column for grouping samples by color. Default \code{NULL}.}
 }
 \value{
 ggplot2 object, scatter plot

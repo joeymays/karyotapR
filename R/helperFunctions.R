@@ -1,4 +1,4 @@
-#' Glimpse the top-left corner of a matrix
+#' Print the top-left corner of a matrix
 #'
 #' Outputs up to 5 rows and columns of the input matrix object (with `rownames` and `colnames`) to get a quick look without filling the console.
 #'
@@ -29,15 +29,15 @@ corner <- function(input.mat) {
 
 #' Get tidy-style data from `TapestriExperiment` objects
 #'
-#' `getTidyData()` pulls the matrix from the indicated `assay` and/or `altExp` slot(s), and rearranges it into tidy format.
-#' `colData` from the top-level/main experiment is merged.
-#' `rowData` from the indicated `assay` and/or `altExp` slot(s) is merged.
-#' Attempts are made to sort by "chr" and "start.pos" columns if they are present to simplify downstream operations, e.g. plotting.
+#' `getTidyData()` pulls data from the indicated `assay` and/or `altExp` slot(s), and rearranges it into tidy format.
+#' `colData` (cell metadata) from the top-level/main experiment is included.
+#' `rowData` (probe metadata) from the indicated `assay` and/or `altExp` slot(s) is included.
+#' Attempts are made to sort by "chr" and "start.pos" columns if they are present to simplify plotting and other downstream operations.
 #'
-#' @param TapestriExperiment A `TapestriExperiment` object
+#' @param TapestriExperiment `TapestriExperiment` object.
 #' @param alt.exp Character, `altExp` slot to use. `NULL` (default) uses top-level/main experiment.
 #' @param assay Character, `assay` slot to use. `NULL` (default) uses first-indexed assay (often "counts").
-#' @param feature.id.as.factor Logical, whether the feature.id column should be output as a factor. Default TRUE.
+#' @param feature.id.as.factor Logical, if `TRUE` (default), the feature.id column is returned as a factor.
 #'
 #' @return A `tibble` of tidy data with corresponding metadata from `colData` and `rowData`.
 #' @export
