@@ -18,7 +18,7 @@ calcNormCounts(TapestriExperiment, method = "mb", scaling.factor = NULL)
 }
 \description{
 Normalizes raw counts from \code{counts} slot in \code{TapestriExperiment} and returns the object with normalized counts in the \code{normcounts} slot.
-The standard deviation for each probe using normalized counts and adds it to \code{rowData}.
+Also calculates the standard deviation for each probe using normalized counts and adds it to \code{rowData}.
 }
 \details{
 "mb" method performs the same normalization scheme as in Mission Bio's mosaic package for python:

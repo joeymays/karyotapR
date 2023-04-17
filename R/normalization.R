@@ -1,7 +1,7 @@
 #' Normalize raw counts
 #'
 #' Normalizes raw counts from `counts` slot in `TapestriExperiment` and returns the object with normalized counts in the `normcounts` slot.
-#' The standard deviation for each probe using normalized counts and adds it to `rowData`.
+#' Also calculates the standard deviation for each probe using normalized counts and adds it to `rowData`.
 #'
 #' "mb" method performs the same normalization scheme as in Mission Bio's mosaic package for python:
 #' Counts for each barcode are normalized relative to their barcode's mean and probe counts are normalized relative to their probe's median.
