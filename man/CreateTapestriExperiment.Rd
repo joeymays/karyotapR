@@ -17,27 +17,26 @@ createTapestriExperiment(
 \arguments{
 \item{h5.filename}{File path for \code{.h5} file from Tapestri Pipeline output.}
 
-\item{panel.id}{Character, Tapestri panel name, either CO261, CO293, or \code{NULL}. Acts as shortcut for setting custom slots. Default \code{NULL}.}
+\item{panel.id}{Character, Tapestri panel ID, either CO261, CO293, CO610, or \code{NULL}. Initializes \code{barcodeProbe} and \code{grnaProbe} slots. Default \code{NULL}.}
 
-\item{get.cytobands}{Logical, whether to retrieve and add chromosome cytobands and chromosome arms to probe metadata. Default \code{TRUE}.}
+\item{get.cytobands}{Logical, if \code{TRUE} (default), retrieve and add chromosome cytobands and chromosome arms to \code{rowData} (probe metadata).}
 
-\item{genome}{Character, reference genome to pull cytobands and arms from. Only "hg19" (default) is currently supported.}
+\item{genome}{Character, reference genome for pulling cytoband coordinates and chromosome arm labels (see \code{\link[=getCytobands]{getCytobands()}}). Only "hg19" (default) is currently supported.}
 
 \item{move.non.genome.probes}{Logical, if \code{TRUE} (default), move counts and metadata from non-genomic probes to \code{altExp} slots (see \code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}).}
 
-\item{filter.variants}{Logical, if \code{TRUE}, only loads variants that have passed Tapestri Pipeline filters. Default \code{TRUE}.}
+\item{filter.variants}{Logical, if \code{TRUE} (default), only stores variants that have passed Tapestri Pipeline filters.}
 
-\item{verbose}{Logical, if \code{TRUE} (default), metadata is output as messages.}
+\item{verbose}{Logical, if \code{TRUE} (default), metadata is output in message text.}
 }
 \value{
-Constructed \code{TapestriExperiment} object.
+\code{TapestriExperiment} object containing data from Tapestri Pipeline output.
 }
 \description{
-\code{createTapestriExperiment()} constructs a \code{TapestriExperiment} container object from data in the \code{.h5} file output by the Tapestri Pipeline.
+\code{createTapestriExperiment()} constructs a \code{TapestriExperiment} container object from data stored in the \code{.h5} file output by the Tapestri Pipeline.
 Read count matrix (probe x cell barcode) is stored in the "counts" \code{assay} slot of the top-level experiment.
 Allele frequency matrix (variant x cell barcode) is stored in the "alleleFrequency" \code{assay} slot of the "alleleFrequency" \code{altExp} (alternative experiment) slot.
 \code{panel.id} is an optional shortcut to set special probe identities for specific custom panels.
-See details for full explanation of construction.
 }
 \section{Panel ID Shortcuts}{
 \code{panel.id} is an optional shortcut to set the \code{barcodeProbe} and \code{grnaProbe} slots in \code{TapestriExperiment} for specific custom Tapestri panels.

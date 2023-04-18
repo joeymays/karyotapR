@@ -36,7 +36,7 @@ callSampleLables(
 A \code{TapestriExperiment} object with sample calls added to \code{colData} column \code{sample.name}. If \code{return.table == TRUE}, a \code{data.frame} of sample calls.
 }
 \description{
-\code{callSampleLables()} assigns labels to cells (stored as \code{colData} column) using feature count data in \code{colData}.
+\code{callSampleLables()} assigns labels (stored as \code{colData} column) to cells using feature count data in \code{colData}.
 This is most useful for assigning barcode labels based on barcoded reads (see \link{countBarcodedReads}).
 For \code{method = max}, labels are dictated by whichever \code{input.features} column has the highest number of counts.
 By default, ties are broken by choosing whichever label has the lowest index position (\code{ties.method = "first"}).

@@ -26,11 +26,11 @@ countBarcodedReadsFromContig(
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{bam.file}{File path of BAM file. \code{.bai} BAM index file must be in the same location.}
+\item{bam.file}{File path of BAM file. \code{.bai} BAM index file must be in the same location (can be generated using \code{\link[Rsamtools:scanBam]{Rsamtools::indexBam}}).}
 
 \item{barcode.lookup}{\code{data.frame} where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.}
 
-\item{probe}{Character, either "gRNA" or "barcode" to parse counts from grnaCounts or barcodeCounts \code{altExp} slots, respectively.}
+\item{probe}{Character, either "gRNA" or "barcode" to parse counts from \code{grnaCounts} or \code{barcodeCounts} \code{altExp} slots, respectively.}
 
 \item{return.table}{Logical, if \code{TRUE}, returns table of read counts per barcode. If \code{FALSE}, returns \code{TapestriExperiment.} Default \code{FALSE}.}
 
@@ -53,7 +53,7 @@ A data.frame of read counts for each specified barcode.
 \code{countBarcodedReads()} and \code{countBarcodedReadsFromContig()} match exogenous DNA barcode sequences to their associated
 cell barcodes and saves them to the \code{colData} (cell barcode metadata) of \code{TapestriExperiment}.
 \code{countBarcodedReads()} is a shortcut for \code{countBarcodedReadsFromContig()}, allowing the user to specify 'gRNA' or 'barcode'
-to use the grnaCounts or barcodeCounts \code{altExp} slots.
+to use the \code{grnaCounts} or \code{barcodeCounts} \code{altExp} slots.
 The entries in the \code{barcode.lookup} table do not have to be present in the sample,
 allowing users to keep one master table/file of available barcode sequences for use in all experiments.
 }
@@ -63,5 +63,7 @@ bam.file, barcode.lookup, "gRNA")}
 \dontrun{counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
 }
 \seealso{
+\code{\link[Rsamtools:scanBam]{Rsamtools::indexBam()}}
+
 \code{\link[Biostrings:matchPattern]{Biostrings::matchPattern()}}
 }
