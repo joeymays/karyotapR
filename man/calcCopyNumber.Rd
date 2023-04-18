@@ -3,55 +3,55 @@
 \name{calcCopyNumber}
 \alias{calcCopyNumber}
 \alias{generateControlCopyNumberTemplate}
-\title{Calculate copy number value for each cell-chromosome using baseline control sample}
+\title{Calculate relative copy number value for each cell-probe unit using reference sample}
 \usage{
 calcCopyNumber(
   TapestriExperiment,
   control.copy.number,
-  sample.category = "cluster",
+  sample.feature = "cluster",
   remove.bad.probes = F
 )
 
 generateControlCopyNumberTemplate(
   TapestriExperiment,
-  copy.number.all = 2,
-  sample.label.all = "cluster"
+  copy.number = 2,
+  sample.feature.label = NA
 )
 }
 \arguments{
-\item{TapestriExperiment}{A \code{TapestriExperiment} object.}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{control.copy.number}{A \code{data.frame} with columns \code{arm}, \code{copy.number}, and \code{sample.label}. See details.}
+\item{control.copy.number}{\code{data.frame} with columns \code{arm}, \code{copy.number}, and \code{sample.label}. See details.}
 
-\item{sample.category}{Character, \code{colData} column to use for subsetting cell.barcodes. Default "cluster".}
+\item{sample.feature}{Character, \code{colData} column to use for subsetting cell.barcodes. Default "cluster".}
 
-\item{remove.bad.probes}{Logical, if TRUE, probes with median normalized counts = 0 are removed from \code{TapestriExperiment}. If FALSE (default), probes with median normalized counts = 0 throw error and stop function.}
+\item{remove.bad.probes}{Logical, if \code{TRUE}, probes with median normalized counts = 0 are removed from the returned \code{TapestriExperiment}. If FALSE (default), probes with median normalized counts = 0 throw error and stop function.}
 
-\item{copy.number.all}{Numeric, sets all entries of \code{copy.number} column in output. Default 2.}
+\item{copy.number}{Numeric, sets all entries of \code{copy.number} column in output. Default 2 (diploid).}
 
-\item{sample.label.all}{Character, sets all entries of \code{sample.label} column in output. Default "cluster".}
+\item{sample.feature.label}{Character, sets all entries of \code{sample.label} column in output.}
 }
 \value{
-\code{TapestriExperiment} object with copy number values in \code{copyNumber} assay slot.
+\code{TapestriExperiment} object with cell-probe copy number values in \code{copyNumber} assay slot.
 
 \code{data.frame} with 3 columns named \code{arm}, \code{copy.number}, and \code{sample.label}
 }
 \description{
-\code{calcCopyNumber()} transforms the normalized count matrix of a \code{TapestriExperiment} object
-into copy number values based on a reference subset of cell barcodes and given copy number value (e.g. 2 for diploid).
-This is practically used to set the median copy number of a usually diploid reference/control
+\code{calcCopyNumber()} transforms the normalized count matrix \code{normcounts} of a \code{TapestriExperiment} object
+into copy number values based on a set of reference cell barcodes and given copy number value (e.g. 2 for diploid).
+This is practically used to set the median copy number of a usually diploid reference
 cell population to a known copy number value, e.g. 2, and then calculate the copy number for all the
-cells relative to that control population. This occurs individually for each probe,
-such that the result is one copy number value per cell barcode per probe.
+cells relative to that reference population. This occurs individually for each probe,
+such that the result is one copy number value per cell barcode per probe (cell-probe unit).
 \code{control.copy.number} is a \code{data.frame} lookup table used to indicate the copy number value and cell barcodes
 to use as the reference. A template for \code{control.copy.number} can be generated using \code{\link[=generateControlCopyNumberTemplate]{generateControlCopyNumberTemplate()}},
 which will have a row for each chromosome arm represented in \code{TapestriExperiment}.
 
 The \code{control.copy.number} data.frame should include 3 columns named \code{arm}, \code{copy.number}, and \code{sample.label}.
-\code{arm} is chromosome arms from chr1p through chrXq, \code{copy.number} is the reference copy number value, and \code{sample.label} is the
-value corresponding to the \code{colData} column given in \code{sample.category} to indicate the cell barcode subset to use to set the copy number.
-This is best used in a workflow where the cells are clustered first, and then one cluster is used as the reference population
-the other clusters. This also allows for the baseline copy number to be set for each chromosome individually in the case where the
+\code{arm} is chromosome arm names from chr1p through chrXq, \code{copy.number} is the reference copy number value (2 = diploid), and \code{sample.label} is the
+value corresponding to the \code{colData} column given in \code{sample.feature} to indicate the set of reference cell barcodes to use to set the copy number.
+This is best used in a workflow where the cells are clustered first into their respective samples, and then one cluster is used as the reference population
+the other clusters. This also allows for the baseline copy number to be set for each chromosome arm individually in the case where the
 reference population is not completely diploid.
 }
 \section{Functions}{
@@ -64,7 +64,7 @@ reference population is not completely diploid.
 control.copy.number <- generateControlCopyNumberTemplate()
 TapestriExperiment <- calcCopyNumber(TapestriExperiment,
   control.copy.number,
-  sample.category = "cluster"
+  sample.feature = "cluster"
 )
 }
 }

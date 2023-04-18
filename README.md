@@ -14,7 +14,7 @@ targeted DNA sequencing panels for the Mission Bio Tapestri system.
 ## Installation
 
 You can install the development version of CNweaveR from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/joeymays/CNweaveR) with:
 
 ``` r
 # install.packages("devtools")
@@ -42,7 +42,30 @@ We’ll use a toy dataset for this example.
 
 ``` r
 example.exp <- newTapestriExperimentExample()
+#> Moving gRNA probe  to altExp slot 'grnaCounts'.
+#> Moving barcode probe  to altExp slot 'barcodeCounts'.
 #> Moving chrY probe(s) probe_231, probe_232, probe_233, probe_234, probe_235, probe_236, probe_237, probe_238, probe_239, probe_240 to altExp slot 'chrYCounts'.
+```
+
+Calling the `TapestriExperiment` will print a summary of the contained
+data.
+
+``` r
+example.exp
+#> class: TapestriExperiment 
+#> dim: 230 300 
+#> metadata(7): sample.name pipeline.panel.name ... date.h5.created
+#>   mean.reads.per.cell.per.probe
+#> assays(1): counts
+#> rownames(230): probe_1 probe_2 ... probe_229 probe_230
+#> rowData names(5): probe.id chr arm total.reads median.reads
+#> colnames(300): cell_1 cell_2 ... cell_299 cell_300
+#> colData names(3): cell.barcode test.cluster total.reads
+#> reducedDimNames(0):
+#> mainExpName: CNV
+#> altExpNames(2): chrYCounts alleleFrequency
+#> barcodeProbe: dummyBCprobe
+#> grnaProbe: dummyGRNAprobe
 ```
 
 ### Clustering
@@ -53,7 +76,6 @@ identify the PCs accounting for the most variation in the dataset.
 
 ``` r
 example.exp <- runPCA(example.exp)
-#> Running PCA on: alleleFrequency alleleFrequency
 PCAKneePlot(example.exp)
 ```
 
@@ -102,8 +124,8 @@ number value to normalize each chromosome arm to.
 
 ``` r
 example.exp <- calcNormCounts(example.exp)
-control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.label.all = "cellline3", copy.number.all = 2)
-example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.category = "cluster")
+control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.feature.label = "cellline3", copy.number = 2)
+example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.feature = "cluster")
 example.exp <- calcSmoothCopyNumber(example.exp)
 ```
 

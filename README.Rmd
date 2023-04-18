@@ -23,7 +23,7 @@ CNweaveR enables basic analysis of CNVs using custom genome-wide targeted DNA se
 
 ## Installation
 
-You can install the development version of CNweaveR from [GitHub](https://github.com/) with:
+You can install the development version of CNweaveR from [GitHub](https://github.com/joeymays/CNweaveR) with:
 
 ``` r
 # install.packages("devtools")
@@ -49,6 +49,12 @@ We'll use a toy dataset for this example.
 
 ```{r}
 example.exp <- newTapestriExperimentExample()
+```
+
+Calling the `TapestriExperiment` will print a summary of the contained data.
+
+```{r}
+example.exp
 ```
 
 ### Clustering
@@ -96,8 +102,8 @@ Normalize counts and calculate copy number relative to cellline 3, which is dipl
 
 ```{r}
 example.exp <- calcNormCounts(example.exp)
-control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.label.all = "cellline3", copy.number.all = 2)
-example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.category = "cluster")
+control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.feature.label = "cellline3", copy.number = 2)
+example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.feature = "cluster")
 example.exp <- calcSmoothCopyNumber(example.exp)
 ```
 

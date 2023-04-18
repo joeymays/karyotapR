@@ -1,6 +1,6 @@
-#' @param TapestriExperiment A `TapestriExperiment` object.
-#' @param copy.number.all Numeric, sets all entries of `copy.number` column in output. Default 2.
-#' @param sample.label.all Character, sets all entries of `sample.label` column in output. Default "cluster".
+#' @param TapestriExperiment `TapestriExperiment` object.
+#' @param copy.number Numeric, sets all entries of `copy.number` column in output. Default 2 (diploid).
+#' @param sample.feature.label Character, sets all entries of `sample.label` column in output.
 #'
 #' @return `data.frame` with 3 columns named `arm`, `copy.number`, and `sample.label`
 #' @export
@@ -8,7 +8,7 @@
 #' @describeIn calcCopyNumber generates a `data.frame` template for `control.copy.number` in `calcCopyNumber()`.
 #' @order 2
 #'
-generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number.all = 2, sample.label.all = "cluster") {
+generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 2, sample.feature.label = NA) {
 
     if(any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))){
         stop("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
@@ -16,8 +16,8 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number.al
 
     ploidy.template <- data.frame(
     arm = unique(SummarizedExperiment::rowData(TapestriExperiment)$arm),
-    copy.number = copy.number.all,
-    sample.label = sample.label.all
+    copy.number = copy.number,
+    sample.label = sample.feature.label
   )
   rownames(ploidy.template) <- ploidy.template$arm
 
@@ -26,31 +26,31 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number.al
 
 #' @name calcCopyNumber
 #'
-#' @title Calculate copy number value for each cell-chromosome using baseline control sample
+#' @title Calculate relative copy number value for each cell-probe unit using reference sample
 #'
-#' @description `calcCopyNumber()` transforms the normalized count matrix of a `TapestriExperiment` object
-#' into copy number values based on a reference subset of cell barcodes and given copy number value (e.g. 2 for diploid).
-#' This is practically used to set the median copy number of a usually diploid reference/control
+#' @description `calcCopyNumber()` transforms the normalized count matrix `normcounts` of a `TapestriExperiment` object
+#' into copy number values based on a set of reference cell barcodes and given copy number value (e.g. 2 for diploid).
+#' This is practically used to set the median copy number of a usually diploid reference
 #' cell population to a known copy number value, e.g. 2, and then calculate the copy number for all the
-#' cells relative to that control population. This occurs individually for each probe,
-#' such that the result is one copy number value per cell barcode per probe.
+#' cells relative to that reference population. This occurs individually for each probe,
+#' such that the result is one copy number value per cell barcode per probe (cell-probe unit).
 #' `control.copy.number` is a `data.frame` lookup table used to indicate the copy number value and cell barcodes
 #' to use as the reference. A template for `control.copy.number` can be generated using [`generateControlCopyNumberTemplate()`],
 #' which will have a row for each chromosome arm represented in `TapestriExperiment`.
 #'
 #' The `control.copy.number` data.frame should include 3 columns named `arm`, `copy.number`, and `sample.label`.
-#' `arm` is chromosome arms from chr1p through chrXq, `copy.number` is the reference copy number value, and `sample.label` is the
-#' value corresponding to the `colData` column given in `sample.category` to indicate the cell barcode subset to use to set the copy number.
-#' This is best used in a workflow where the cells are clustered first, and then one cluster is used as the reference population
-#' the other clusters. This also allows for the baseline copy number to be set for each chromosome individually in the case where the
+#' `arm` is chromosome arm names from chr1p through chrXq, `copy.number` is the reference copy number value (2 = diploid), and `sample.label` is the
+#' value corresponding to the `colData` column given in `sample.feature` to indicate the set of reference cell barcodes to use to set the copy number.
+#' This is best used in a workflow where the cells are clustered first into their respective samples, and then one cluster is used as the reference population
+#' the other clusters. This also allows for the baseline copy number to be set for each chromosome arm individually in the case where the
 #' reference population is not completely diploid.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
-#' @param control.copy.number A `data.frame` with columns `arm`, `copy.number`, and `sample.label`. See details.
-#' @param sample.category Character, `colData` column to use for subsetting cell.barcodes. Default "cluster".
-#' @param remove.bad.probes Logical, if TRUE, probes with median normalized counts = 0 are removed from `TapestriExperiment`. If FALSE (default), probes with median normalized counts = 0 throw error and stop function.
+#' @param control.copy.number `data.frame` with columns `arm`, `copy.number`, and `sample.label`. See details.
+#' @param sample.feature Character, `colData` column to use for subsetting cell.barcodes. Default "cluster".
+#' @param remove.bad.probes Logical, if `TRUE`, probes with median normalized counts = 0 are removed from the returned `TapestriExperiment`. If FALSE (default), probes with median normalized counts = 0 throw error and stop function.
 #'
-#' @return `TapestriExperiment` object with copy number values in `copyNumber` assay slot.
+#' @return `TapestriExperiment` object with cell-probe copy number values in `copyNumber` assay slot.
 #' @export
 #'
 #' @rdname calcCopyNumber
@@ -61,18 +61,18 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number.al
 #' control.copy.number <- generateControlCopyNumberTemplate()
 #' TapestriExperiment <- calcCopyNumber(TapestriExperiment,
 #'   control.copy.number,
-#'   sample.category = "cluster"
+#'   sample.feature = "cluster"
 #' )
 #' }
-calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.category = "cluster", remove.bad.probes = F) {
-  sample.category <- tolower(sample.category)
+calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.feature = "cluster", remove.bad.probes = F) {
+  sample.feature <- tolower(sample.feature)
 
   # error checks
-  if (!sample.category %in% colnames(SummarizedExperiment::colData(TapestriExperiment))) {
-    stop(paste0("sample.category '", sample.category, "' not found in colData"))
+  if (!sample.feature %in% colnames(SummarizedExperiment::colData(TapestriExperiment))) {
+    stop(paste0("sample.feature '", sample.feature, "' not found in colData"))
   }
 
-  if (any(!unique(control.copy.number$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.category]))) {
+  if (any(!unique(control.copy.number$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.feature]))) {
     stop(paste0("control.copy.number sample.label elements not found in colData. Check control.copy.number."))
   }
 
@@ -83,12 +83,12 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.categ
   probe.table <- merge(probe.table, control.copy.number, by = "arm", all.x = TRUE, sort = FALSE)
   rownames(probe.table) <- probe.table$probe.id
 
-  sample.category.lookup <- SummarizedExperiment::colData(TapestriExperiment)[, sample.category, drop = FALSE]
+  sample.feature.lookup <- SummarizedExperiment::colData(TapestriExperiment)[, sample.feature, drop = FALSE]
 
   # define function for calculating median from cell subset
   getProbeMedian <- function(idx) {
     probe.info <- probe.table[idx, ]
-    probe.median <- median(counts.mat[probe.info$probe.id, rownames(sample.category.lookup)[sample.category.lookup[, 1] == probe.info$sample.label]])
+    probe.median <- median(counts.mat[probe.info$probe.id, rownames(sample.feature.lookup)[sample.feature.lookup[, 1] == probe.info$sample.label]])
     return(probe.median)
   }
 
