@@ -56,7 +56,7 @@ allowing users to keep one master table/file of available barcode sequences for 
     <p><code>countBarcodedReads()</code> and <code>countBarcodedReadsFromContig()</code> match exogenous DNA barcode sequences to their associated
 cell barcodes and saves them to the <code>colData</code> (cell barcode metadata) of <code>TapestriExperiment</code>.
 <code>countBarcodedReads()</code> is a shortcut for <code>countBarcodedReadsFromContig()</code>, allowing the user to specify 'gRNA' or 'barcode'
-to use the grnaCounts or barcodeCounts <code>altExp</code> slots.
+to use the <code>grnaCounts</code> or <code>barcodeCounts</code> <code>altExp</code> slots.
 The entries in the <code>barcode.lookup</code> table do not have to be present in the sample,
 allowing users to keep one master table/file of available barcode sequences for use in all experiments.</p>
     </div>
@@ -89,7 +89,7 @@ allowing users to keep one master table/file of available barcode sequences for 
 
 
 <dt>bam.file</dt>
-<dd><p>File path of BAM file. <code>.bai</code> BAM index file must be in the same location.</p></dd>
+<dd><p>File path of BAM file. <code>.bai</code> BAM index file must be in the same location (can be generated using <code><a href="https://rdrr.io/pkg/Rsamtools/man/scanBam.html" class="external-link">Rsamtools::indexBam</a></code>).</p></dd>
 
 
 <dt>barcode.lookup</dt>
@@ -97,7 +97,7 @@ allowing users to keep one master table/file of available barcode sequences for 
 
 
 <dt>probe</dt>
-<dd><p>Character, either "gRNA" or "barcode" to parse counts from grnaCounts or barcodeCounts <code>altExp</code> slots, respectively.</p></dd>
+<dd><p>Character, either "gRNA" or "barcode" to parse counts from <code>grnaCounts</code> or <code>barcodeCounts</code> <code>altExp</code> slots, respectively.</p></dd>
 
 
 <dt>return.table</dt>
@@ -135,7 +135,8 @@ allowing users to keep one master table/file of available barcode sequences for 
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/Biostrings/man/matchPattern.html" class="external-link">Biostrings::matchPattern()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="https://rdrr.io/pkg/Rsamtools/man/scanBam.html" class="external-link">Rsamtools::indexBam()</a></code></p>
+<p><code><a href="https://rdrr.io/pkg/Biostrings/man/matchPattern.html" class="external-link">Biostrings::matchPattern()</a></code></p></div>
     </div>
 
     <div class="section level2">
