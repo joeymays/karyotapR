@@ -4,11 +4,11 @@ Version: 0.0.0.9000
 Authors@R:
     person("Joseph", "Mays", , "josephcmays@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4903-938X"))
-Description: CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of single cells, 
+Description: CNweaveR enables analysis of DNA copy number variants (CNVs) in thousands of single cells,
     using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri platform.
-    This package allows users to easily parse, manipulate, and visualize datasets produced 
+    This package allows users to easily parse, manipulate, and visualize datasets produced
     from the automated Tapestri Pipeline, with support for normalization, clustering, and copy number calling.
-    Functions are also available to deconvolute multiplexed samples by genotype and parsing barcoded reads from 
+    Functions are also available to deconvolute multiplexed samples by genotype and parsing barcoded reads from
     exogenous lentiviral constructs.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -17,7 +17,8 @@ RoxygenNote: 7.2.3
 URL: https://github.com/joeymays/CNweaveR,
     http://joeymays.xyz/CNweaveR/
 BugReports: https://github.com/joeymays/CNweaveR/issues
-Imports: 
+biocViews:
+Imports:
     BiocGenerics,
     circlize,
     ComplexHeatmap,
@@ -37,10 +38,10 @@ Imports:
     tidyr,
     umap,
     viridisLite
-Depends: 
+Depends:
     R (>= 3.6),
     SingleCellExperiment
-Suggests: 
+Suggests:
     Biostrings,
     dbscan,
     Rsamtools,
