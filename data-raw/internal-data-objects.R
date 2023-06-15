@@ -2,7 +2,7 @@
 
 #h19 cytoband coordinates; cytoBand.hg19.txt from http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz on 2022-04-22
 
-cytoband.hg19 <- read.table("cytoBand.hg19.txt", sep= '\t', skip = 1, col.names = c("chromosome", "start.position", "end.position", "cytoband", "stain"))
+cytoband.hg19 <- read.table("cytoBand.hg19.txt", sep= '\t', col.names = c("chromosome", "start.position", "end.position", "cytoband", "stain"))
 cytoband.hg19$strand <- c("*")
 cytoband.hg19.genomicRanges <- GRanges(seqnames = cytoband.hg19$chromosome,
                                        ranges = IRanges(cytoband.hg19$start.position, cytoband.hg19$end.position),
@@ -17,5 +17,18 @@ tap <- createTapestriExperiment(tap.file, panel.id = "CO293", get.cytobands = F,
 co293.metadata <- as.data.frame(rowData(tap))
 co293.metadata <- co293.metadata[,1:4]
 
-usethis::use_data(cytoband.hg19.genomicRanges, co293.metadata, overwrite = TRUE, internal = TRUE)
+#usethis::use_data(cytoband.hg19.genomicRanges, co293.metadata, overwrite = TRUE, internal = TRUE)
 
+#CO261 panel metadata
+#tap.file is arbitrary .h5 tapestri pipeline file using CO261 panel
+tap <- createTapestriExperiment(tap.file, panel.id = "CO261", get.cytobands = F, move.non.genome.probes = F, filter.variants = T)
+co261.metadata <- as.data.frame(rowData(tap))
+co261.metadata <- co261.metadata[,1:4]
+
+#CO610 panel metadata
+#tap.file is arbitrary .h5 tapestri pipeline file using CO610 panel
+tap <- createTapestriExperiment(tap.file, panel.id = "CO610", get.cytobands = F, move.non.genome.probes = F, filter.variants = T)
+co610.metadata <- as.data.frame(rowData(tap))
+co610.metadata <- co610.metadata[,1:4]
+
+usethis::use_data(cytoband.hg19.genomicRanges, co293.metadata, co261.metadata, co610.metadata, overwrite = TRUE, internal = TRUE)
