@@ -233,13 +233,13 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
         barcodeProbe <- "CO610_AMP351"
         grnaProbe <- "CO610_AMP350"
     } else {
-        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261 or CO293, or NULL for manual settings."))
+        stop(paste("panel.id", panel.id, "is not recognized. Please specify CO261, CO293, CO610, or NULL for manual settings."))
     }
 
     return(list(barcode.probe = barcodeProbe, grna.probe = grnaProbe))
 }
 
-#create TapestriExperiment with manual counts, CO293 metadata
+#create TapestriExperiment with manual counts
 .createTapestriExperiment.manual <- function(counts = NULL, af.matrix = NULL, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = TRUE,
                                              verbose = TRUE) {
 
@@ -252,9 +252,6 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     if(is.null(dimnames(counts))){
         stop("No dimnames on counts matrix supplied.")
     }
-
-    #overwrite panel ID
-    panel.id <- "CO293"
 
     # read panel ID
     panel.id.output <- .GetPanelID(panel.id = panel.id)
@@ -271,7 +268,13 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
     #subset probe metadata in case not all probes present in count data
 
-    probe.metadata <- co293.metadata
+    if(panel.id == "CO261"){
+        probe.metadata <- co261.metadata
+    } else if(panel.id == "CO293"){
+        probe.metadata <- co293.metadata
+    } else if(panel.id == "CO610"){
+        probe.metadata <- co610.metadata
+    }
 
     if(!all(rownames(read.counts.raw) %in% probe.metadata$probe.id)){
         stop("Unknown probe ID in read counts.")
