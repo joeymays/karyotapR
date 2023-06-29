@@ -4,8 +4,8 @@
 #' @param barcode.lookup `data.frame` where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
 #' @param cell.barcode.tag Character of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".
 #' @param contig Character, contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.
-#' @param max.mismatch Numeric, the maximum and minimum number of mismatching letters allowed.
-#' @param with.indels If `TRUE` then indels are allowed.
+#' @param max.mismatch Numeric, the maximum and minimum number of mismatching letters allowed. Default 2.
+#' @param with.indels If `TRUE`, then indels are allowed. Default `FALSE`.
 #'
 #' @return A data.frame of read counts for each specified barcode.
 #' @export
@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' \dontrun{counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
-countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = TRUE){
+countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = FALSE){
 
     # set bam parameters
     which <- GenomicRanges::GRanges(contig, IRanges::IRanges(1,536870912))
@@ -45,7 +45,8 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
     barcode.set <- Biostrings::DNAStringSet(x = barcode.lut.vector, use.names = TRUE)
 
     # match input barcodes to reads and convert to logical
-    sequence.matches <- lapply(barcode.set, function(x){
+    # progress bar
+    sequence.matches <- pbapply::pblapply(barcode.set, function(x){
         as.logical(Biostrings::vcountPattern(pattern = x, subject = bam.filter$seq, max.mismatch = max.mismatch, with.indels = with.indels))
     })
 
@@ -102,6 +103,8 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @param ... Arguments to pass on to `countBarcodedReadsFromContig()`.
 #' @param TapestriExperiment `TapestriExperiment` object
 #' @param return.table Logical, if `TRUE`, returns table of read counts per barcode. If `FALSE`, returns `TapestriExperiment.` Default `FALSE`.
+#' @param max.mismatch Numeric, the maximum and minimum number of mismatching letters allowed. Default 2.
+#' @param with.indels If `TRUE`, then indels are allowed. Default `FALSE`.
 #'
 #' @return `TapestriExperiment` with barcoded read counts added to `colData`.
 #' @export
@@ -114,7 +117,7 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @examples
 #' \dontrun{counts <- countBarcodedReads(TapestriExperiment,
 #' bam.file, barcode.lookup, "gRNA")}
-countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe, return.table = FALSE, ...){
+countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe, return.table = FALSE, max.mismatch = 2, with.indels = FALSE, ...){
 
     probe <- tolower(probe)
 
@@ -127,7 +130,7 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
         stop(paste0("Probe tag '", probe, "' not recognized. Try probe = 'grna' or 'barcode'."))
     }
 
-    result <- countBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, ...)
+    result <- countBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, max.mismatch = max.mismatch, with.indels = with.indels, ...)
 
     if(return.table){
         return(result)

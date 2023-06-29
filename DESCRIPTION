@@ -29,6 +29,7 @@ Imports:
     IRanges,
     magrittr,
     methods,
+    pbapply,
     rhdf5,
     rlang,
     S4Vectors,

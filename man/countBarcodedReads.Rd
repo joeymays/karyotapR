@@ -11,6 +11,8 @@ countBarcodedReads(
   barcode.lookup,
   probe,
   return.table = FALSE,
+  max.mismatch = 2,
+  with.indels = FALSE,
   ...
 )
 
@@ -20,7 +22,7 @@ countBarcodedReadsFromContig(
   contig,
   cell.barcode.tag = "RG",
   max.mismatch = 2,
-  with.indels = TRUE
+  with.indels = FALSE
 )
 }
 \arguments{
@@ -34,15 +36,15 @@ countBarcodedReadsFromContig(
 
 \item{return.table}{Logical, if \code{TRUE}, returns table of read counts per barcode. If \code{FALSE}, returns \code{TapestriExperiment.} Default \code{FALSE}.}
 
+\item{max.mismatch}{Numeric, the maximum and minimum number of mismatching letters allowed. Default 2.}
+
+\item{with.indels}{If \code{TRUE}, then indels are allowed. Default \code{FALSE}.}
+
 \item{...}{Arguments to pass on to \code{countBarcodedReadsFromContig()}.}
 
 \item{contig}{Character, contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.}
 
 \item{cell.barcode.tag}{Character of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".}
-
-\item{max.mismatch}{Numeric, the maximum and minimum number of mismatching letters allowed.}
-
-\item{with.indels}{If \code{TRUE} then indels are allowed.}
 }
 \value{
 \code{TapestriExperiment} with barcoded read counts added to \code{colData}.
