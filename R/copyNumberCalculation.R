@@ -154,6 +154,8 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
     stop(paste0("method '", method, "' not recognized. Please use mean or median."))
   }
 
+  cli::cli_progress_step("Smoothing copy number by {method}...", )
+
   ploidy.counts <- SummarizedExperiment::assay(TapestriExperiment, "copyNumber")
 
   ploidy.tidy <- ploidy.counts %>%

@@ -21,6 +21,7 @@ biocViews:
 Imports:
     BiocGenerics,
     circlize,
+    cli,
     ComplexHeatmap,
     dplyr,
     GenomicRanges,
@@ -29,7 +30,7 @@ Imports:
     IRanges,
     magrittr,
     methods,
-    pbapply,
+    purrr,
     rhdf5,
     rlang,
     S4Vectors,

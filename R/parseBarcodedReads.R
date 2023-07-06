@@ -46,9 +46,9 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 
     # match input barcodes to reads and convert to logical
     # progress bar
-    sequence.matches <- pbapply::pblapply(barcode.set, function(x){
+    sequence.matches <- purrr::map(barcode.set, function(x){
         as.logical(Biostrings::vcountPattern(pattern = x, subject = bam.filter$seq, max.mismatch = max.mismatch, with.indels = with.indels))
-    })
+    }, .progress = "Matching barcodes...")
 
     # match barcoded reads to cell barcodes and count. Returns NULL if no matches.
     sequence.match.ids <- names(sequence.matches)
