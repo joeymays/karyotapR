@@ -69,6 +69,8 @@ allowing users to keep one master table/file of available barcode sequences for 
 <span>  <span class="va">barcode.lookup</span>,</span>
 <span>  <span class="va">probe</span>,</span>
 <span>  return.table <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  max.mismatch <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  with.indels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -78,7 +80,7 @@ allowing users to keep one master table/file of available barcode sequences for 
 <span>  <span class="va">contig</span>,</span>
 <span>  cell.barcode.tag <span class="op">=</span> <span class="st">"RG"</span>,</span>
 <span>  max.mismatch <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  with.indels <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  with.indels <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,6 +106,14 @@ allowing users to keep one master table/file of available barcode sequences for 
 <dd><p>Logical, if <code>TRUE</code>, returns table of read counts per barcode. If <code>FALSE</code>, returns <code>TapestriExperiment.</code> Default <code>FALSE</code>.</p></dd>
 
 
+<dt>max.mismatch</dt>
+<dd><p>Numeric, the maximum and minimum number of mismatching letters allowed. Default 2.</p></dd>
+
+
+<dt>with.indels</dt>
+<dd><p>If <code>TRUE</code>, then indels are allowed. Default <code>FALSE</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments to pass on to <code>countBarcodedReadsFromContig()</code>.</p></dd>
 
@@ -114,14 +124,6 @@ allowing users to keep one master table/file of available barcode sequences for 
 
 <dt>cell.barcode.tag</dt>
 <dd><p>Character of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".</p></dd>
-
-
-<dt>max.mismatch</dt>
-<dd><p>Numeric, the maximum and minimum number of mismatching letters allowed.</p></dd>
-
-
-<dt>with.indels</dt>
-<dd><p>If <code>TRUE</code> then indels are allowed.</p></dd>
 
 </dl></div>
     <div class="section level2">
