@@ -36,20 +36,26 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
     cn.model.table.arm <- .callCopyNumberClasses(cn.model.table.arm)
 
     #transform copy number calls to matrix
-    cli::cli_progress_step("Saving copy number calls to altExp: smoothedCopyNumberByChr, assay: gmmCopyNumber...")
+    #add copy number calls and model metadata to TapestriExperiment
+    
+    # whole chromosome
+    cli::cli_progress_step("Saving whole chromosome copy number calls to altExp: smoothedCopyNumberByChr, assay: gmmCopyNumber...")
+    
     class.labels.chr.df <- cn.model.table.chr %>% dplyr::pull("cn.class") %>%
         purrr::map(\(x) tidyr::pivot_wider(x, names_from = "cell.barcode", values_from = "cn.class")) %>% purrr::list_rbind() %>%
         as.data.frame() %>% magrittr::set_rownames(cn.model.table.chr$feature.id)
+    
+    SummarizedExperiment::assay(altExp(TapestriExperiment, "smoothedCopyNumberByChr"), "gmmCopyNumber") <- class.labels.chr.df
+    S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr <- cn.model.table.chr
+    
+    # arms
+    cli::cli_progress_step("Saving chromosome arm copy number calls to altExp: smoothedCopyNumberByArm, assay: gmmCopyNumber...")
     
     class.labels.arm.df <- cn.model.table.arm %>% dplyr::pull("cn.class") %>%
       purrr::map(\(x) tidyr::pivot_wider(x, names_from = "cell.barcode", values_from = "cn.class")) %>% purrr::list_rbind() %>%
       as.data.frame() %>% magrittr::set_rownames(cn.model.table.arm$feature.id)
 
-    #add copy number calls and model metadata to TapestriExperiment
-    SummarizedExperiment::assay(altExp(TapestriExperiment, "smoothedCopyNumberByChr"), "gmmCopyNumber") <- class.labels.chr.df
     SummarizedExperiment::assay(altExp(TapestriExperiment, "smoothedCopyNumberByArm"), "gmmCopyNumber") <- class.labels.arm.df
-
-    S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr <- cn.model.table.chr
     S4Vectors::metadata(TapestriExperiment)$gmmParametersByArm <- cn.model.table.arm
     
     return(TapestriExperiment)
