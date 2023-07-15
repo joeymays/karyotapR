@@ -416,7 +416,7 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
     # panel.metadata
     probe.metadata <- probe.metadata[, c("probe.id", "chr", "start.pos", "end.pos")]
 
-    if(!all(rownames(cnv.norm.counts) == probe.metadata$probe.id)){
+    if(!all(rownames(read.counts.raw) == probe.metadata$probe.id)){
         stop("Probe IDs in metadata do not match rownames of counts.")
     }
 
