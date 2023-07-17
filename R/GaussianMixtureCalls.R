@@ -1,7 +1,7 @@
 
 #' GMM
 #'
-#' @param TapestriExperiment
+#' @param TapestriExperiment `TapestriExperiment` object
 #' @param cell.barcodes
 #' @param control.copy.number
 #' @param model.components
@@ -214,33 +214,115 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
     return(cn.model.table)
 }
 
+#' getGMMBoundaries
+#'
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param chromosome.scope
+#'
+#' @return
+#' @export
+#'
+#' @examples
+getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr"){
 
+    if(S4Vectors::isEmpty(S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr)){
+        cli::cli_abort("GMM metadata not found. Did you run `calcGMMCopyNumber()` yet?")
+    }
 
+    if(chromosome.scope == "chr" | chromosome.scope == "chromosome"){
+        model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr
+    } else if(chromosome.scope == "arm"){
+        model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByArm
+    } else {
+        cli::cli_abort("chromosome.scope should be 'chr or 'arm'")
+    }
 
+    model.boundaries <- model.metadata %>% dplyr::select("feature.id", "model") %>% dplyr::group_by(.data$feature.id) %>%
+        dplyr::transmute("boundary" = purrr::map(.data$model, ~.singleModelBoundary(.x))) %>% tidyr::unnest_wider(col = "boundary", names_sep = ".") %>%
+        dplyr::ungroup()
 
+    return(model.boundaries)
+}
 
+.getSingleBoundary <- function(mean1, sd1, mean2, sd2){
 
+    normals <- data.frame(idx = seq(0,10,0.01),
+                          component1 = stats::dnorm(x = seq(0,10,0.01), mean = mean1, sd = sd1),
+                          component2 = stats::dnorm(x = seq(0,10,0.01), mean = mean2, sd = sd2))
 
+    #calculate absolute minimum between two curves
+    normals <- normals %>% dplyr::mutate(delta = abs(.data$component1 - .data$component2))
 
+    #search for absolute minimum between the two means
+    normals.filtered <- normals %>% dplyr::filter(.data$idx >= mean1, .data$idx <= mean2)
+    boundary <- normals.filtered$idx[which(normals.filtered$delta == min(normals.filtered$delta))]
 
+    return(boundary)
+}
 
+.singleModelBoundary <- function(current.model){
 
+    current.model.boundaries <- list()
+    for(i in seq_len(nrow(current.model) - 1)){
+        current.model.boundaries[i] <- .getSingleBoundary(mean1 = current.model$mean[i], sd1 = current.model$sd[i],
+                                                          mean2 = current.model$mean[i+1], sd2 = current.model$sd[i+1])
+    }
+    current.model.boundaries <- unlist(current.model.boundaries)
+    return(current.model.boundaries)
+}
 
+#' Plot Copy Number GMM Components
+#'
+#' @param TapestriExperiment `TapestriExperiment` object
+#' @param feature.id
+#' @param draw.boundaries
+#' @param chromosome.scope
+#'
+#' @return
+#' @export
+#'
+#' @import ggplot2
+#'
+#' @examples
+plotCopyNumberGMM <- function(TapestriExperiment, feature.id = 1, chromosome.scope = "chr", draw.boundaries = F){
 
+    if(S4Vectors::isEmpty(S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr)){
+        cli::cli_abort("GMM metadata not found. Did you run `calcGMMCopyNumber()` yet?")
+    }
 
+    if(chromosome.scope == "chr" | chromosome.scope == "chromosome"){
+        model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr
+    } else if(chromosome.scope == "arm"){
+        model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByArm
+    } else {
+        cli::cli_abort("chromosome.scope should be 'chr or 'arm'")
+    }
 
+    if(length(feature.id) != 1){
+        cli::cli_abort("`feature.id` must have length = 1")
+    }
 
+    if(!feature.id %in% model.metadata$feature.id){
+        cli::cli_abort("`feature.id` not found in model metadata. Check `feature.id` and `chromosome.scope`.")
+    }
 
+    model.fit <- model.metadata[model.metadata[, "feature.id"] == feature.id,] %>% purrr::pluck("model", 1) %>%
+        purrr::pmap(function(mean, sd, ...) data.frame("y" = stats::dnorm(seq(0,10,0.05), "mean" = mean, "sd" = sd))) %>%
+        purrr::map(\(x) tibble::add_column(x, "x" = seq(0,10,0.05), .before = 0)) %>% dplyr::bind_rows(.id = "cn")
 
+    model.fit$y <- model.fit$y / max(model.fit$y) #normalize to max = 1
 
+    model.plot <- model.fit %>%
+        ggplot(aes(x = .data$x, y = .data$y, color = .data$cn)) +
+        geom_line() +
+        theme_bw() +
+        labs(title = paste("Chromosome", feature.id), y = "Density", x = "Copy Number") +
+        scale_x_continuous(breaks = 0:10)
 
+    if(draw.boundaries == TRUE){
+        model.boundaries <- .singleModelBoundary(current.model = model.metadata[model.metadata[, "feature.id"] == feature.id,] %>% purrr::pluck("model", 1))
+        model.plot <- model.plot + geom_vline(xintercept = model.boundaries, linetype = "dashed")
+    }
 
-
-
-
-
-
-
-
-
-
+    return(model.plot)
+}
