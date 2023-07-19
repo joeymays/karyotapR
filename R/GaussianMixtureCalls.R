@@ -14,9 +14,6 @@
 #' @examples
 calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.number, model.components = 1:5, model.priors = NULL, ...){
 
-    #control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, copy.number = 2)
-    #control.copy.number["chr10q","copy.number"] <- 3
-
     if(is.null(model.priors)){
         model.priors <- rep(1, length(model.components))
     } else {
@@ -25,13 +22,16 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
         }
     }
 
+    if(rlang::is_missing(control.copy.number)){
+        cli::cli_abort("{.arg control.copy.number} has not been set. Use {.fun CNweaveR::generateControlCopyNumberTemplate}.")
+    }
+
     if(length(cell.barcodes) == 0){
         cli::cli_abort("cell.barcodes is empty.")
     } else {
         cli::cli_alert_info("Calculating GMMs using {length(cell.barcodes)} cells.")
         filtered.tapestri.exp <- TapestriExperiment[,cell.barcodes]
     }
-
 
     #simulate probe counts
     simulated.norm.counts <- .generateSimulatedCNVCells(TapestriExperiment = filtered.tapestri.exp, control.copy.number = control.copy.number, ...)
@@ -86,7 +86,7 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
     cli::cli_progress_step("Simulating probes for {n.simulated.cells} cells...")
 
     raw.counts <- SummarizedExperiment::assay(TapestriExperiment, "counts")
-    norm.counts <-  sweep(raw.counts, 2, colMeans(raw.counts), "/") * 100 # set cell means to 100
+    norm.counts <- .MBNormCounts(raw.counts)
     norm.counts[norm.counts == 0] <- 1 #pseudocount zeros to ones
     norm.counts <- as.list(as.data.frame(t(norm.counts))) #convert to list of probes
 
