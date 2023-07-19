@@ -2,7 +2,7 @@
 % Please edit documentation in R/GaussianMixtureCalls.R
 \name{plotCopyNumberGMM}
 \alias{plotCopyNumberGMM}
-\title{Plot Copy Number GMM Components}
+\title{Plot copy number GMM components}
 \usage{
 plotCopyNumberGMM(
   TapestriExperiment,
@@ -14,8 +14,24 @@ plotCopyNumberGMM(
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{chromosome.scope}{}
+\item{feature.id}{chromosome or chromosome arm}
+
+\item{chromosome.scope}{"chr" or "arm", for plotting models for either whole chromosomes or chromosome arms}
+
+\item{draw.boundaries}{logical, if \code{TRUE}, draw decision boundaries between each Gaussian component}
+}
+\value{
+\code{ggplot} object
 }
 \description{
-Plot Copy Number GMM Components
+Plot copy number GMM components
+}
+\examples{
+\dontrun{
+TapestriExperiment <- plotCopyNumberGMM(TapestriExperiment,
+  feature.id = 7,
+  chromosome.scope = "chr",
+  draw.boundaries = T
+)
+}
 }

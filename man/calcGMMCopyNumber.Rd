@@ -2,7 +2,7 @@
 % Please edit documentation in R/GaussianMixtureCalls.R
 \name{calcGMMCopyNumber}
 \alias{calcGMMCopyNumber}
-\title{GMM}
+\title{Call copy number for each cell-chromosome using Gaussian mixture models}
 \usage{
 calcGMMCopyNumber(
   TapestriExperiment,
@@ -14,8 +14,33 @@ calcGMMCopyNumber(
 )
 }
 \arguments{
-\item{...}{}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
+
+\item{cell.barcodes}{character, vector of cell barcodes to use for GMM simulation. Usually corresponds to diploid control.}
+
+\item{control.copy.number}{\code{data.frame} with columns \code{arm} and \code{copy.number}, indicating of known copy number of cells in \code{cell.barcodes}.}
+
+\item{model.components}{numeric, vector of copy number GMM components to calculate, default \code{1:5} (for copy number = 1, 2, 3, 4, 5).}
+
+\item{model.priors}{numeric, relative prior probabilities for each GMM component. If \code{NULL} (default), assumes equal priors.}
+
+\item{...}{Additional parameters to be passed to other functions.}
+}
+\value{
+\code{TapestriExperiment} object with copy number calls based on the calculated GMMs, saved to \code{gmmCopyNumber} slot of \code{smoothedCopyNumberByChr} and \code{smoothedCopyNumberByArm} altExps.
+GMM parameters for each \code{feature.id} are saved to the \code{metadata} slot.
 }
 \description{
-GMM
+Call copy number for each cell-chromosome using Gaussian mixture models
+}
+\examples{
+\dontrun{
+control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
+TapestriExperiment <- calcGMMCopyNumber(TapestriExperiment,
+cell.barcodes = colnames(TapestriExperiment),
+  control.copy.number = control.copy.number,
+  model.components = 1:5,
+  model.priors = c(1,1,1,1,1)
+)
+}
 }

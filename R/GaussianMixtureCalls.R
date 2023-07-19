@@ -1,17 +1,27 @@
 
-#' GMM
+#' Call copy number for each cell-chromosome using Gaussian mixture models
 #'
-#' @param TapestriExperiment `TapestriExperiment` object
-#' @param cell.barcodes
-#' @param control.copy.number
-#' @param model.components
-#' @param model.priors
-#' @param ...
+#' @param TapestriExperiment `TapestriExperiment` object.
+#' @param cell.barcodes character, vector of cell barcodes to use for GMM simulation. Usually corresponds to diploid control.
+#' @param control.copy.number `data.frame` with columns `arm` and `copy.number`, indicating of known copy number of cells in `cell.barcodes`.
+#' @param model.components numeric, vector of copy number GMM components to calculate, default `1:5` (for copy number = 1, 2, 3, 4, 5).
+#' @param model.priors numeric, relative prior probabilities for each GMM component. If `NULL` (default), assumes equal priors.
+#' @param ... Additional parameters to be passed to other functions.
 #'
-#' @return
+#' @return `TapestriExperiment` object with copy number calls based on the calculated GMMs, saved to `gmmCopyNumber` slot of `smoothedCopyNumberByChr` and `smoothedCopyNumberByArm` altExps.
+#' GMM parameters for each `feature.id` are saved to the `metadata` slot.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
+#' TapestriExperiment <- calcGMMCopyNumber(TapestriExperiment,
+#' cell.barcodes = colnames(TapestriExperiment),
+#'   control.copy.number = control.copy.number,
+#'   model.components = 1:5,
+#'   model.priors = c(1,1,1,1,1)
+#' )
+#' }
 calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.number, model.components = 1:5, model.priors = NULL, ...){
 
     if(is.null(model.priors)){
@@ -214,15 +224,20 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
     return(cn.model.table)
 }
 
-#' getGMMBoundaries
+#' Calculate decision boundaries between components of copy number GMMs
 #'
 #' @param TapestriExperiment `TapestriExperiment` object
-#' @param chromosome.scope
+#' @param chromosome.scope "chr" or "arm", for using models for either whole chromosomes or chromosome arms. Default "chr".
 #'
-#' @return
+#' @return tibble containing boundary values of GMMs for each feature.id
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
+#' boundaries <- getGMMBoundaries(TapestriExperiment,
+#' chromosome.scope = "chr")
+#' }
 getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr"){
 
     if(S4Vectors::isEmpty(S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr)){
@@ -271,19 +286,26 @@ getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr"){
     return(current.model.boundaries)
 }
 
-#' Plot Copy Number GMM Components
+#' Plot copy number GMM components
 #'
 #' @param TapestriExperiment `TapestriExperiment` object
-#' @param feature.id
-#' @param draw.boundaries
-#' @param chromosome.scope
+#' @param feature.id chromosome or chromosome arm
+#' @param draw.boundaries logical, if `TRUE`, draw decision boundaries between each Gaussian component
+#' @param chromosome.scope "chr" or "arm", for plotting models for either whole chromosomes or chromosome arms
 #'
-#' @return
+#' @return `ggplot` object
 #' @export
 #'
 #' @import ggplot2
 #'
 #' @examples
+#' \dontrun{
+#' TapestriExperiment <- plotCopyNumberGMM(TapestriExperiment,
+#'   feature.id = 7,
+#'   chromosome.scope = "chr",
+#'   draw.boundaries = T
+#' )
+#' }
 plotCopyNumberGMM <- function(TapestriExperiment, feature.id = 1, chromosome.scope = "chr", draw.boundaries = F){
 
     if(S4Vectors::isEmpty(S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr)){
