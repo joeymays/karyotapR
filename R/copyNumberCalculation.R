@@ -11,7 +11,7 @@
 generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 2, sample.feature.label = NA) {
 
     if(any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))){
-        stop("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
+        cli::cli_abort("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
     }
 
     ploidy.template <- data.frame(
@@ -69,11 +69,11 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
 
   # error checks
   if (!sample.feature %in% colnames(SummarizedExperiment::colData(TapestriExperiment))) {
-    stop(paste0("sample.feature '", sample.feature, "' not found in colData"))
+    cli::cli_abort("{.var sample.feature} {.q {sample.feature}} not found in {.var colData}.")
   }
 
   if (any(!unique(control.copy.number$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.feature]))) {
-    stop(paste0("control.copy.number sample.label elements not found in colData. Check control.copy.number."))
+     cli::cli_abort("{.var control.copy.number} {.q sample.label} elements not found in {colData.} Check {.var control.copy.number.}")
   }
 
   counts.mat <- SummarizedExperiment::assay(TapestriExperiment, "normcounts")
@@ -101,7 +101,7 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
   bad.probes <- NULL
   if (any(probe.medians == 0)) {
       if(remove.bad.probes == F){
-          stop(paste0(names(probe.medians[probe.medians == 0]), " control cell median equal to 0. Filter out prior to proceeding.\n"))
+          cli::cli_abort("{names(probe.medians[probe.medians == 0])} control cell median equal to 0. Filter out prior to proceeding.")
       } else {
           bad.probes <- names(probe.medians)[which(probe.medians == 0)]
       }
@@ -116,8 +116,7 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
 
   if(!is.null(bad.probes)){
       TapestriExperiment <- TapestriExperiment[setdiff(rownames(TapestriExperiment), bad.probes),]
-      message("Probes removed for 0 median value:")
-      message(paste(bad.probes, collapse = ", "))
+      cli::cli_alert_info("Probes removed for 0 median value: {.q {bad.probes}}.")
   }
 
   return(TapestriExperiment)
@@ -151,7 +150,7 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
   } else if (method == "mean") {
     smooth.func <- mean
   } else {
-    stop(paste0("method '", method, "' not recognized. Please use mean or median."))
+    cli::cli_abort("{.var method} {.q {method}}, not recognized. Please use {.q mean} or {.q median}.")
   }
 
   cli::cli_progress_step("Smoothing copy number by {method}...", )

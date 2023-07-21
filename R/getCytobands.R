@@ -18,12 +18,13 @@ getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE){
     genome <- tolower(genome)
 
     if(genome != "hg19"){
-        stop(paste(genome, "not found. Only hg19 is currently supported."))
+        cli::cli_abort("{.var genome} {.q {genome}} not found. Only {.q hg19} is currently supported.")
     }
 
 if(verbose){
     if(genome == "hg19"){
-        message("Adding cytobands from hg19.")
+        cli::cli_h2("Notes")
+        cli::cli_alert_info("Adding cytobands from hg19.")
     }
 }
     #only add chr label for arms to chrs 1-22, X, Y

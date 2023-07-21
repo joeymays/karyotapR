@@ -54,8 +54,7 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
     if(is.null(assay)){
         assay <- SummarizedExperiment::assayNames(target.exp)[1]
     } else if(!assay %in% SummarizedExperiment::assayNames(target.exp)){
-        stop(paste0("assay '", assay, "' not found. Available assays are:\n",
-                    paste0(SummarizedExperiment::assayNames(target.exp), collapse = ", ")))
+        cli::cli_abort("{.var assay} {.q {assay}} not found. Available assays are: {.q {SummarizedExperiment::assayNames(target.exp)}}.")
     }
 
     tidy.data <- SummarizedExperiment::assay(target.exp, assay)
@@ -110,8 +109,7 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
     if(is.null(assay)){
         assay <- SummarizedExperiment::assayNames(target.exp)[1]
     } else if(!assay %in% SummarizedExperiment::assayNames(target.exp)){
-        stop(paste0("assay '", assay, "' not found. Available assays are:\n",
-                    paste0(SummarizedExperiment::assayNames(target.exp), collapse = ", ")))
+        cli::cli_abort("{.var assay} {.q {assay}} not found. Available assays are: {.q {SummarizedExperiment::assayNames(target.exp)}}.")
     }
 
     return(assay)

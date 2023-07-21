@@ -33,7 +33,7 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
                     e$message <- paste0(e$message, "\nBAM index .bai file needs to be in the same directory as .bam file.",
                                         "\nRun `Rsamtools::indexBam(bam.filename)` to generate BAM index file if it cannot be found.")
                 }
-                 stop(e$message)
+                 cli::cli_abort(e$message)
              })
 
     # filter bam by cell barcode tag
@@ -59,20 +59,20 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
         bam.matches <- bam.filter$tag[sequence.matches[[x]]]
 
         if(S4Vectors::isEmpty(bam.matches)){
-            message(paste0("No read matches found for ID '", x,"'."))
+            cli::cli_alert_info("No read matches found for ID {.q {x}}.")
             return(NULL)
         }
 
         counts <- as.data.frame(table(bam.matches))
         counts$bam.matches <- as.character(counts$bam.matches)
         colnames(counts) <- c("cell.barcode", x)
-        message(paste0(sum(counts[,2]), " read matches found for ID '", x,"'."))
+        cli::cli_alert_info("{sum(counts[,2])} read matches found for ID {.q {x}}.")
         return(counts)
     })
 
     # stop if no matches
     if(all(vapply(sequence.match.counts, is.null, FUN.VALUE = logical(1)))){
-        stop("No matches found for any barcode IDs.")
+        cli::cli_abort("No matches found for any barcode IDs.")
     }
 
     # remove NULL items from sequence.match.counts, removes barcode IDs with no matches
@@ -127,7 +127,7 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
     } else if(probe == "barcode"){
         contig <- as.character(rowData(altExp(TapestriExperiment, "barcodeCounts"))[barcodeProbe(TapestriExperiment),"chr"])
     } else {
-        stop(paste0("Probe tag '", probe, "' not recognized. Try probe = 'grna' or 'barcode'."))
+        cli::cli_abort("{.var probe} {.q {probe}} not recognized. Try {.var probe} = {.q grna} or {.q barcode.}")
     }
 
     result <- countBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, max.mismatch = max.mismatch, with.indels = with.indels, ...)
@@ -189,11 +189,11 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' }
 callSampleLables <- function(TapestriExperiment, input.features, output.feature = "sample.call", return.table = FALSE, neg.label = NA, method = "max", ties.method = "first", min.count.threshold = 1) {
   if (method != "max") {
-    stop("Method not recognized. Only 'max' currently supported.")
+    cli::cli_abort("Method not recognized. Only 'max' currently supported.")
   } else {
     # check for missing colData labels
     if (any(!input.features %in% colnames(SingleCellExperiment::colData(TapestriExperiment)))) {
-      stop(paste0(input.features[!input.features %in% colnames(SingleCellExperiment::colData(TapestriExperiment))], " not found in colData.\n"))
+      cli::cli_abort("{.q {input.features[!input.features %in% colnames(SingleCellExperiment::colData(TapestriExperiment))]}} not found in {.var colData}.")
     }
 
     # subset colData
@@ -202,12 +202,12 @@ callSampleLables <- function(TapestriExperiment, input.features, output.feature 
 
     # check if numeric
     if (any(!apply(coldata.subset, 2, is.numeric))) {
-      stop("Selected input.features are not numeric.")
+      cli::cli_abort("Selected input.features are not numeric.")
     }
 
     # apply min threshold, set counts to 0
     if(min.count.threshold < 1){
-        stop("min.count.threshold must be positive.")
+        cli::cli_abort("min.count.threshold must be positive.")
     } else {
         coldata.subset[coldata.subset < min.count.threshold] <- 0
     }

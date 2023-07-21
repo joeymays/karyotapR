@@ -25,9 +25,14 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
     if(!is.null(sd.min.threshold)){
         feature.set.filter <- SingleCellExperiment::rowData(SingleCellExperiment::altExp(TapestriExperiment, alt.exp))$allelefreq.sd >= sd.min.threshold
         if(all(!feature.set.filter)){
-            stop("All features filtered out. Reduce sd.min.threshold.")
+            cli::cli_abort("All features filtered out. Reduce sd.min.threshold.")
         } else {
-            message("Running PCA on ", alt.exp, " ", assay, " with ", sum(feature.set.filter), " features.", appendLF = T)
+            if(alt.exp == assay){
+            cli::cli_alert_info("Running PCA on {.emph {alt.exp}} with {sum(feature.set.filter)} features.")
+            } else {
+                cli::cli_alert_info("Running PCA on {.emph {alt.exp}} {.emph {assay}} with {sum(feature.set.filter)} features.")
+
+            }
         }
     }
 
@@ -127,7 +132,11 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
 
     assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
-    message(paste("Running UMAP on:", alt.exp, assay))
+    if(alt.exp == assay){
+        cli::cli_alert_info("Running UMAP on: {.emph {alt.exp}}.")
+    } else {
+        cli::cli_alert_info("Running UMAP on: {.emph {alt.exp}} {.emph {assay}}.")
+    }
 
     # PCA
     if(use.pca.dims){
@@ -139,7 +148,7 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
         }
 
         if(is.null(pca.dims)){
-            stop("pca.dims not set.")
+            cli::cli_abort("{.var pca.dims} not set.")
         } else {
             umap.assay <- umap.assay[,pca.dims]
         }
@@ -204,7 +213,7 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
     } else {
         #check for group label
         if(!group.label %in% colnames(SummarizedExperiment::colData(TapestriExperiment))){
-            stop("group.label not found in colData.")
+            cli::cli_abort("group.label not found in colData.")
         }
         group.label.data <- SummarizedExperiment::colData(TapestriExperiment)[,group.label]
     }
@@ -248,7 +257,7 @@ runClustering <- function(TapestriExperiment, alt.exp = "alleleFrequency", dim.r
 
     .SelectAssay(TapestriExperiment, alt.exp = alt.exp)
 
-    message(paste("Finding clusters using on:", alt.exp, dim.reduction))
+    cli::cli_alert_info("Finding clusters in: {.emph {alt.exp}} {.emph {dim.reduction}}")
 
     if(is.null(alt.exp)){
         dbscan.assay <- SingleCellExperiment::reducedDim(TapestriExperiment, dim.reduction)

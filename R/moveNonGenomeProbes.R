@@ -37,30 +37,30 @@ moveNonGenomeProbes <- function(TapestriExperiment) {
     if (grnaProbe != "not specified"){
         probe.index <- which(rownames(TapestriExperiment) == grnaProbe)
         feature.type[probe.index] <- "grnaCounts"
-        message(paste("Moving gRNA probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'grnaCounts'."))
+        cli::cli_alert_info(paste("Moving gRNA probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'grnaCounts'."))
     }
 
     if (barcodeProbe != "not specified"){
         probe.index <- which(rownames(TapestriExperiment) == barcodeProbe)
         feature.type[probe.index] <- "barcodeCounts"
-        message(paste("Moving barcode probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'barcodeCounts'."))
+        cli::cli_alert_info(paste("Moving barcode probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'barcodeCounts'."))
     }
 
     probe.index <- which(rowData(TapestriExperiment)$chr == "Y")
     if (S4Vectors::isEmpty(probe.index)) {
-        message("ChrY probe ID(s) not found in TapestriExperiment object.")
+        cli::cli_alert_info("ChrY probe ID(s) not found in TapestriExperiment object.")
     } else {
         feature.type[probe.index] <- "chrYCounts"
-        message(paste("Moving chrY probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'chrYCounts'."))
+        cli::cli_alert_info(paste("Moving chrY probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'chrYCounts'."))
     }
 
     probe.index <- which(feature.type == "otherProbeCounts")
     if (any(feature.type == "otherProbeCounts")) {
-        message(paste("Moving other non-genomic probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'otherProbeCounts'."))
+        cli::cli_alert_info(paste("Moving other non-genomic probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'otherProbeCounts'."))
     }
 
     if (all(feature.type == "CNV")) {
-        message("No non-genomic probe IDs found.")
+        cli::cli_alert_info("No non-genomic probe IDs found.")
         return(TapestriExperiment)
     }
 
