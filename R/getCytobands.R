@@ -1,4 +1,4 @@
-#' Retrieve and add chromosome cytobands and chromosome arms to `TapestriExperiment` object
+#' Add chromosome cytobands and chromosome arms to `TapestriExperiment`
 #'
 #' `getCytobands()` retrieves the chromosome arm and cytoband for each probe based on stored positional data and saves them in `rowData`.
 #' This is run automatically as part of [createTapestriExperiment()].
@@ -10,6 +10,8 @@
 #'
 #' @return `TapestriExperiment` object with `rowData` updated to include chromosome arms and cytobands.
 #' @export
+#'
+#' @concept build experiment
 #'
 #' @examples
 #' \dontrun{tapObject <- getCytobands(tapObject, genome = "hg19")}

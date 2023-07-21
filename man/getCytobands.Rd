@@ -2,7 +2,7 @@
 % Please edit documentation in R/getCytobands.R
 \name{getCytobands}
 \alias{getCytobands}
-\title{Retrieve and add chromosome cytobands and chromosome arms to \code{TapestriExperiment} object}
+\title{Add chromosome cytobands and chromosome arms to \code{TapestriExperiment}}
 \usage{
 getCytobands(TapestriExperiment, genome = "hg19", verbose = TRUE)
 }
@@ -24,3 +24,4 @@ Note: Some downstream smoothing and plotting functions may fail if chromosome ar
 \examples{
 \dontrun{tapObject <- getCytobands(tapObject, genome = "hg19")}
 }
+\concept{build experiment}

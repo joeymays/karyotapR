@@ -2,3 +2,22 @@ url: http://joeymays.xyz/CNweaveR/
 template:
   bootstrap: 5
 
+reference:
+- title: Building `TapestriExperiment` objects
+- contents:
+  - has_concept("build experiment")
+- title: Calculate and Call Copy Number
+- contents:
+  - has_concept("copy number")
+- title: Plotting
+- contents:
+  - has_concept("plots")
+- title: Dimensional Reduction
+- contents:
+  - has_concept("dimensional reduction")
+- title: Handling Barcoded Reads
+- contents:
+  - has_concept("barcoded reads")
+- title: Helper and Misc Functions
+- contents:
+  - lacks_concept(c("build experiment", "copy number", "dimensional reduction", "barcoded reads", "plots"))

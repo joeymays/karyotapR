@@ -43,3 +43,4 @@ dim.reduction = "UMAP", eps = 0.8)}
 \seealso{
 \code{\link[dbscan:dbscan]{dbscan::dbscan()}}
 }
+\concept{dimensional reduction}

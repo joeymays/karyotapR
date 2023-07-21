@@ -35,3 +35,5 @@ TapestriExperiment <- plotCopyNumberGMM(TapestriExperiment,
 )
 }
 }
+\concept{copy number}
+\concept{plots}

@@ -52,3 +52,4 @@ and \code{grnaProbe} for a gRNA-associated probe ID. These are used as shortcuts
 \item \code{grnaProbe(TapestriExperiment) <- value}: grnaProbe setter
 
 }}
+\concept{build experiment}

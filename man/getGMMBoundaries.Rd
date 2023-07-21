@@ -24,3 +24,4 @@ boundaries <- getGMMBoundaries(TapestriExperiment,
 chromosome.scope = "chr")
 }
 }
+\concept{copy number}

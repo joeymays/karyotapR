@@ -29,3 +29,4 @@ The proportion is multiplied by \code{scaling.factor} if provided.
 \examples{
 \dontrun{TapestriExperiment <- calcNormCounts(TapestriExperiment)}
 }
+\concept{copy number}

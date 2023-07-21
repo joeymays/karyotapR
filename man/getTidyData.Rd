@@ -32,3 +32,4 @@ Attempts are made to sort by "chr" and "start.pos" columns if they are present t
 \examples{
 \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}
 }
+\concept{copy number}

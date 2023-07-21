@@ -74,3 +74,4 @@ assayHeatmap(TapestriExperiment,
 \seealso{
 \link[ComplexHeatmap]{Heatmap}
 }
+\concept{plots}

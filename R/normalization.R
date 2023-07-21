@@ -15,6 +15,8 @@
 #' @return `TapestriExperiment` object with normalized counts added to `normcounts` slot.
 #' @export
 #'
+#' @concept copy number
+#'
 #' @importFrom stats median sd
 #'
 #' @examples

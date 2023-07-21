@@ -21,6 +21,8 @@
 #'
 #' @seealso [SingleCellExperiment::splitAltExps()] for manual specification of probes to move to `altExp` slots.
 #'
+#' @concept build experiment
+#'
 #' @examples
 #' \dontrun{
 #' tapObject <- moveNonGenomeProbes(tapObject)

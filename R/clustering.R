@@ -14,6 +14,8 @@
 #'
 #' @seealso [stats::prcomp()] for PCA method details.
 #'
+#' @concept dimensional reduction
+#'
 #' @examples
 #' \dontrun{TapestriExperiment <- runPCA(TapestriExperiment,
 #' alt.exp = "alleleFrequency", sd.min.threshold = 35)}
@@ -77,6 +79,9 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
 #' @return ggplot2 object, combined line plot and bar graph
 #' @export
 #'
+#' @concept dimensional reduction
+#' @concept plots
+#'
 #' @examples
 #' \dontrun{PCAKneePlot(TapestriExperiment, n.pcs = 5)}
 PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs = 10){
@@ -125,6 +130,8 @@ PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs =
 #'
 #' @return `TapestriExperiment` with UMAP embeddings saved to `reducedDims` slot of `altExp.`
 #' @export
+#'
+#' @concept dimensional reduction
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- runUMAP(TapestriExperiment, input.dims = 1:3)}
@@ -191,6 +198,9 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
 #' @return ggplot2 object, scatter plot
 #' @export
 #'
+#' @concept dimensional reduction
+#' @concept plots
+#'
 #' @examples
 #' \dontrun{reducedDimPlot(TapestriExperiment, dim.reduction = "pca")}
 reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
@@ -245,6 +255,8 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 #'
 #' @return `TapestriExperiment` object with updated `colData` containing cluster assignments.
 #' @export
+#'
+#' @concept dimensional reduction
 #'
 #' @seealso [`dbscan::dbscan()`]
 #'

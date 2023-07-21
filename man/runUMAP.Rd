@@ -35,3 +35,4 @@ Analyzes matrix data by UMAP and saves results to \code{reducedDims} slot of \co
 \examples{
 \dontrun{TapestriExperiment <- runUMAP(TapestriExperiment, input.dims = 1:3)}
 }
+\concept{dimensional reduction}

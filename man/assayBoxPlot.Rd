@@ -48,3 +48,4 @@ assayBoxPlot(TapestriExperiment, "chrYCounts",
 \seealso{
 \code{\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot()}}
 }
+\concept{plots}

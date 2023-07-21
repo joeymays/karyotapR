@@ -21,3 +21,4 @@ The output string can then be used to sort the input string into typical chromos
 chr.order <- getChrOrder(c(1,"virus",5,"X",22,"plasmid","Y"))
 ordered.vector <- c(1,"virus",5,"X",22,"plasmid","Y")[chr.order]
 }
+\concept{build experiment}

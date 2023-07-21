@@ -36,3 +36,4 @@ tapObject <- moveNonGenomeProbes(tapObject)
 \seealso{
 \code{\link[SingleCellExperiment:splitAltExps]{SingleCellExperiment::splitAltExps()}} for manual specification of probes to move to \code{altExp} slots.
 }
+\concept{build experiment}

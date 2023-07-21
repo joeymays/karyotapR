@@ -9,6 +9,8 @@
 #' @return A numerical vector of the input vectors indices in chromosome order.
 #' @export
 #'
+#' @concept build experiment
+#'
 #' @examples
 #' chr.order <- getChrOrder(c(1,"virus",5,"X",22,"plasmid","Y"))
 #' ordered.vector <- c(1,"virus",5,"X",22,"plasmid","Y")[chr.order]

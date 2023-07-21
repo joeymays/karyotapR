@@ -69,3 +69,4 @@ bam.file, barcode.lookup, "gRNA")}
 
 \code{\link[Biostrings:matchPattern]{Biostrings::matchPattern()}}
 }
+\concept{barcoded reads}

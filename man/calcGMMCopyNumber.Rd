@@ -44,3 +44,4 @@ cell.barcodes = colnames(TapestriExperiment),
 )
 }
 }
+\concept{copy number}

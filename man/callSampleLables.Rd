@@ -51,3 +51,4 @@ TapestriExperiment <- callSampleLables(TapestriExperiment,
 )
 }
 }
+\concept{barcoded reads}

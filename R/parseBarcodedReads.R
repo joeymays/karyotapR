@@ -109,6 +109,8 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @return `TapestriExperiment` with barcoded read counts added to `colData`.
 #' @export
 #'
+#' @concept barcoded reads
+#'
 #' @rdname countBarcodedReads
 #' @order 1
 #'
@@ -179,6 +181,8 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #'
 #' @return A `TapestriExperiment` object with sample calls added to `colData` column `sample.name`. If `return.table == TRUE`, a `data.frame` of sample calls.
 #' @export
+#'
+#' @concept barcoded reads
 #'
 #' @examples
 #' \dontrun{

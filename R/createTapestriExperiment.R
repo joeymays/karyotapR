@@ -1,4 +1,4 @@
-#' Create TapestriExperiment object from Tapestri Pipeline output
+#' Create `TapestriExperiment` object from Tapestri Pipeline output
 #'
 #' `createTapestriExperiment()` constructs a `TapestriExperiment` container object from data stored in the `.h5` file output by the Tapestri Pipeline.
 #' Read count matrix (probe x cell barcode) is stored in the "counts" `assay` slot of the top-level experiment.
@@ -58,6 +58,8 @@
 #' @import SingleCellExperiment
 #'
 #' @seealso [moveNonGenomeProbes()], [getCytobands()], which are run as part of this function by default.
+#'
+#' @concept build experiment
 #'
 #' @examples
 #' \dontrun{
@@ -545,6 +547,8 @@ newDummyTapestriExperiment <- function(){
 #' Type 3 has 125 cells, all XY, with 1 copy of chr 1p, otherwise diploid.
 #'
 #' @importFrom stats rnorm
+#'
+#' @concept misc
 #'
 #' @return `TapestriExperiment` object.
 #' @export

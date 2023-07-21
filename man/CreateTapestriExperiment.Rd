@@ -2,7 +2,7 @@
 % Please edit documentation in R/createTapestriExperiment.R
 \name{createTapestriExperiment}
 \alias{createTapestriExperiment}
-\title{Create TapestriExperiment object from Tapestri Pipeline output}
+\title{Create \code{TapestriExperiment} object from Tapestri Pipeline output}
 \usage{
 createTapestriExperiment(
   h5.filename,
@@ -103,3 +103,4 @@ tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")
 \seealso{
 \code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}}, \code{\link[=getCytobands]{getCytobands()}}, which are run as part of this function by default.
 }
+\concept{build experiment}

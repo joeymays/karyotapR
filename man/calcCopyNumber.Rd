@@ -68,3 +68,4 @@ TapestriExperiment <- calcCopyNumber(TapestriExperiment,
 )
 }
 }
+\concept{copy number}

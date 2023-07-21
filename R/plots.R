@@ -91,6 +91,8 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #'
 #' @import ggplot2
 #'
+#' @concept plots
+#'
 #' @examples
 #' \dontrun{
 #' assayBoxPlot(TapestriExperiment, "chrYCounts",
@@ -169,6 +171,8 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #'
 #' @return A `ComplexHeatmap` object
 #' @export
+#'
+#' @concept plots
 #'
 #' @seealso \link[ComplexHeatmap]{Heatmap}
 #'

@@ -7,6 +7,7 @@
 #' @return A matrix-like object matching input class, subset to a maximum of 5 rows and columns.
 #' @export
 #'
+#'
 #' @examples
 #' \dontrun{
 #' corner(assay(TapestriObject))
@@ -38,6 +39,8 @@ corner <- function(input.mat) {
 #' @param alt.exp Character, `altExp` slot to use. `NULL` (default) uses top-level/main experiment.
 #' @param assay Character, `assay` slot to use. `NULL` (default) uses first-indexed assay (often "counts").
 #' @param feature.id.as.factor Logical, if `TRUE` (default), the feature.id column is returned as a factor.
+#'
+#' @concept copy number
 #'
 #' @return A `tibble` of tidy data with corresponding metadata from `colData` and `rowData`.
 #' @export

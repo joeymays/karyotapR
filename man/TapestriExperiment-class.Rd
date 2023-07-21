@@ -36,3 +36,4 @@ TapestriExperiment Class Definition
 \examples{
 tapExpObject <- new("TapestriExperiment")
 }
+\concept{build experiment}

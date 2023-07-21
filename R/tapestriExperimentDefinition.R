@@ -22,6 +22,8 @@
 #' @param TapestriExperiment A `TapestriExperiment` object
 #' @param object An R object
 #'
+#' @concept build experiment
+#'
 #' @export
 #' @importMethodsFrom SingleCellExperiment show
 setMethod("show", "TapestriExperiment", function(object) {
@@ -44,6 +46,8 @@ setMethod("show", "TapestriExperiment", function(object) {
 #' [`moveNonGenomeProbes()`] and [`countBarcodedReads()`].
 #'
 #' @param x A `TapestriExperiment` object
+#'
+#' @concept build experiment
 #'
 #' @export
 #' @rdname slotGettersSetters
@@ -75,7 +79,7 @@ setMethod("barcodeProbe<-", "TapestriExperiment", function(x, value) {
 })
 
 
-#' @param x A TapestriExperiment object
+#' @param x A `TapestriExperiment` object
 #'
 #' @export
 #' @rdname slotGettersSetters

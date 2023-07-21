@@ -20,3 +20,4 @@ Type 3 has 125 cells, all XY, with 1 copy of chr 1p, otherwise diploid.
 \examples{
 tapExperiment <- newTapestriExperimentExample()
 }
+\concept{misc}

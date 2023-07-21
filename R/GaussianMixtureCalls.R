@@ -12,6 +12,8 @@
 #' GMM parameters for each `feature.id` are saved to the `metadata` slot.
 #' @export
 #'
+#' @concept copy number
+#'
 #' @examples
 #' \dontrun{
 #' control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
@@ -232,6 +234,8 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 #' @return tibble containing boundary values of GMMs for each feature.id
 #' @export
 #'
+#' @concept copy number
+#'
 #' @examples
 #' \dontrun{
 #' control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
@@ -297,6 +301,9 @@ getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr"){
 #' @export
 #'
 #' @import ggplot2
+#'
+#' @concept copy number
+#' @concept plots
 #'
 #' @examples
 #' \dontrun{

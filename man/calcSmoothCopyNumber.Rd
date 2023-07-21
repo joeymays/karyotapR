@@ -26,3 +26,4 @@ in \code{altExp} slots \code{smoothedCopyNumberByChr} for chromosome-level smoot
 TapestriExperiment <- calcSmoothCopyNumber(TapestriExperiment)
 }
 }
+\concept{copy number}

@@ -39,3 +39,4 @@ alt.exp = "alleleFrequency", sd.min.threshold = 35)}
 \seealso{
 \code{\link[stats:prcomp]{stats::prcomp()}} for PCA method details.
 }
+\concept{dimensional reduction}

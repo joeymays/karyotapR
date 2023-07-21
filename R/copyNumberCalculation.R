@@ -56,6 +56,8 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 
 #' @rdname calcCopyNumber
 #' @order 1
 #'
+#' @concept copy number
+#'
 #' @examples
 #' \dontrun{
 #' control.copy.number <- generateControlCopyNumberTemplate()
@@ -137,6 +139,8 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
 #'
 #' @return `TapestriExperiment` with `smoothedCopyNumber` and `discreteCopyNumber` assays in `altExp` slots `smoothedCopyNumberByChr` and `smoothedCopyNumberByArm`.
 #' @export
+#'
+#' @concept copy number
 #'
 #' @examples
 #' \dontrun{
