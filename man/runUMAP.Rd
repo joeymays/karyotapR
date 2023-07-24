@@ -24,7 +24,7 @@ runUMAP(
 
 \item{pca.dims}{Numeric, indices of PCs to use in UMAP. Default \code{NULL}.}
 
-\item{...}{Additional parameters to pass to \code{\link[umap:umap]{umap::umap()}}, e.g. for configuration (see \code{\link[umap:umap.defaults]{umap::umap.defaults}}).}
+\item{...}{Additional parameters to pass to \code{\link[umap:umap]{umap::umap()}}, e.g. for configuration (see \code{\link[umap:umap.defaults]{umap::umap.defaults()}}).}
 }
 \value{
 \code{TapestriExperiment} with UMAP embeddings saved to \code{reducedDims} slot of \code{altExp.}

@@ -298,7 +298,7 @@ getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr"){
 #' Plot copy number GMM components
 #'
 #' Plots the probability densities of GMM components for given chromosome or chromosome arm, store in a `TapestriExperiment`.
-#' `[calcGMMCopyNumber()]` must be run first.
+#' [calcGMMCopyNumber()] must be run first.
 #'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param feature.id chromosome or chromosome arm to plot.

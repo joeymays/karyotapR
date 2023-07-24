@@ -15,7 +15,7 @@ calcSmoothCopyNumber(TapestriExperiment, method = "median")
 \code{TapestriExperiment} with \code{smoothedCopyNumber} and \code{discreteCopyNumber} assays in \code{altExp} slots \code{smoothedCopyNumberByChr} and \code{smoothedCopyNumberByArm}.
 }
 \description{
-\code{calcSmoothCopyNumber()} takes \code{copyNumber} slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
+\code{calcSmoothCopyNumber()} takes \code{copyNumber} slot values for probes on a chromosome and smooths them by median (default) for each chromosome
 and chromosome arm, resulting in one copy number value per chromosome and chromosome arm for each cell barcode.
 Cell-chromosome values are then discretized into integers by conventional rounding (1.5 <= x < 2.5 rounds to 2).
 Smoothed copy number and discretized smoothed copy number values are stored as \code{smoothedCopyNumber} and \code{discreteCopyNumber} assays,

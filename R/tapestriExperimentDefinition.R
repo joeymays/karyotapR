@@ -43,7 +43,7 @@ setMethod("show", "TapestriExperiment", function(object) {
 #' @description Get and set custom slots in `TapestriExperiment`. Currently supported slots
 #' are `barcodeProbe` for a sample barcode probe ID
 #' and `grnaProbe` for a gRNA-associated probe ID. These are used as shortcuts for
-#' [`moveNonGenomeProbes()`] and [`countBarcodedReads()`].
+#' [moveNonGenomeProbes()] and [countBarcodedReads()].
 #'
 #' @param x A `TapestriExperiment` object
 #'

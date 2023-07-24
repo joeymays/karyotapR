@@ -126,7 +126,7 @@ PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs =
 #' @param assay Character, `assay` to use. `NULL` (default) uses first-indexed assay. Not used when `use.pca.dims = TRUE`.
 #' @param use.pca.dims Logical, if `TRUE`, uses experiment PCA, otherwise uses `assay` data. Default `TRUE`.
 #' @param pca.dims Numeric, indices of PCs to use in UMAP. Default `NULL`.
-#' @param ... Additional parameters to pass to [umap::umap()], e.g. for configuration (see [`umap::umap.defaults`]).
+#' @param ... Additional parameters to pass to [umap::umap()], e.g. for configuration (see [umap::umap.defaults()]).
 #'
 #' @return `TapestriExperiment` with UMAP embeddings saved to `reducedDims` slot of `altExp.`
 #' @export
@@ -258,7 +258,7 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp =  "alleleFrequency",
 #'
 #' @concept dimensional reduction
 #'
-#' @seealso [`dbscan::dbscan()`]
+#' @seealso [dbscan::dbscan()]
 #'
 #' @examples
 #' \dontrun{TapestriExperiment <- runClustering(TapestriExperiment,

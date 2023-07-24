@@ -25,7 +25,7 @@ plotCopyNumberGMM(
 }
 \description{
 Plots the probability densities of GMM components for given chromosome or chromosome arm, store in a \code{TapestriExperiment}.
-\verb{[calcGMMCopyNumber()]} must be run first.
+\code{\link[=calcGMMCopyNumber]{calcGMMCopyNumber()}} must be run first.
 }
 \examples{
 \dontrun{

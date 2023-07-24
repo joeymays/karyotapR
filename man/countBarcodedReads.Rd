@@ -28,7 +28,7 @@ countBarcodedReadsFromContig(
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object}
 
-\item{bam.file}{File path of BAM file. \code{.bai} BAM index file must be in the same location (can be generated using \code{\link[Rsamtools:scanBam]{Rsamtools::indexBam}}).}
+\item{bam.file}{File path of BAM file. \code{.bai} BAM index file must be in the same location (can be generated using \code{\link[Rsamtools:scanBam]{Rsamtools::indexBam()}}).}
 
 \item{barcode.lookup}{\code{data.frame} where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.}
 

@@ -1,6 +1,6 @@
 #' Parse Barcoded Reads
 #'
-#' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location (can be generated using [`Rsamtools::indexBam`]).
+#' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location (can be generated using [Rsamtools::indexBam()]).
 #' @param barcode.lookup `data.frame` where the first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
 #' @param cell.barcode.tag Character of length 2, indicates cell barcode field in BAM, specified by Tapestri pipeline (currently "RG"). Default "RG".
 #' @param contig Character, contig or chromosome name to search for barcodes in. Can be a vector of more than one contig to expand search space.
@@ -97,7 +97,7 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' The entries in the `barcode.lookup` table do not have to be present in the sample,
 #' allowing users to keep one master table/file of available barcode sequences for use in all experiments.
 #'
-#' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location (can be generated using [`Rsamtools::indexBam`]).
+#' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location (can be generated using [Rsamtools::indexBam()]).
 #' @param barcode.lookup `data.frame`, first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
 #' @param probe Character, either "gRNA" or "barcode" to parse counts from `grnaCounts` or `barcodeCounts` `altExp` slots, respectively.
 #' @param ... Arguments to pass on to `countBarcodedReadsFromContig()`.

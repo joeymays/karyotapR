@@ -35,7 +35,7 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 
 #' cells relative to that reference population. This occurs individually for each probe,
 #' such that the result is one copy number value per cell barcode per probe (cell-probe unit).
 #' `control.copy.number` is a `data.frame` lookup table used to indicate the copy number value and cell barcodes
-#' to use as the reference. A template for `control.copy.number` can be generated using [`generateControlCopyNumberTemplate()`],
+#' to use as the reference. A template for `control.copy.number` can be generated using [generateControlCopyNumberTemplate()],
 #' which will have a row for each chromosome arm represented in `TapestriExperiment`.
 #'
 #' The `control.copy.number` data.frame should include 3 columns named `arm`, `copy.number`, and `sample.label`.

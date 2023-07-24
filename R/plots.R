@@ -87,7 +87,7 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' @return ggplot object
 #' @export
 #'
-#' @seealso [`ggplot2::geom_boxplot()`]
+#' @seealso [ggplot2::geom_boxplot()]
 #'
 #' @import ggplot2
 #'
@@ -142,7 +142,7 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #'
 #' Creates a heatmap of data from the indicated `TapestriObject` `assay` slot using the `ComplexHeatmap` package.
 #' Heatmaps are generated as transposed (i.e. x-y flipped) representations of the `assay` matrix.
-#' Additional [`ComplexHeatmap::Heatmap()`] parameters can be passed in to overwrite defaults.
+#' Additional [ComplexHeatmap::Heatmap()] parameters can be passed in to overwrite defaults.
 #'
 #' @details
 #' # Options for `color.preset`
@@ -166,8 +166,8 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #' @param split.row.by Character, `colData` column to split rows by, i.e. "cluster". Default `NULL`.
 #' @param annotate.row.by Character, `colData` column to use for block annotation. Default `NULL`.
 #' @param color.preset Character, color preset to use for heatmap color, either "copy.number" or "copy.number.denoise" (see `Details`). Overrides `color.custom`. `NULL` (default) uses default `ComplexHeatmap` coloring.
-#' @param color.custom Color mapping function given by [`circlize::colorRamp2()`]. `color.preset` must be `NULL`.
-#' @param ... Additional parameters to pass to [`ComplexHeatmap::Heatmap()`].
+#' @param color.custom Color mapping function given by [circlize::colorRamp2()]. `color.preset` must be `NULL`.
+#' @param ... Additional parameters to pass to [ComplexHeatmap::Heatmap()].
 #'
 #' @return A `ComplexHeatmap` object
 #' @export
