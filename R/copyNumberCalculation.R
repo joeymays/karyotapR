@@ -66,7 +66,7 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 
 #'   sample.feature = "cluster"
 #' )
 #' }
-calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.feature = "cluster", remove.bad.probes = F) {
+calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.feature = "cluster", remove.bad.probes = FALSE) {
   sample.feature <- tolower(sample.feature)
 
   # error checks
@@ -102,7 +102,7 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
   # check for probes with median = 0
   bad.probes <- NULL
   if (any(probe.medians == 0)) {
-      if(remove.bad.probes == F){
+      if(remove.bad.probes == FALSE){
           cli::cli_abort("{names(probe.medians[probe.medians == 0])} control cell median equal to 0. Filter out prior to proceeding.")
       } else {
           bad.probes <- names(probe.medians)[which(probe.medians == 0)]
@@ -126,7 +126,7 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
 
 #' Smooth copy number values across chromosomes and chromosome arms
 #'
-#' `calcSmoothCopyNumber()` takes `copyNumber` slot values for probes on a chromosome and smoothes them by median (default) for each chromosome
+#' `calcSmoothCopyNumber()` takes `copyNumber` slot values for probes on a chromosome and smooths them by median (default) for each chromosome
 #' and chromosome arm, resulting in one copy number value per chromosome and chromosome arm for each cell barcode.
 #' Cell-chromosome values are then discretized into integers by conventional rounding (1.5 <= x < 2.5 rounds to 2).
 #' Smoothed copy number and discretized smoothed copy number values are stored as `smoothedCopyNumber` and `discreteCopyNumber` assays,

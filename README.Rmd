@@ -117,5 +117,5 @@ assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discrete
 Visualize chrY counts. Visualization reveals that cellline 2 has chr Y and is therefore male, while the other two cell lines are female. 
 
 ```{r boxplot, dpi=300}
-assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "cluster")
+assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "cluster")
 ```

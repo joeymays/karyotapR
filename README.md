@@ -42,9 +42,9 @@ We’ll use a toy dataset for this example.
 
 ``` r
 example.exp <- newTapestriExperimentExample()
-#> Moving gRNA probe  to altExp slot 'grnaCounts'.
-#> Moving barcode probe  to altExp slot 'barcodeCounts'.
-#> Moving chrY probe(s) probe_231, probe_232, probe_233, probe_234, probe_235, probe_236, probe_237, probe_238, probe_239, probe_240 to altExp slot 'chrYCounts'.
+#> ℹ Moving gRNA probe  to altExp slot 'grnaCounts'.
+#> ℹ Moving barcode probe  to altExp slot 'barcodeCounts'.
+#> ℹ Moving chrY probe(s) probe_231, probe_232, probe_233, probe_234, probe_235, probe_236, probe_237, probe_238, probe_239, probe_240 to altExp slot 'chrYCounts'.
 ```
 
 Calling the `TapestriExperiment` will print a summary of the contained
@@ -85,7 +85,7 @@ Run UMAP with the top PCs.
 
 ``` r
 example.exp <- runUMAP(example.exp, pca.dims = 1:2)
-#> Running UMAP on: alleleFrequency alleleFrequency
+#> ℹ Running UMAP on: alleleFrequency.
 ```
 
 ``` r
@@ -98,7 +98,7 @@ Run `runClustering()` to cluster with dbscan.
 
 ``` r
 example.exp <- runClustering(example.exp, eps = 0.9)
-#> Finding clusters using on: alleleFrequency UMAP
+#> ℹ Finding clusters in: alleleFrequency UMAP
 ```
 
 Visualize UMAP, using “cluster” label to color.
@@ -127,6 +127,9 @@ example.exp <- calcNormCounts(example.exp)
 control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.feature.label = "cellline3", copy.number = 2)
 example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.feature = "cluster")
 example.exp <- calcSmoothCopyNumber(example.exp)
+#> ℹ Smoothing copy number by median...
+#> ✔ Smoothing copy number by median... [1.6s]
+#> 
 ```
 
 Visualize copy number. Visualization reveals that cell line 1 has 1 copy
@@ -148,7 +151,7 @@ Visualize chrY counts. Visualization reveals that cellline 2 has chr Y
 and is therefore male, while the other two cell lines are female.
 
 ``` r
-assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "cluster")
+assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "cluster")
 ```
 
 <img src="man/figures/README-boxplot-1.png" width="100%" />

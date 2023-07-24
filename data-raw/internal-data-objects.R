@@ -13,7 +13,7 @@ cytoband.hg19.genomicRanges <- GRanges(seqnames = cytoband.hg19$chromosome,
 
 #CO293 panel metadata
 #tap.file is arbitrary .h5 tapestri pipeline file using CO293 panel
-tap <- createTapestriExperiment(tap.file, panel.id = "CO293", get.cytobands = F, move.non.genome.probes = F, filter.variants = T)
+tap <- createTapestriExperiment(tap.file, panel.id = "CO293", get.cytobands = FALSE, move.non.genome.probes = FALSE, filter.variants = TRUE)
 co293.metadata <- as.data.frame(rowData(tap))
 co293.metadata <- co293.metadata[,1:4]
 
@@ -21,13 +21,13 @@ co293.metadata <- co293.metadata[,1:4]
 
 #CO261 panel metadata
 #tap.file is arbitrary .h5 tapestri pipeline file using CO261 panel
-tap <- createTapestriExperiment(tap.file, panel.id = "CO261", get.cytobands = F, move.non.genome.probes = F, filter.variants = T)
+tap <- createTapestriExperiment(tap.file, panel.id = "CO261", get.cytobands = FALSE, move.non.genome.probes = FALSE, filter.variants = TRUE)
 co261.metadata <- as.data.frame(rowData(tap))
 co261.metadata <- co261.metadata[,1:4]
 
 #CO610 panel metadata
 #tap.file is arbitrary .h5 tapestri pipeline file using CO610 panel
-tap <- createTapestriExperiment(tap.file, panel.id = "CO610", get.cytobands = F, move.non.genome.probes = F, filter.variants = T)
+tap <- createTapestriExperiment(tap.file, panel.id = "CO610", get.cytobands = FALSE, move.non.genome.probes = FALSE, filter.variants = TRUE)
 co610.metadata <- as.data.frame(rowData(tap))
 co610.metadata <- co610.metadata[,1:4]
 

@@ -8,7 +8,7 @@ plotCopyNumberGMM(
   TapestriExperiment,
   feature.id = 1,
   chromosome.scope = "chr",
-  draw.boundaries = F
+  draw.boundaries = FALSE
 )
 }
 \arguments{
@@ -32,7 +32,7 @@ Plots the probability densities of GMM components for given chromosome or chromo
 TapestriExperiment <- plotCopyNumberGMM(TapestriExperiment,
   feature.id = 7,
   chromosome.scope = "chr",
-  draw.boundaries = T
+  draw.boundaries = TRUE
 )
 }
 }

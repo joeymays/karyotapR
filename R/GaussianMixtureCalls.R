@@ -166,7 +166,7 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 
     #fit Gaussian distributions
     cn.model.params <- sim.data.tidy %>% tidyr::nest(.by = c("feature.id", "cn.sim.class"), .key = "smoothed.counts") %>%
-      dplyr::mutate("fit" = purrr::map(.data$smoothed.counts, \(x) suppressWarnings(fitdistrplus::fitdist(x$smoothedCopyNumber, distr = "norm")), .progress = T)) %>%
+      dplyr::mutate("fit" = purrr::map(.data$smoothed.counts, \(x) suppressWarnings(fitdistrplus::fitdist(x$smoothedCopyNumber, distr = "norm")), .progress = TRUE)) %>%
       dplyr::mutate("params" = purrr::map(.data$fit, \(x) x$estimate)) %>% tidyr::unnest_wider("params") %>% dplyr::select("feature.id", "cn.sim.class", "mean", "sd")
 
     return(cn.model.params)
@@ -318,7 +318,7 @@ getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr"){
 #' TapestriExperiment <- plotCopyNumberGMM(TapestriExperiment,
 #'   feature.id = 7,
 #'   chromosome.scope = "chr",
-#'   draw.boundaries = T
+#'   draw.boundaries = TRUE
 #' )
 #' }
 plotCopyNumberGMM <- function(TapestriExperiment, feature.id = 1, chromosome.scope = "chr", draw.boundaries = FALSE){

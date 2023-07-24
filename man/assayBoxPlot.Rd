@@ -41,7 +41,7 @@ probes on chrY or barcode probe counts.
 \dontrun{
 assayBoxPlot(TapestriExperiment, "chrYCounts",
   assay = "counts",
-  split.features = T, split.x.by = "cluster"
+  split.features = TRUE, split.x.by = "cluster"
 )
 }
 }

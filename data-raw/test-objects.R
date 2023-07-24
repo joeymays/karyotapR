@@ -76,7 +76,7 @@ exp3.subset <- calcCopyNumber(exp3.subset, control.copy.number = control.copy.nu
 exp3.subset <- calcSmoothCopyNumber(exp3.subset)
 assayHeatmap(exp3.subset, assay = "copyNumber", split.col.by = "chr", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "copy.number.denoise")
 assayHeatmap(exp3.subset, alt.exp = "smoothedCopyNumberByChr", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "sample.grna", color.preset = "copy.number")
-assayBoxPlot(exp3.subset, alt.exp = "chrYCounts", split.features = T, split.x.by = "cluster")
+assayBoxPlot(exp3.subset, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "cluster")
 
 getTidyData(exp3.subset)
 getTidyData(exp3.subset, alt.exp = "alleleFrequency")
@@ -105,7 +105,7 @@ example.exp <- calcSmoothCopyNumber(example.exp)
 
 assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "copy.number")
 assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "test.cluster", annotate.row.by = "test.cluster", color.preset = "copy.number")
-assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = T, split.x.by = "test.cluster")
+assayBoxPlot(example.exp, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "test.cluster")
 
 
 

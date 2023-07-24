@@ -9,7 +9,7 @@ calcCopyNumber(
   TapestriExperiment,
   control.copy.number,
   sample.feature = "cluster",
-  remove.bad.probes = F
+  remove.bad.probes = FALSE
 )
 
 generateControlCopyNumberTemplate(

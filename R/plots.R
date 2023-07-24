@@ -97,7 +97,7 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' \dontrun{
 #' assayBoxPlot(TapestriExperiment, "chrYCounts",
 #'   assay = "counts",
-#'   split.features = T, split.x.by = "cluster"
+#'   split.features = TRUE, split.x.by = "cluster"
 #' )
 #' }
 assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = TRUE, split.features = FALSE, split.x.by = NULL, split.y.by = NULL) {
