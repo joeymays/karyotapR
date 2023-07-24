@@ -16,7 +16,7 @@ calcGMMCopyNumber(
 \arguments{
 \item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{cell.barcodes}{character, vector of cell barcodes to use for GMM simulation. Usually corresponds to diploid control.}
+\item{cell.barcodes}{character, vector of cell barcodes to fit GMM. Usually corresponds to diploid control.}
 
 \item{control.copy.number}{\code{data.frame} with columns \code{arm} and \code{copy.number}, indicating of known copy number of cells in \code{cell.barcodes}.}
 
@@ -24,14 +24,17 @@ calcGMMCopyNumber(
 
 \item{model.priors}{numeric, relative prior probabilities for each GMM component. If \code{NULL} (default), assumes equal priors.}
 
-\item{...}{Additional parameters to be passed to other functions.}
+\item{...}{Additional parameters to be passed to internal functions.}
 }
 \value{
 \code{TapestriExperiment} object with copy number calls based on the calculated GMMs, saved to \code{gmmCopyNumber} slot of \code{smoothedCopyNumberByChr} and \code{smoothedCopyNumberByArm} altExps.
 GMM parameters for each \code{feature.id} are saved to the \code{metadata} slot.
 }
 \description{
-Call copy number for each cell-chromosome using Gaussian mixture models
+Uses control cells to simulate expected smoothed copy number distributions for all chromosomes across each of \code{model.components} (copy number level).
+Then uses the distributions to calculate posterior probabilities for each cell-chromosome belonging to each of copy number level.
+Each cell-chromosome is assigned the copy number value for which its posterior probability is highest.
+This is done for both whole chromosomes and chromosome arms.
 }
 \examples{
 \dontrun{

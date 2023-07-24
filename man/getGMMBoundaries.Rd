@@ -2,20 +2,22 @@
 % Please edit documentation in R/GaussianMixtureCalls.R
 \name{getGMMBoundaries}
 \alias{getGMMBoundaries}
-\title{Calculate decision boundaries between components of copy number GMMs}
+\title{Calculate decision boundaries between components of copy number GMMs
+#'}
 \usage{
 getGMMBoundaries(TapestriExperiment, chromosome.scope = "chr")
 }
 \arguments{
-\item{TapestriExperiment}{\code{TapestriExperiment} object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
 \item{chromosome.scope}{"chr" or "arm", for using models for either whole chromosomes or chromosome arms. Default "chr".}
 }
 \value{
-tibble containing boundary values of GMMs for each feature.id
+tibble containing boundary values of GMMs for each \code{feature.id}.
 }
 \description{
 Calculate decision boundaries between components of copy number GMMs
+#'
 }
 \examples{
 \dontrun{

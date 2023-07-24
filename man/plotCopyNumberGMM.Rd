@@ -12,19 +12,20 @@ plotCopyNumberGMM(
 )
 }
 \arguments{
-\item{TapestriExperiment}{\code{TapestriExperiment} object}
+\item{TapestriExperiment}{\code{TapestriExperiment} object.}
 
-\item{feature.id}{chromosome or chromosome arm}
+\item{feature.id}{chromosome or chromosome arm to plot.}
 
-\item{chromosome.scope}{"chr" or "arm", for plotting models for either whole chromosomes or chromosome arms}
+\item{chromosome.scope}{"chr" or "arm", for plotting models for either whole chromosomes or chromosome arms.}
 
-\item{draw.boundaries}{logical, if \code{TRUE}, draw decision boundaries between each Gaussian component}
+\item{draw.boundaries}{logical, if \code{TRUE}, draw decision boundaries between each Gaussian component.}
 }
 \value{
 \code{ggplot} object
 }
 \description{
-Plot copy number GMM components
+Plots the probability densities of GMM components for given chromosome or chromosome arm, store in a \code{TapestriExperiment}.
+\verb{[calcGMMCopyNumber()]} must be run first.
 }
 \examples{
 \dontrun{
