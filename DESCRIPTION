@@ -36,7 +36,6 @@ Imports:
     rlang,
     S4Vectors,
     stats,
-    stringr,
     SummarizedExperiment,
     tibble,
     tidyr,
