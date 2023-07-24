@@ -9,12 +9,11 @@
 #' @order 2
 #'
 generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 2, sample.feature.label = NA) {
+  if (any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))) {
+    cli::cli_abort("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
+  }
 
-    if(any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))){
-        cli::cli_abort("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
-    }
-
-    ploidy.template <- data.frame(
+  ploidy.template <- data.frame(
     arm = unique(SummarizedExperiment::rowData(TapestriExperiment)$arm),
     copy.number = copy.number,
     sample.label = sample.feature.label
@@ -75,7 +74,7 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
   }
 
   if (any(!unique(control.copy.number$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.feature]))) {
-     cli::cli_abort("{.var control.copy.number} {.q sample.label} elements not found in {colData.} Check {.var control.copy.number.}")
+    cli::cli_abort("{.var control.copy.number} {.q sample.label} elements not found in {colData.} Check {.var control.copy.number.}")
   }
 
   counts.mat <- SummarizedExperiment::assay(TapestriExperiment, "normcounts")
@@ -102,11 +101,11 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
   # check for probes with median = 0
   bad.probes <- NULL
   if (any(probe.medians == 0)) {
-      if(remove.bad.probes == FALSE){
-          cli::cli_abort("{names(probe.medians[probe.medians == 0])} control cell median equal to 0. Filter out prior to proceeding.")
-      } else {
-          bad.probes <- names(probe.medians)[which(probe.medians == 0)]
-      }
+    if (remove.bad.probes == FALSE) {
+      cli::cli_abort("{names(probe.medians[probe.medians == 0])} control cell median equal to 0. Filter out prior to proceeding.")
+    } else {
+      bad.probes <- names(probe.medians)[which(probe.medians == 0)]
+    }
   }
 
   probe.medians <- probe.medians[rownames(SummarizedExperiment::rowData(TapestriExperiment))] # reorder based on rowData
@@ -116,9 +115,9 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
 
   SummarizedExperiment::assay(TapestriExperiment, "copyNumber") <- counts.ploidy
 
-  if(!is.null(bad.probes)){
-      TapestriExperiment <- TapestriExperiment[setdiff(rownames(TapestriExperiment), bad.probes),]
-      cli::cli_alert_info("Probes removed for 0 median value: {.q {bad.probes}}.")
+  if (!is.null(bad.probes)) {
+    TapestriExperiment <- TapestriExperiment[setdiff(rownames(TapestriExperiment), bad.probes), ]
+    cli::cli_alert_info("Probes removed for 0 median value: {.q {bad.probes}}.")
   }
 
   return(TapestriExperiment)
@@ -173,7 +172,7 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
     tidyr::pivot_wider(id_cols = dplyr::all_of("chr"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("chr")
 
-  smoothed.ploidy.chr <- smoothed.ploidy.chr[,colnames(ploidy.counts)] #reorder to match input matrix
+  smoothed.ploidy.chr <- smoothed.ploidy.chr[, colnames(ploidy.counts)] # reorder to match input matrix
 
   smoothed.ploidy.arm <- ploidy.tidy %>%
     dplyr::group_by(.data$cell.barcode, .data$arm) %>%
@@ -181,20 +180,20 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
     tidyr::pivot_wider(id_cols = dplyr::all_of("arm"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
     tibble::column_to_rownames("arm")
 
-  smoothed.ploidy.arm <- smoothed.ploidy.arm[,colnames(ploidy.counts)] #reorder to match input matrix
+  smoothed.ploidy.arm <- smoothed.ploidy.arm[, colnames(ploidy.counts)] # reorder to match input matrix
 
   discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
   discrete.ploidy.arm <- round(smoothed.ploidy.arm, 0)
 
 
   smoothed.ploidy.chr <- SingleCellExperiment::SingleCellExperiment(list(
-      smoothedCopyNumber = smoothed.ploidy.chr,
-      discreteCopyNumber = discrete.ploidy.chr
+    smoothedCopyNumber = smoothed.ploidy.chr,
+    discreteCopyNumber = discrete.ploidy.chr
   ))
 
   smoothed.ploidy.arm <- SingleCellExperiment::SingleCellExperiment(list(
-      smoothedCopyNumber = smoothed.ploidy.arm,
-      discreteCopyNumber = discrete.ploidy.arm
+    smoothedCopyNumber = smoothed.ploidy.arm,
+    discreteCopyNumber = discrete.ploidy.arm
   ))
 
   smoothed.ploidy.chr <- .TapestriExperiment(smoothed.ploidy.chr)

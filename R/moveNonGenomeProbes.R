@@ -28,45 +28,44 @@
 #' tapObject <- moveNonGenomeProbes(tapObject)
 #' }
 moveNonGenomeProbes <- function(TapestriExperiment) {
+  feature.type <- rep("otherProbeCounts", nrow(TapestriExperiment))
 
-    feature.type <- rep("otherProbeCounts", nrow(TapestriExperiment))
+  feature.type[which(rowData(TapestriExperiment)$chr %in% c(1:22, "X"))] <- "CNV"
 
-    feature.type[which(rowData(TapestriExperiment)$chr %in% c(1:22, "X"))] <- "CNV"
+  barcodeProbe <- TapestriExperiment@barcodeProbe
+  grnaProbe <- TapestriExperiment@grnaProbe
 
-    barcodeProbe <- TapestriExperiment@barcodeProbe
-    grnaProbe <- TapestriExperiment@grnaProbe
+  if (grnaProbe != "not specified") {
+    probe.index <- which(rownames(TapestriExperiment) == grnaProbe)
+    feature.type[probe.index] <- "grnaCounts"
+    cli::cli_alert_info(paste("Moving gRNA probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'grnaCounts'."))
+  }
 
-    if (grnaProbe != "not specified"){
-        probe.index <- which(rownames(TapestriExperiment) == grnaProbe)
-        feature.type[probe.index] <- "grnaCounts"
-        cli::cli_alert_info(paste("Moving gRNA probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'grnaCounts'."))
-    }
+  if (barcodeProbe != "not specified") {
+    probe.index <- which(rownames(TapestriExperiment) == barcodeProbe)
+    feature.type[probe.index] <- "barcodeCounts"
+    cli::cli_alert_info(paste("Moving barcode probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'barcodeCounts'."))
+  }
 
-    if (barcodeProbe != "not specified"){
-        probe.index <- which(rownames(TapestriExperiment) == barcodeProbe)
-        feature.type[probe.index] <- "barcodeCounts"
-        cli::cli_alert_info(paste("Moving barcode probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'barcodeCounts'."))
-    }
+  probe.index <- which(rowData(TapestriExperiment)$chr == "Y")
+  if (S4Vectors::isEmpty(probe.index)) {
+    cli::cli_alert_info("ChrY probe ID(s) not found in TapestriExperiment object.")
+  } else {
+    feature.type[probe.index] <- "chrYCounts"
+    cli::cli_alert_info(paste("Moving chrY probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'chrYCounts'."))
+  }
 
-    probe.index <- which(rowData(TapestriExperiment)$chr == "Y")
-    if (S4Vectors::isEmpty(probe.index)) {
-        cli::cli_alert_info("ChrY probe ID(s) not found in TapestriExperiment object.")
-    } else {
-        feature.type[probe.index] <- "chrYCounts"
-        cli::cli_alert_info(paste("Moving chrY probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'chrYCounts'."))
-    }
+  probe.index <- which(feature.type == "otherProbeCounts")
+  if (any(feature.type == "otherProbeCounts")) {
+    cli::cli_alert_info(paste("Moving other non-genomic probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'otherProbeCounts'."))
+  }
 
-    probe.index <- which(feature.type == "otherProbeCounts")
-    if (any(feature.type == "otherProbeCounts")) {
-        cli::cli_alert_info(paste("Moving other non-genomic probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'otherProbeCounts'."))
-    }
-
-    if (all(feature.type == "CNV")) {
-        cli::cli_alert_info("No non-genomic probe IDs found.")
-        return(TapestriExperiment)
-    }
-
-    TapestriExperiment <- SingleCellExperiment::splitAltExps(TapestriExperiment, feature.type, ref = "CNV")
-
+  if (all(feature.type == "CNV")) {
+    cli::cli_alert_info("No non-genomic probe IDs found.")
     return(TapestriExperiment)
+  }
+
+  TapestriExperiment <- SingleCellExperiment::splitAltExps(TapestriExperiment, feature.type, ref = "CNV")
+
+  return(TapestriExperiment)
 }

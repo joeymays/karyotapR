@@ -16,74 +16,77 @@
 #' @seealso [Biostrings::matchPattern()]
 #'
 #' @examples
-#' \dontrun{counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
-countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = FALSE){
+#' \dontrun{
+#' counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")
+#' }
+countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = FALSE) {
+  # set bam parameters
+  which <- GenomicRanges::GRanges(contig, IRanges::IRanges(1, 536870912))
+  what <- c("qname", "rname", "isize", "seq")
+  param <- Rsamtools::ScanBamParam(which = which, what = what, tag = cell.barcode.tag)
 
-    # set bam parameters
-    which <- GenomicRanges::GRanges(contig, IRanges::IRanges(1,536870912))
-    what <- c("qname", "rname", "isize", "seq")
-    param <- Rsamtools::ScanBamParam(which = which, what = what, tag = cell.barcode.tag)
+  # check for bam index and throw error if not found
+  tryCatch(
+    expr = bam <- Rsamtools::scanBam(file = bam.file, param = param),
+    error = function(e) {
+      error.message.match <- grep(pattern = "failed to load BAM index", x = e$message)
+      if (!S4Vectors::isEmpty(error.message.match)) {
+        e$message <- paste0(
+          e$message, "\nBAM index .bai file needs to be in the same directory as .bam file.",
+          "\nRun `Rsamtools::indexBam(bam.filename)` to generate BAM index file if it cannot be found."
+        )
+      }
+      cli::cli_abort(e$message)
+    }
+  )
 
-    # check for bam index and throw error if not found
-    tryCatch(expr = bam <- Rsamtools::scanBam(file = bam.file, param = param),
-             error = function(e){
+  # filter bam by cell barcode tag
+  bam.filter <- data.frame(qname = bam[[1]]$qname, rname = bam[[1]]$rname, tlen = bam[[1]]$isize, seq = bam[[1]]$seq, tag = bam[[1]]$tag[[cell.barcode.tag]])
 
-                error.message.match <- grep(pattern = "failed to load BAM index", x = e$message)
-                if(!S4Vectors::isEmpty(error.message.match)){
-                    e$message <- paste0(e$message, "\nBAM index .bai file needs to be in the same directory as .bam file.",
-                                        "\nRun `Rsamtools::indexBam(bam.filename)` to generate BAM index file if it cannot be found.")
-                }
-                 cli::cli_abort(e$message)
-             })
+  # parse barcode lookup table by column index
+  barcode.lut.vector <- barcode.lookup[, 2]
+  names(barcode.lut.vector) <- barcode.lookup[, 1]
+  barcode.set <- Biostrings::DNAStringSet(x = barcode.lut.vector, use.names = TRUE)
 
-    # filter bam by cell barcode tag
-    bam.filter <- data.frame(qname = bam[[1]]$qname, rname = bam[[1]]$rname, tlen = bam[[1]]$isize, seq  = bam[[1]]$seq, tag = bam[[1]]$tag[[cell.barcode.tag]])
+  # match input barcodes to reads and convert to logical
+  # progress bar
+  sequence.matches <- purrr::map(barcode.set, function(x) {
+    as.logical(Biostrings::vcountPattern(pattern = x, subject = bam.filter$seq, max.mismatch = max.mismatch, with.indels = with.indels))
+  }, .progress = "Matching barcodes...")
 
-    # parse barcode lookup table by column index
-    barcode.lut.vector <- barcode.lookup[,2]
-    names(barcode.lut.vector) <- barcode.lookup[,1]
-    barcode.set <- Biostrings::DNAStringSet(x = barcode.lut.vector, use.names = TRUE)
+  # match barcoded reads to cell barcodes and count. Returns NULL if no matches.
+  sequence.match.ids <- names(sequence.matches)
+  names(sequence.match.ids) <- names(sequence.matches)
 
-    # match input barcodes to reads and convert to logical
-    # progress bar
-    sequence.matches <- purrr::map(barcode.set, function(x){
-        as.logical(Biostrings::vcountPattern(pattern = x, subject = bam.filter$seq, max.mismatch = max.mismatch, with.indels = with.indels))
-    }, .progress = "Matching barcodes...")
+  sequence.match.counts <- lapply(sequence.match.ids, function(x) {
+    bam.matches <- bam.filter$tag[sequence.matches[[x]]]
 
-    # match barcoded reads to cell barcodes and count. Returns NULL if no matches.
-    sequence.match.ids <- names(sequence.matches)
-    names(sequence.match.ids) <- names(sequence.matches)
-
-    sequence.match.counts <- lapply(sequence.match.ids, function(x){
-
-        bam.matches <- bam.filter$tag[sequence.matches[[x]]]
-
-        if(S4Vectors::isEmpty(bam.matches)){
-            cli::cli_alert_info("No read matches found for ID {.q {x}}.")
-            return(NULL)
-        }
-
-        counts <- as.data.frame(table(bam.matches))
-        counts$bam.matches <- as.character(counts$bam.matches)
-        colnames(counts) <- c("cell.barcode", x)
-        cli::cli_alert_info("{sum(counts[,2])} read matches found for ID {.q {x}}.")
-        return(counts)
-    })
-
-    # stop if no matches
-    if(all(vapply(sequence.match.counts, is.null, FUN.VALUE = logical(1)))){
-        cli::cli_abort("No matches found for any barcode IDs.")
+    if (S4Vectors::isEmpty(bam.matches)) {
+      cli::cli_alert_info("No read matches found for ID {.q {x}}.")
+      return(NULL)
     }
 
-    # remove NULL items from sequence.match.counts, removes barcode IDs with no matches
-    sequence.match.counts <- sequence.match.counts[!vapply(sequence.match.counts, is.null, logical(1))]
+    counts <- as.data.frame(table(bam.matches))
+    counts$bam.matches <- as.character(counts$bam.matches)
+    colnames(counts) <- c("cell.barcode", x)
+    cli::cli_alert_info("{sum(counts[,2])} read matches found for ID {.q {x}}.")
+    return(counts)
+  })
 
-    # combine count tables
-    sequence.match.counts <- Reduce(function(x, y) merge(x, y, by="cell.barcode", all = TRUE), sequence.match.counts)
-    rownames(sequence.match.counts) <- sequence.match.counts$cell.barcode
-    sequence.match.counts[is.na(sequence.match.counts)] <- 0
+  # stop if no matches
+  if (all(vapply(sequence.match.counts, is.null, FUN.VALUE = logical(1)))) {
+    cli::cli_abort("No matches found for any barcode IDs.")
+  }
 
-    return(sequence.match.counts)
+  # remove NULL items from sequence.match.counts, removes barcode IDs with no matches
+  sequence.match.counts <- sequence.match.counts[!vapply(sequence.match.counts, is.null, logical(1))]
+
+  # combine count tables
+  sequence.match.counts <- Reduce(function(x, y) merge(x, y, by = "cell.barcode", all = TRUE), sequence.match.counts)
+  rownames(sequence.match.counts) <- sequence.match.counts$cell.barcode
+  sequence.match.counts[is.na(sequence.match.counts)] <- 0
+
+  return(sequence.match.counts)
 }
 
 #' @name countBarcodedReads
@@ -117,48 +120,51 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' @seealso [Rsamtools::indexBam()]
 #'
 #' @examples
-#' \dontrun{counts <- countBarcodedReads(TapestriExperiment,
-#' bam.file, barcode.lookup, "gRNA")}
-countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe, return.table = FALSE, max.mismatch = 2, with.indels = FALSE, ...){
+#' \dontrun{
+#' counts <- countBarcodedReads(
+#'   TapestriExperiment,
+#'   bam.file, barcode.lookup, "gRNA"
+#' )
+#' }
+countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe, return.table = FALSE, max.mismatch = 2, with.indels = FALSE, ...) {
+  probe <- tolower(probe)
 
-    probe <- tolower(probe)
+  # get contig
+  if (probe == "grna") {
+    contig <- as.character(rowData(altExp(TapestriExperiment, "grnaCounts"))[grnaProbe(TapestriExperiment), "chr"])
+  } else if (probe == "barcode") {
+    contig <- as.character(rowData(altExp(TapestriExperiment, "barcodeCounts"))[barcodeProbe(TapestriExperiment), "chr"])
+  } else {
+    cli::cli_abort("{.var probe} {.q {probe}} not recognized. Try {.var probe} = {.q grna} or {.q barcode.}")
+  }
 
-    # get contig
-    if(probe == "grna"){
-        contig <- as.character(rowData(altExp(TapestriExperiment, "grnaCounts"))[grnaProbe(TapestriExperiment),"chr"])
-    } else if(probe == "barcode"){
-        contig <- as.character(rowData(altExp(TapestriExperiment, "barcodeCounts"))[barcodeProbe(TapestriExperiment),"chr"])
-    } else {
-        cli::cli_abort("{.var probe} {.q {probe}} not recognized. Try {.var probe} = {.q grna} or {.q barcode.}")
-    }
+  result <- countBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, max.mismatch = max.mismatch, with.indels = with.indels, ...)
 
-    result <- countBarcodedReadsFromContig(bam.file, barcode.lookup, contig = contig, max.mismatch = max.mismatch, with.indels = with.indels, ...)
+  if (return.table) {
+    return(result)
+  } else {
+    # get existing colData
+    existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
 
-    if(return.table){
-        return(result)
-    } else {
-        # get existing colData
-        existing.cell.data <- as.data.frame(SingleCellExperiment::colData(TapestriExperiment))
+    # drop columns if already exist to allow overwriting
+    existing.cell.data <- existing.cell.data[, !colnames(existing.cell.data) %in% setdiff(colnames(result), "cell.barcode")]
 
-        # drop columns if already exist to allow overwriting
-        existing.cell.data <- existing.cell.data[,!colnames(existing.cell.data) %in% setdiff(colnames(result), "cell.barcode")]
+    # merge result and existing colData
+    updated.cell.data <- merge(existing.cell.data, result, by = "cell.barcode", all.x = TRUE, sort = FALSE)
 
-        # merge result and existing colData
-        updated.cell.data <- merge(existing.cell.data, result, by = "cell.barcode", all.x = TRUE, sort = FALSE)
+    # set NAs to 0
+    ids <- setdiff(colnames(result), "cell.barcode")
+    updated.cell.data[, ids][is.na(updated.cell.data[, ids])] <- 0
 
-        # set NAs to 0
-        ids <- setdiff(colnames(result), "cell.barcode")
-        updated.cell.data[,ids][is.na(updated.cell.data[,ids])] <- 0
+    # reorder to match colData
+    rownames(updated.cell.data) <- updated.cell.data$cell.barcode
+    updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)), ]
 
-        # reorder to match colData
-        rownames(updated.cell.data) <- updated.cell.data$cell.barcode
-        updated.cell.data <- updated.cell.data[rownames(SingleCellExperiment::colData(TapestriExperiment)),]
+    # update TapestriExperiment
+    SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
 
-        # update TapestriExperiment
-        SummarizedExperiment::colData(TapestriExperiment) <- S4Vectors::DataFrame(updated.cell.data)
-
-        return(TapestriExperiment)
-    }
+    return(TapestriExperiment)
+  }
 }
 
 #' Call sample labels based on feature counts
@@ -210,10 +216,10 @@ callSampleLables <- function(TapestriExperiment, input.features, output.feature 
     }
 
     # apply min threshold, set counts to 0
-    if(min.count.threshold < 1){
-        cli::cli_abort("min.count.threshold must be positive.")
+    if (min.count.threshold < 1) {
+      cli::cli_abort("min.count.threshold must be positive.")
     } else {
-        coldata.subset[coldata.subset < min.count.threshold] <- 0
+      coldata.subset[coldata.subset < min.count.threshold] <- 0
     }
 
     # make calls
@@ -244,4 +250,3 @@ callSampleLables <- function(TapestriExperiment, input.features, output.feature 
     }
   }
 }
-

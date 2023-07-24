@@ -33,7 +33,9 @@ ggplot2 object, scatter plot
 Plots a scatter plot of the indicated dimensional reduction results.
 }
 \examples{
-\dontrun{reducedDimPlot(TapestriExperiment, dim.reduction = "pca")}
+\dontrun{
+reducedDimPlot(TapestriExperiment, dim.reduction = "pca")
+}
 }
 \concept{dimensional reduction}
 \concept{plots}

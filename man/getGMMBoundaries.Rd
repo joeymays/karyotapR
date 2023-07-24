@@ -23,7 +23,8 @@ Calculate decision boundaries between components of copy number GMMs
 \dontrun{
 control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
 boundaries <- getGMMBoundaries(TapestriExperiment,
-chromosome.scope = "chr")
+  chromosome.scope = "chr"
+)
 }
 }
 \concept{copy number}

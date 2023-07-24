@@ -18,7 +18,7 @@ Contig names that do not match 1:22, X, or Y are sorted numerically and alphabet
 The output string can then be used to sort the input string into typical chromosome order.
 }
 \examples{
-chr.order <- getChrOrder(c(1,"virus",5,"X",22,"plasmid","Y"))
-ordered.vector <- c(1,"virus",5,"X",22,"plasmid","Y")[chr.order]
+chr.order <- getChrOrder(c(1, "virus", 5, "X", 22, "plasmid", "Y"))
+ordered.vector <- c(1, "virus", 5, "X", 22, "plasmid", "Y")[chr.order]
 }
 \concept{build experiment}

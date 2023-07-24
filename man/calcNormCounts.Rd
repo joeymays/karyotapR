@@ -27,6 +27,8 @@ Counts for each barcode are normalized relative to their barcode's mean and prob
 The proportion is multiplied by \code{scaling.factor} if provided.
 }
 \examples{
-\dontrun{TapestriExperiment <- calcNormCounts(TapestriExperiment)}
+\dontrun{
+TapestriExperiment <- calcNormCounts(TapestriExperiment)
+}
 }
 \concept{copy number}

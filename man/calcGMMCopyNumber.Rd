@@ -40,10 +40,10 @@ This is done for both whole chromosomes and chromosome arms.
 \dontrun{
 control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
 TapestriExperiment <- calcGMMCopyNumber(TapestriExperiment,
-cell.barcodes = colnames(TapestriExperiment),
+  cell.barcodes = colnames(TapestriExperiment),
   control.copy.number = control.copy.number,
   model.components = 1:5,
-  model.priors = c(1,1,1,1,1)
+  model.priors = c(1, 1, 1, 1, 1)
 )
 }
 }

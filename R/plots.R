@@ -119,7 +119,7 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
   }
 
   if (!is.null(split.y.by)) {
-      g1 <- g1 + facet_wrap(facets = split.y.by, ncol = 1)
+    g1 <- g1 + facet_wrap(facets = split.y.by, ncol = 1)
   }
 
   if (split.features) {
@@ -249,12 +249,14 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
   }
 
   # set default params here to allow overwriting in function call
-  hm.defaults <- list("name" = assay,
-                      "hm.col" = hm.col,
-                      "left.annotation" = row.annotation,
-                      "row.split" = row.split,
-                      "show.column.names" = show.column.names,
-                      "column.split" = column.split)
+  hm.defaults <- list(
+    "name" = assay,
+    "hm.col" = hm.col,
+    "left.annotation" = row.annotation,
+    "row.split" = row.split,
+    "show.column.names" = show.column.names,
+    "column.split" = column.split
+  )
 
   hm <- .ComplexHeatmap.default(matrix = t(hm.matrix), hm.defaults = hm.defaults, ...)
 
@@ -284,37 +286,31 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
                                     border = TRUE,
                                     col = hm.defaults[["hm.col"]],
                                     hm.defaults = hm.defaults,
-                                    ...
-                                    ){
+                                    ...) {
+  complex.hm <- ComplexHeatmap::Heatmap(
+    matrix = matrix,
+    cluster_rows = cluster_rows,
+    cluster_row_slices = cluster_row_slices,
+    show_row_names = show_row_names,
+    show_row_dend = show_row_dend,
+    row_split = row_split,
+    row_title_gp = row_title_gp,
+    cluster_columns = cluster_columns,
+    show_column_names = show_column_names,
+    column_names_side = column_names_side,
+    show_column_dend = show_column_dend,
+    column_split = column_split,
+    column_title_gp = column_title_gp,
+    column_names_gp = column_names_gp,
+    column_title_rot = column_title_rot,
+    column_gap = column_gap,
+    left_annotation = left_annotation,
+    name = name,
+    border = border,
+    col = col,
+    column_names_rot = column_names_rot,
+    ...
+  )
 
-    complex.hm <- ComplexHeatmap::Heatmap(
-
-        matrix = matrix,
-        cluster_rows = cluster_rows,
-        cluster_row_slices = cluster_row_slices,
-        show_row_names = show_row_names,
-        show_row_dend = show_row_dend,
-        row_split = row_split,
-        row_title_gp = row_title_gp,
-        cluster_columns = cluster_columns,
-        show_column_names = show_column_names,
-        column_names_side = column_names_side,
-        show_column_dend = show_column_dend,
-        column_split = column_split,
-        column_title_gp = column_title_gp,
-        column_names_gp = column_names_gp,
-        column_title_rot = column_title_rot,
-        column_gap = column_gap,
-        left_annotation = left_annotation,
-        name = name,
-        border = border,
-        col = col,
-        column_names_rot = column_names_rot,
-        ...
-        )
-
-    return(complex.hm)
+  return(complex.hm)
 }
-
-
-

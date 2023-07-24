@@ -60,9 +60,15 @@ The entries in the \code{barcode.lookup} table do not have to be present in the 
 allowing users to keep one master table/file of available barcode sequences for use in all experiments.
 }
 \examples{
-\dontrun{counts <- countBarcodedReads(TapestriExperiment,
-bam.file, barcode.lookup, "gRNA")}
-\dontrun{counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")}
+\dontrun{
+counts <- countBarcodedReads(
+  TapestriExperiment,
+  bam.file, barcode.lookup, "gRNA"
+)
+}
+\dontrun{
+counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")
+}
 }
 \seealso{
 \code{\link[Rsamtools:scanBam]{Rsamtools::indexBam()}}

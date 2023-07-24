@@ -45,48 +45,52 @@ corner <- function(input.mat) {
 #' @return A `tibble` of tidy data with corresponding metadata from `colData` and `rowData`.
 #' @export
 #'
-#' @examples \dontrun{getTidyData(TapestriObject, alt.exp = "alleleFrequency")}
-getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, feature.id.as.factor = TRUE){
+#' @examples \dontrun{
+#' getTidyData(TapestriObject, alt.exp = "alleleFrequency")
+#' }
+getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, feature.id.as.factor = TRUE) {
+  if (is.null(alt.exp)) {
+    target.exp <- TapestriExperiment
+  } else {
+    target.exp <- altExp(TapestriExperiment, alt.exp)
+  }
 
-    if(is.null(alt.exp)){
-        target.exp <- TapestriExperiment
-    } else {
-        target.exp <- altExp(TapestriExperiment, alt.exp)
-    }
+  if (is.null(assay)) {
+    assay <- SummarizedExperiment::assayNames(target.exp)[1]
+  } else if (!assay %in% SummarizedExperiment::assayNames(target.exp)) {
+    cli::cli_abort("{.var assay} {.q {assay}} not found. Available assays are: {.q {SummarizedExperiment::assayNames(target.exp)}}.")
+  }
 
-    if(is.null(assay)){
-        assay <- SummarizedExperiment::assayNames(target.exp)[1]
-    } else if(!assay %in% SummarizedExperiment::assayNames(target.exp)){
-        cli::cli_abort("{.var assay} {.q {assay}} not found. Available assays are: {.q {SummarizedExperiment::assayNames(target.exp)}}.")
-    }
+  tidy.data <- SummarizedExperiment::assay(target.exp, assay)
 
-    tidy.data <- SummarizedExperiment::assay(target.exp, assay)
+  tidy.data <- as.data.frame(tidy.data) %>%
+    tibble::rownames_to_column("feature.id") %>%
+    dplyr::as_tibble() %>%
+    tidyr::pivot_longer(cols = !tidyr::matches("feature.id"), names_to = "cell.barcode", values_to = assay)
 
-    tidy.data <- as.data.frame(tidy.data) %>% tibble::rownames_to_column("feature.id") %>% dplyr::as_tibble() %>%
-        tidyr::pivot_longer(cols = !tidyr::matches("feature.id"), names_to = "cell.barcode", values_to = assay)
+  tidy.data <- tidy.data %>% dplyr::left_join(as.data.frame(SummarizedExperiment::colData(TapestriExperiment)), by = "cell.barcode")
 
-    tidy.data <- tidy.data %>% dplyr::left_join(as.data.frame(SummarizedExperiment::colData(TapestriExperiment)), by = "cell.barcode")
+  # get rowdata and add rownames as a column to target for join with feature.id
+  rowdata.to.join <- as.data.frame(SummarizedExperiment::rowData(target.exp)) %>% tibble::rownames_to_column("feature.id")
 
-    # get rowdata and add rownames as a column to target for join with feature.id
-    rowdata.to.join <- as.data.frame(SummarizedExperiment::rowData(target.exp)) %>% tibble::rownames_to_column("feature.id")
+  tidy.data <- tidy.data %>% dplyr::left_join(rowdata.to.join,
+    by = "feature.id",
+    suffix = c(".bc", ".feature")
+  )
 
-    tidy.data <- tidy.data %>% dplyr::left_join(rowdata.to.join,
-                                                by = "feature.id",
-                                                suffix = c(".bc", ".feature"))
+  # attempt to sort by chr and start.pos if present
+  if (all(c("chr", "start.pos") %in% colnames(tidy.data))) {
+    tidy.data <- tidy.data %>% dplyr::arrange(.data$chr, .data$start.pos)
+  } else if ("chr" %in% colnames(tidy.data)) {
+    tidy.data <- tidy.data %>% dplyr::arrange(.data$chr)
+  }
 
-    # attempt to sort by chr and start.pos if present
-    if(all(c("chr", "start.pos") %in% colnames(tidy.data))){
-        tidy.data <- tidy.data %>% dplyr::arrange(.data$chr, .data$start.pos)
-    } else if("chr" %in% colnames(tidy.data)){
-        tidy.data <- tidy.data %>% dplyr::arrange(.data$chr)
-    }
+  # make feature.id a factor to enable sorting in visualization
+  if (feature.id.as.factor) {
+    tidy.data$feature.id <- factor(tidy.data$feature.id, levels = unique(tidy.data$feature.id))
+  }
 
-    # make feature.id a factor to enable sorting in visualization
-    if(feature.id.as.factor){
-        tidy.data$feature.id <- factor(tidy.data$feature.id, levels = unique(tidy.data$feature.id))
-    }
-
-    return(tidy.data)
+  return(tidy.data)
 }
 
 #' Check for available `altExp` and `assay` slots
@@ -101,19 +105,18 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
 #' @return Character, assay selection
 #' @noRd
 #'
-.SelectAssay <- function(TapestriExperiment, alt.exp = NULL, assay = NULL){
+.SelectAssay <- function(TapestriExperiment, alt.exp = NULL, assay = NULL) {
+  if (is.null(alt.exp)) {
+    target.exp <- TapestriExperiment
+  } else {
+    target.exp <- altExp(TapestriExperiment, alt.exp)
+  }
 
-    if(is.null(alt.exp)){
-        target.exp <- TapestriExperiment
-    } else {
-        target.exp <- altExp(TapestriExperiment, alt.exp)
-    }
+  if (is.null(assay)) {
+    assay <- SummarizedExperiment::assayNames(target.exp)[1]
+  } else if (!assay %in% SummarizedExperiment::assayNames(target.exp)) {
+    cli::cli_abort("{.var assay} {.q {assay}} not found. Available assays are: {.q {SummarizedExperiment::assayNames(target.exp)}}.")
+  }
 
-    if(is.null(assay)){
-        assay <- SummarizedExperiment::assayNames(target.exp)[1]
-    } else if(!assay %in% SummarizedExperiment::assayNames(target.exp)){
-        cli::cli_abort("{.var assay} {.q {assay}} not found. Available assays are: {.q {SummarizedExperiment::assayNames(target.exp)}}.")
-    }
-
-    return(assay)
+  return(assay)
 }

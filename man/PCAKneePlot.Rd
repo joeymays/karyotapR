@@ -22,7 +22,9 @@ Variance explained for each PC is indicated by the line.
 Cumulative variance explained is indicated by the bars.
 }
 \examples{
-\dontrun{PCAKneePlot(TapestriExperiment, n.pcs = 5)}
+\dontrun{
+PCAKneePlot(TapestriExperiment, n.pcs = 5)
+}
 }
 \concept{dimensional reduction}
 \concept{plots}

@@ -11,10 +11,12 @@
 #' @examples
 #' tapExpObject <- new("TapestriExperiment")
 .TapestriExperiment <- setClass(
-    "TapestriExperiment",
-    contains = "SingleCellExperiment",
-    slots = c(barcodeProbe = "character",
-              grnaProbe = "character")
+  "TapestriExperiment",
+  contains = "SingleCellExperiment",
+  slots = c(
+    barcodeProbe = "character",
+    grnaProbe = "character"
+  )
 )
 
 
@@ -27,12 +29,12 @@
 #' @export
 #' @importMethodsFrom SingleCellExperiment show
 setMethod("show", "TapestriExperiment", function(object) {
-    callNextMethod()
-    cat(
-        "barcodeProbe: ", object@barcodeProbe, "\n",
-        "grnaProbe: ", object@grnaProbe, "\n",
-        sep = ""
-    )
+  callNextMethod()
+  cat(
+    "barcodeProbe: ", object@barcodeProbe, "\n",
+    "grnaProbe: ", object@grnaProbe, "\n",
+    sep = ""
+  )
 })
 
 
@@ -73,9 +75,9 @@ setGeneric("barcodeProbe<-", function(x, value) standardGeneric("barcodeProbe<-"
 #' @export
 #' @describeIn slotGettersSetters barcodeProbe setter
 setMethod("barcodeProbe<-", "TapestriExperiment", function(x, value) {
-    x@barcodeProbe <- value
-    validObject(x)
-    x
+  x@barcodeProbe <- value
+  validObject(x)
+  x
 })
 
 
@@ -104,25 +106,27 @@ setGeneric("grnaProbe<-", function(x, value) standardGeneric("grnaProbe<-"))
 #' @export
 #' @describeIn slotGettersSetters grnaProbe setter
 setMethod("grnaProbe<-", "TapestriExperiment", function(x, value) {
-    x@grnaProbe <- value
-    validObject(x)
-    x
+  x@grnaProbe <- value
+  validObject(x)
+  x
 })
 
 
 S4Vectors::setValidity2("TapestriExperiment", function(object) {
-    msg <- NULL
+  msg <- NULL
 
-    if (length(grnaProbe(object)) > 1) {
-        msg <- c(msg, "'grnaProbe' should have length equal to 1")
-    }
-    if (length(barcodeProbe(object)) > 1) {
-        msg <- c(
-            msg, "'barcodeProbe' should have length equal to 1"
-        )
-    }
+  if (length(grnaProbe(object)) > 1) {
+    msg <- c(msg, "'grnaProbe' should have length equal to 1")
+  }
+  if (length(barcodeProbe(object)) > 1) {
+    msg <- c(
+      msg, "'barcodeProbe' should have length equal to 1"
+    )
+  }
 
-    if (length(msg)) {
-        msg
-    } else TRUE
+  if (length(msg)) {
+    msg
+  } else {
+    TRUE
+  }
 })

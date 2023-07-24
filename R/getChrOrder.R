@@ -12,21 +12,19 @@
 #' @concept build experiment
 #'
 #' @examples
-#' chr.order <- getChrOrder(c(1,"virus",5,"X",22,"plasmid","Y"))
-#' ordered.vector <- c(1,"virus",5,"X",22,"plasmid","Y")[chr.order]
+#' chr.order <- getChrOrder(c(1, "virus", 5, "X", 22, "plasmid", "Y"))
+#' ordered.vector <- c(1, "virus", 5, "X", 22, "plasmid", "Y")[chr.order]
+getChrOrder <- function(chr.vector) {
+  chr.df.input <- data.frame(index = seq_along(chr.vector), id = chr.vector)
 
-getChrOrder <- function(chr.vector){
+  chr.df <- chr.df.input[which(chr.df.input$id %in% c(1:22, "X", "Y")), ]
 
-    chr.df.input <- data.frame(index = seq_along(chr.vector), id = chr.vector)
+  non.chr.df <- chr.df.input[which(!chr.df.input$id %in% c(1:22, "X", "Y")), ]
 
-    chr.df <- chr.df.input[which(chr.df.input$id %in% c(1:22,"X", "Y")),]
+  chr.df.ordered <- chr.df[gtools::mixedorder(chr.df$id), ]
+  non.chr.df.ordered <- non.chr.df[gtools::mixedorder(non.chr.df$id), ]
 
-    non.chr.df <- chr.df.input[which(!chr.df.input$id %in% c(1:22,"X", "Y")),]
+  chr.vector.order <- c(chr.df.ordered$index, non.chr.df.ordered$index)
 
-    chr.df.ordered <- chr.df[gtools::mixedorder(chr.df$id),]
-    non.chr.df.ordered <- non.chr.df[gtools::mixedorder(non.chr.df$id),]
-
-    chr.vector.order <- c(chr.df.ordered$index, non.chr.df.ordered$index)
-
-    return(chr.vector.order)
+  return(chr.vector.order)
 }

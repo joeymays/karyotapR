@@ -30,11 +30,15 @@ runPCA(
 \code{TapestriExperiment} with PCA results saved to \code{reducedDims} slot of \code{altExp}, and proportion of variance explained by each PC saved to \code{metadata} slot of \code{altExp.}
 }
 \description{
-Analyzes assay data by Principal Components Analysis (PCA) and saves results to \code{reducedDims} slot of \code{TapestriObject}.
+Analyzes assay data by Principal Components Analysis (PCA) and saves results
+to \code{reducedDims} slot of \code{TapestriObject}.
 }
 \examples{
-\dontrun{TapestriExperiment <- runPCA(TapestriExperiment,
-alt.exp = "alleleFrequency", sd.min.threshold = 35)}
+\dontrun{
+TapestriExperiment <- runPCA(TapestriExperiment,
+  alt.exp = "alleleFrequency", sd.min.threshold = 35
+)
+}
 }
 \seealso{
 \code{\link[stats:prcomp]{stats::prcomp()}} for PCA method details.
