@@ -91,7 +91,7 @@ allowing users to keep one master table/file of available barcode sequences for 
 
 
 <dt>bam.file</dt>
-<dd><p>File path of BAM file. <code>.bai</code> BAM index file must be in the same location (can be generated using <code><a href="https://rdrr.io/pkg/Rsamtools/man/scanBam.html" class="external-link">Rsamtools::indexBam</a></code>).</p></dd>
+<dd><p>File path of BAM file. <code>.bai</code> BAM index file must be in the same location (can be generated using <code><a href="https://rdrr.io/pkg/Rsamtools/man/scanBam.html" class="external-link">Rsamtools::indexBam()</a></code>).</p></dd>
 
 
 <dt>barcode.lookup</dt>
@@ -143,9 +143,15 @@ allowing users to keep one master table/file of available barcode sequences for 
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu">countBarcodedReads</span><span class="op">(</span><span class="va">TapestriExperiment</span>,</span></span>
-<span class="r-in"><span><span class="va">bam.file</span>, <span class="va">barcode.lookup</span>, <span class="st">"gRNA"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu">countBarcodedReadsFromContig</span><span class="op">(</span><span class="va">bam.file</span>, <span class="va">barcode.lookup</span>, <span class="st">"virus_ref2"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu">countBarcodedReads</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">TapestriExperiment</span>,</span></span>
+<span class="r-in"><span>  <span class="va">bam.file</span>, <span class="va">barcode.lookup</span>, <span class="st">"gRNA"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu">countBarcodedReadsFromContig</span><span class="op">(</span><span class="va">bam.file</span>, <span class="va">barcode.lookup</span>, <span class="st">"virus_ref2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

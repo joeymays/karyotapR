@@ -41,7 +41,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="building-tapestriexperiment-objects">Building <code>TapestriExperiment</code> objects<a class="anchor" aria-label="anchor" href="#building-tapestriexperiment-objects"></a></h2>
       
       
 
@@ -55,12 +55,7 @@
           
           <code><a href="CreateTapestriExperiment.html">createTapestriExperiment()</a></code> 
         </dt>
-        <dd>Create TapestriExperiment object from Tapestri Pipeline output</dd>
-      </dl><dl><dt>
-          
-          <code><a href="PCAKneePlot.html">PCAKneePlot()</a></code> 
-        </dt>
-        <dd>Plot of PCA proportion of variance explained</dd>
+        <dd>Create <code>TapestriExperiment</code> object from Tapestri Pipeline output</dd>
       </dl><dl><dt>
           
           <code><a href="TapestriExperiment-class.html">show(<i>&lt;TapestriExperiment&gt;</i>)</a></code> 
@@ -68,19 +63,45 @@
         <dd>TapestriExperiment Class Definition</dd>
       </dl><dl><dt>
           
-          <code><a href="assayBoxPlot.html">assayBoxPlot()</a></code> 
+          <code><a href="getChrOrder.html">getChrOrder()</a></code> 
         </dt>
-        <dd>Generate a box plot from assay data</dd>
+        <dd>Get chromosome order from a string of chromosome/contig names</dd>
       </dl><dl><dt>
           
-          <code><a href="assayHeatmap.html">assayHeatmap()</a></code> 
+          <code><a href="getCytobands.html">getCytobands()</a></code> 
         </dt>
-        <dd>Generate heatmap of assay data</dd>
+        <dd>Add chromosome cytobands and chromosome arms to <code>TapestriExperiment</code></dd>
       </dl><dl><dt>
+          
+          <code><a href="moveNonGenomeProbes.html">moveNonGenomeProbes()</a></code> 
+        </dt>
+        <dd>Move non-genome probes counts and metadata to altExp slots</dd>
+      </dl><dl><dt>
+          
+          <code><a href="slotGettersSetters.html">barcodeProbe()</a></code> <code><a href="slotGettersSetters.html">`barcodeProbe&lt;-`()</a></code> <code><a href="slotGettersSetters.html">grnaProbe()</a></code> <code><a href="slotGettersSetters.html">`grnaProbe&lt;-`()</a></code> 
+        </dt>
+        <dd>Getter and Setter functions for <code>TapestriExperiment</code> slots</dd>
+      </dl></div><div class="section level2">
+      <h2 id="calculate-and-call-copy-number">Calculate and Call Copy Number<a class="anchor" aria-label="anchor" href="#calculate-and-call-copy-number"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="calcCopyNumber.html">calcCopyNumber()</a></code> <code><a href="calcCopyNumber.html">generateControlCopyNumberTemplate()</a></code> 
         </dt>
         <dd>Calculate relative copy number value for each cell-probe unit using reference sample</dd>
+      </dl><dl><dt>
+          
+          <code><a href="calcGMMCopyNumber.html">calcGMMCopyNumber()</a></code> 
+        </dt>
+        <dd>Call copy number for each cell-chromosome using Gaussian mixture models</dd>
       </dl><dl><dt>
           
           <code><a href="calcNormCounts.html">calcNormCounts()</a></code> 
@@ -93,29 +114,10 @@
         <dd>Smooth copy number values across chromosomes and chromosome arms</dd>
       </dl><dl><dt>
           
-          <code><a href="callSampleLables.html">callSampleLables()</a></code> 
+          <code><a href="getGMMBoundaries.html">getGMMBoundaries()</a></code> 
         </dt>
-        <dd>Call sample labels based on feature counts</dd>
-      </dl><dl><dt>
-          
-          <code><a href="corner.html">corner()</a></code> 
-        </dt>
-        <dd>Print the top-left corner of a matrix</dd>
-      </dl><dl><dt>
-          
-          <code><a href="countBarcodedReads.html">countBarcodedReads()</a></code> <code><a href="countBarcodedReads.html">countBarcodedReadsFromContig()</a></code> 
-        </dt>
-        <dd>Get read counts from barcoded reads</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getChrOrder.html">getChrOrder()</a></code> 
-        </dt>
-        <dd>Get chromosome order from a string of chromosome/contig names</dd>
-      </dl><dl><dt>
-          
-          <code><a href="getCytobands.html">getCytobands()</a></code> 
-        </dt>
-        <dd>Retrieve and add chromosome cytobands and chromosome arms to <code>TapestriExperiment</code> object</dd>
+        <dd>Calculate decision boundaries between components of copy number GMMs
+#'</dd>
       </dl><dl><dt>
           
           <code><a href="getTidyData.html">getTidyData()</a></code> 
@@ -123,14 +125,61 @@
         <dd>Get tidy-style data from <code>TapestriExperiment</code> objects</dd>
       </dl><dl><dt>
           
-          <code><a href="moveNonGenomeProbes.html">moveNonGenomeProbes()</a></code> 
+          <code><a href="plotCopyNumberGMM.html">plotCopyNumberGMM()</a></code> 
         </dt>
-        <dd>Move non-genome probes counts and metadata to altExp slots</dd>
+        <dd>Plot copy number GMM components</dd>
+      </dl></div><div class="section level2">
+      <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="PCAKneePlot.html">PCAKneePlot()</a></code> 
+        </dt>
+        <dd>Plot of PCA proportion of variance explained</dd>
       </dl><dl><dt>
           
-          <code><a href="newTapestriExperimentExample.html">newTapestriExperimentExample()</a></code> 
+          <code><a href="assayBoxPlot.html">assayBoxPlot()</a></code> 
         </dt>
-        <dd>Create Example <code>TapestriExperiment</code></dd>
+        <dd>Generate a box plot from assay data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="assayHeatmap.html">assayHeatmap()</a></code> 
+        </dt>
+        <dd>Generate heatmap of assay data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plotCopyNumberGMM.html">plotCopyNumberGMM()</a></code> 
+        </dt>
+        <dd>Plot copy number GMM components</dd>
+      </dl><dl><dt>
+          
+          <code><a href="reducedDimPlot.html">reducedDimPlot()</a></code> 
+        </dt>
+        <dd>Scatter plot for dimensional reduction results</dd>
+      </dl></div><div class="section level2">
+      <h2 id="dimensional-reduction">Dimensional Reduction<a class="anchor" aria-label="anchor" href="#dimensional-reduction"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="PCAKneePlot.html">PCAKneePlot()</a></code> 
+        </dt>
+        <dd>Plot of PCA proportion of variance explained</dd>
       </dl><dl><dt>
           
           <code><a href="reducedDimPlot.html">reducedDimPlot()</a></code> 
@@ -151,13 +200,51 @@
           <code><a href="runUMAP.html">runUMAP()</a></code> 
         </dt>
         <dd>Cluster matrix data by UMAP</dd>
+      </dl></div><div class="section level2">
+      <h2 id="handling-barcoded-reads">Handling Barcoded Reads<a class="anchor" aria-label="anchor" href="#handling-barcoded-reads"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="callSampleLables.html">callSampleLables()</a></code> 
+        </dt>
+        <dd>Call sample labels based on feature counts</dd>
       </dl><dl><dt>
           
-          <code><a href="slotGettersSetters.html">barcodeProbe()</a></code> <code><a href="slotGettersSetters.html">`barcodeProbe&lt;-`()</a></code> <code><a href="slotGettersSetters.html">grnaProbe()</a></code> <code><a href="slotGettersSetters.html">`grnaProbe&lt;-`()</a></code> 
+          <code><a href="countBarcodedReads.html">countBarcodedReads()</a></code> <code><a href="countBarcodedReads.html">countBarcodedReadsFromContig()</a></code> 
         </dt>
-        <dd>Getter and Setter functions for <code>TapestriExperiment</code> slots</dd>
+        <dd>Get read counts from barcoded reads</dd>
+      </dl></div><div class="section level2">
+      <h2 id="helper-and-misc-functions">Helper and Misc Functions<a class="anchor" aria-label="anchor" href="#helper-and-misc-functions"></a></h2>
+      
+      
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="corner.html">corner()</a></code> 
+        </dt>
+        <dd>Print the top-left corner of a matrix</dd>
+      </dl><dl><dt>
+          
+          <code><a href="newTapestriExperimentExample.html">newTapestriExperimentExample()</a></code> 
+        </dt>
+        <dd>Create Example <code>TapestriExperiment</code></dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
