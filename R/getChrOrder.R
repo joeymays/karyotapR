@@ -17,7 +17,7 @@
 
 getChrOrder <- function(chr.vector){
 
-    chr.df.input <- data.frame(index = 1:length(chr.vector), id = chr.vector)
+    chr.df.input <- data.frame(index = seq_along(chr.vector), id = chr.vector)
 
     chr.df <- chr.df.input[which(chr.df.input$id %in% c(1:22,"X", "Y")),]
 

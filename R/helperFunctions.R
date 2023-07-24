@@ -25,7 +25,7 @@ corner <- function(input.mat) {
     col.out <- ncol(input.mat)
   }
 
-  input.mat[1:row.out, 1:col.out]
+  input.mat[seq_len(row.out), seq_len(col.out)]
 }
 
 #' Get tidy-style data from `TapestriExperiment` objects

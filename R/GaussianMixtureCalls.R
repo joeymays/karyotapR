@@ -131,7 +131,7 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
     simulated.counts <- simulated.counts %>% dplyr::select("probe.id", "sim.counts")
     simulated.counts <- split(simulated.counts, simulated.counts$probe.id) %>%
         purrr::map(\(x) unlist(x$sim.counts)) %>% as.data.frame() %>% t()
-    colnames(simulated.counts) <- paste0("sim_cn", 1:6) %>% purrr::map(\(x) paste(x, 1:n.simulated.cells, sep = "_")) %>% unlist()
+    colnames(simulated.counts) <- paste0("sim_cn", 1:6) %>% purrr::map(\(x) paste(x, seq_len(n.simulated.cells), sep = "_")) %>% unlist()
 
     return(simulated.counts)
 }

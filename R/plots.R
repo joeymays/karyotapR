@@ -224,7 +224,7 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
       as.data.frame()
 
     n.colors <- length(unique(row.annotation.data[!is.na(row.annotation.data[, 1]), 1]))
-    color.vector <- viridisLite::viridis(n.colors + 1)[1:n.colors]
+    color.vector <- viridisLite::viridis(n.colors + 1)[seq_len(n.colors)]
     names(color.vector) <- unique(row.annotation.data[!is.na(row.annotation.data[, 1]), 1])
     color.list <- list(color.vector)
     names(color.list)[1] <- annotate.row.by
