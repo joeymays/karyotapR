@@ -60,12 +60,16 @@ reference population is not completely diploid.
 
 }}
 \examples{
-\dontrun{
-control.copy.number <- generateControlCopyNumberTemplate()
-TapestriExperiment <- calcCopyNumber(TapestriExperiment,
+tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- calcNormCounts(tap.object)
+control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
+  sample.feature.label = "cellline1")
+tap.object <- calcCopyNumber(tap.object,
   control.copy.number,
-  sample.feature = "cluster"
+  sample.feature = "test.cluster"
 )
-}
+tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
+  sample.feature.label = "cellline1")
 }
 \concept{copy number}

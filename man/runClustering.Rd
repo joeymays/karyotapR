@@ -37,11 +37,10 @@ Clusters data using dbscan method and saves cluster assignments for each cell ba
 Generally used to assign clusters to UMAP projection after PCA and UMAP dimensional reduction.
 }
 \examples{
-\dontrun{
-TapestriExperiment <- runClustering(TapestriExperiment,
-  dim.reduction = "UMAP", eps = 0.8
-)
-}
+tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
+tap.object <- runUMAP(tap.object, pca.dims = 1:3)
+tap.object <- runClustering(tap.object, dim.reduction = "UMAP", eps = 0.8)
 }
 \seealso{
 \code{\link[dbscan:dbscan]{dbscan::dbscan()}}

@@ -64,12 +64,9 @@ c('#2c7bb6','#abd9e9','#ffffff','#ffffff','#ffffff','#fdae61','#d7191c', "black"
 }
 
 \examples{
-\dontrun{
-assayHeatmap(TapestriExperiment,
-  alt.exp = "smoothedCopyNumberByArm",
-  assay = "discreteCopyNumber", split.row.by = "cluster"
-)
-}
+tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+assayHeatmap(tap.object, assay = "counts", split.row.by = "test.cluster",
+annotate.row.by = "test.cluster", split.col.by = "chr")
 }
 \seealso{
 \link[ComplexHeatmap]{Heatmap}

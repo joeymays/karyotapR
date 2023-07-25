@@ -38,12 +38,8 @@ This is especially useful for visualizing \code{altExp} count data, such as coun
 probes on chrY or barcode probe counts.
 }
 \examples{
-\dontrun{
-assayBoxPlot(TapestriExperiment, "chrYCounts",
-  assay = "counts",
-  split.features = TRUE, split.x.by = "cluster"
-)
-}
+tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+assayBoxPlot(tap.object, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "test.cluster")
 }
 \seealso{
 \code{\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot()}}

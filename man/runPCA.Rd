@@ -34,11 +34,8 @@ Analyzes assay data by Principal Components Analysis (PCA) and saves results
 to \code{reducedDims} slot of \code{TapestriObject}.
 }
 \examples{
-\dontrun{
-TapestriExperiment <- runPCA(TapestriExperiment,
-  alt.exp = "alleleFrequency", sd.min.threshold = 35
-)
-}
+tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
 }
 \seealso{
 \code{\link[stats:prcomp]{stats::prcomp()}} for PCA method details.

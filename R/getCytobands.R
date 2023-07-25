@@ -14,9 +14,8 @@
 #' @concept build experiment
 #'
 #' @examples
-#' \dontrun{
-#' tapObject <- getCytobands(tapObject, genome = "hg19")
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- getCytobands(tap.object, genome = "hg19")
 getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
   genome <- tolower(genome)
 

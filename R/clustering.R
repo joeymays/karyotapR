@@ -18,11 +18,8 @@
 #' @concept dimensional reduction
 #'
 #' @examples
-#' \dontrun{
-#' TapestriExperiment <- runPCA(TapestriExperiment,
-#'   alt.exp = "alleleFrequency", sd.min.threshold = 35
-#' )
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
 runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL, sd.min.threshold = NULL, center = TRUE, scale. = TRUE) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
@@ -87,9 +84,9 @@ runPCA <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL
 #' @concept plots
 #'
 #' @examples
-#' \dontrun{
-#' PCAKneePlot(TapestriExperiment, n.pcs = 5)
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
+#' PCAKneePlot(tap.object, n.pcs = 5)
 PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs = 10) {
   if (is.null(alt.exp)) {
     knee.df <- data.frame("prop.variance" = S4Vectors::metadata(TapestriExperiment)$pca.proportion.of.variance)
@@ -139,9 +136,9 @@ PCAKneePlot <- function(TapestriExperiment, alt.exp = "alleleFrequency", n.pcs =
 #' @concept dimensional reduction
 #'
 #' @examples
-#' \dontrun{
-#' TapestriExperiment <- runUMAP(TapestriExperiment, input.dims = 1:3)
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
+#' tap.object <- runUMAP(tap.object, pca.dims = 1:3)
 runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NULL, use.pca.dims = TRUE, pca.dims = NULL, ...) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
@@ -207,9 +204,9 @@ runUMAP <- function(TapestriExperiment, alt.exp = "alleleFrequency", assay = NUL
 #' @concept plots
 #'
 #' @examples
-#' \dontrun{
-#' reducedDimPlot(TapestriExperiment, dim.reduction = "pca")
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
+#' reducedDimPlot(tap.object, dim.reduction = "pca")
 reducedDimPlot <- function(TapestriExperiment, alt.exp = "alleleFrequency",
                            dim.reduction, dim.x = 1, dim.y = 2, group.label = NULL) {
   .SelectAssay(TapestriExperiment, alt.exp = alt.exp)
@@ -268,11 +265,10 @@ reducedDimPlot <- function(TapestriExperiment, alt.exp = "alleleFrequency",
 #' @seealso [dbscan::dbscan()]
 #'
 #' @examples
-#' \dontrun{
-#' TapestriExperiment <- runClustering(TapestriExperiment,
-#'   dim.reduction = "UMAP", eps = 0.8
-#' )
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
+#' tap.object <- runUMAP(tap.object, pca.dims = 1:3)
+#' tap.object <- runClustering(tap.object, dim.reduction = "UMAP", eps = 0.8)
 runClustering <- function(TapestriExperiment, alt.exp = "alleleFrequency", dim.reduction = "UMAP", eps = 0.8, dim.1 = 1, dim.2 = 2, ...) {
   dim.reduction <- toupper(dim.reduction)
 

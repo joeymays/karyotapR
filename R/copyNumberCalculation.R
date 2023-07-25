@@ -8,6 +8,10 @@
 #' @describeIn calcCopyNumber generates a `data.frame` template for `control.copy.number` in `calcCopyNumber()`.
 #' @order 2
 #'
+#' @examples
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
+#'   sample.feature.label = "cellline1")
 generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 2, sample.feature.label = NA) {
   if (any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))) {
     cli::cli_abort("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
@@ -58,13 +62,14 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 
 #' @concept copy number
 #'
 #' @examples
-#' \dontrun{
-#' control.copy.number <- generateControlCopyNumberTemplate()
-#' TapestriExperiment <- calcCopyNumber(TapestriExperiment,
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- calcNormCounts(tap.object)
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
+#'   sample.feature.label = "cellline1")
+#' tap.object <- calcCopyNumber(tap.object,
 #'   control.copy.number,
-#'   sample.feature = "cluster"
+#'   sample.feature = "test.cluster"
 #' )
-#' }
 calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.feature = "cluster", remove.bad.probes = FALSE) {
   sample.feature <- tolower(sample.feature)
 
@@ -142,9 +147,14 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
 #' @concept copy number
 #'
 #' @examples
-#' \dontrun{
-#' TapestriExperiment <- calcSmoothCopyNumber(TapestriExperiment)
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- calcNormCounts(tap.object)
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
+#'   sample.feature.label = "cellline1")
+#' tap.object <- calcCopyNumber(tap.object,
+#'   control.copy.number,
+#'   sample.feature = "test.cluster")
+#' tap.object <- calcSmoothCopyNumber(tap.object)
 calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
   method <- tolower(method)
 

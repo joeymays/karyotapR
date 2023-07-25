@@ -191,12 +191,12 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @concept barcoded reads
 #'
 #' @examples
-#' \dontrun{
-#' TapestriExperiment <- callSampleLables(TapestriExperiment,
-#'   input.features = c("g7", "gNC"),
-#'   output.feature = "sample.grna"
-#' )
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' colData(tap.object)$gRNA1 <- 2 #example barcode counts
+#' colData(tap.object)$gRNA2 <- 10 #example barcode counts
+#' tap.object <- callSampleLables(tap.object,
+#'     input.features = c("gRNA1", "gRNA2"),
+#'     output.feature = "sample.grna")
 callSampleLables <- function(TapestriExperiment, input.features, output.feature = "sample.call", return.table = FALSE, neg.label = NA, method = "max", ties.method = "first", min.count.threshold = 1) {
   if (method != "max") {
     cli::cli_abort("Method not recognized. Only 'max' currently supported.")

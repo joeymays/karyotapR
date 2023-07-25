@@ -20,9 +20,8 @@
 #' @importFrom stats median sd
 #'
 #' @examples
-#' \dontrun{
-#' TapestriExperiment <- calcNormCounts(TapestriExperiment)
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- calcNormCounts(tap.object)
 calcNormCounts <- function(TapestriExperiment, method = "mb", scaling.factor = NULL) {
   method <- tolower(method)
 

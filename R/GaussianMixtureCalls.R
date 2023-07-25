@@ -164,7 +164,7 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
   SummarizedExperiment::assay(tapestri.sim, "normcounts") <- normalized.counts
 
   # delimit cell barcodes to get copy number classes
-  cn.sim.class <- matrix(unlist(strsplit(colData(tapestri.sim)$cell.barcode, split = "_")), ncol = 3, byrow = T)
+  cn.sim.class <- matrix(unlist(strsplit(colData(tapestri.sim)$cell.barcode, split = "_")), ncol = 3, byrow = TRUE)
   cn.sim.class <- paste(cn.sim.class[,1], cn.sim.class[,2], sep = "_")
 
   SummarizedExperiment::colData(tapestri.sim)$cn.sim.class <- as.factor(cn.sim.class)
@@ -250,7 +250,7 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
     dplyr::mutate(cn.class = purrr::map2(.data$cn.probability, .data$smoothed.cn, function(cn.probability, smoothed.cn) {
       result <- max.col(cn.probability, "first") # pick class with highest probability
       result <- colnames(cn.probability)[result] # label selections
-      result <- as.numeric(matrix(unlist(strsplit(result, split = "cn")), ncol = 2, byrow = T)[, 2]) # pull copy number value from class label
+      result <- as.numeric(matrix(unlist(strsplit(result, split = "cn")), ncol = 2, byrow = TRUE)[, 2]) # pull copy number value from class label
       result <- tibble::as_tibble(data.frame(cell.barcode = purrr::pluck(smoothed.cn, "cell.barcode"), cn.class = result))
     }))
 

@@ -24,9 +24,8 @@
 #' @concept build experiment
 #'
 #' @examples
-#' \dontrun{
-#' tapObject <- moveNonGenomeProbes(tapObject)
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- moveNonGenomeProbes(tap.object)
 moveNonGenomeProbes <- function(TapestriExperiment) {
   feature.type <- rep("otherProbeCounts", nrow(TapestriExperiment))
 

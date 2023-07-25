@@ -94,12 +94,8 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' @concept plots
 #'
 #' @examples
-#' \dontrun{
-#' assayBoxPlot(TapestriExperiment, "chrYCounts",
-#'   assay = "counts",
-#'   split.features = TRUE, split.x.by = "cluster"
-#' )
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' assayBoxPlot(tap.object, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "test.cluster")
 assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = TRUE, split.features = FALSE, split.x.by = NULL, split.y.by = NULL) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
 
@@ -177,12 +173,9 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #' @seealso \link[ComplexHeatmap]{Heatmap}
 #'
 #' @examples
-#' \dontrun{
-#' assayHeatmap(TapestriExperiment,
-#'   alt.exp = "smoothedCopyNumberByArm",
-#'   assay = "discreteCopyNumber", split.row.by = "cluster"
-#' )
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' assayHeatmap(tap.object, assay = "counts", split.row.by = "test.cluster",
+#' annotate.row.by = "test.cluster", split.col.by = "chr")
 assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL, annotate.row.by = NULL, color.preset = NULL, color.custom = NULL, ...) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp, assay) # check call validity
 

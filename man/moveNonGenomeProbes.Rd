@@ -29,9 +29,8 @@ Any remaining probes that are not targeting a human chromosome and are not speci
 This function is run automatically by default and with default behavior as part of \code{\link[=createTapestriExperiment]{createTapestriExperiment()}}.
 }
 \examples{
-\dontrun{
-tapObject <- moveNonGenomeProbes(tapObject)
-}
+tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- moveNonGenomeProbes(tap.object)
 }
 \seealso{
 \code{\link[SingleCellExperiment:splitAltExps]{SingleCellExperiment::splitAltExps()}} for manual specification of probes to move to \code{altExp} slots.

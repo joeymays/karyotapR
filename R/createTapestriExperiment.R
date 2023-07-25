@@ -561,6 +561,8 @@ newTapestriExperimentExample <- function() {
     probe.id = paste0("probe_", 1:240),
     chr = rep(c(1:22, "X", "Y"), each = 10),
     arm = paste0("chr", gtools::mixedsort(c(rep(paste0(c(1:22, "X", "Y"), "p"), each = 5), rep(paste0(c(1:22, "X", "Y"), "q"), each = 5)))),
+    start.pos = rep(1, 240),
+    end.pos = rep(1, 240),
     row.names = paste0("probe_", 1:240)
   )
 

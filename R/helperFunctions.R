@@ -7,11 +7,9 @@
 #' @return A matrix-like object matching input class, subset to a maximum of 5 rows and columns.
 #' @export
 #'
-#'
 #' @examples
-#' \dontrun{
-#' corner(assay(TapestriObject))
-#' }
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' corner(assay(tap.object, "counts"))
 corner <- function(input.mat) {
   if (nrow(input.mat) > 4) {
     row.out <- 5
@@ -45,9 +43,10 @@ corner <- function(input.mat) {
 #' @return A `tibble` of tidy data with corresponding metadata from `colData` and `rowData`.
 #' @export
 #'
-#' @examples \dontrun{
-#' getTidyData(TapestriObject, alt.exp = "alleleFrequency")
-#' }
+#' @examples
+#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tidy.data <- getTidyData(tap.object, alt.exp = "alleleFrequency")
+#'
 getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, feature.id.as.factor = TRUE) {
   if (is.null(alt.exp)) {
     target.exp <- TapestriExperiment
