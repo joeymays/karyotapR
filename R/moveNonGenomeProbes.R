@@ -37,13 +37,13 @@ moveNonGenomeProbes <- function(TapestriExperiment) {
   if (grnaProbe != "not specified") {
     probe.index <- which(rownames(TapestriExperiment) == grnaProbe)
     feature.type[probe.index] <- "grnaCounts"
-    cli::cli_alert_info(paste("Moving gRNA probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'grnaCounts'."))
+    cli::cli_alert_info("Moving gRNA probe {rownames(TapestriExperiment)[probe.index]} to {.var altExp} slot {.q grnaCounts}.")
   }
 
   if (barcodeProbe != "not specified") {
     probe.index <- which(rownames(TapestriExperiment) == barcodeProbe)
     feature.type[probe.index] <- "barcodeCounts"
-    cli::cli_alert_info(paste("Moving barcode probe", rownames(TapestriExperiment)[probe.index], "to altExp slot 'barcodeCounts'."))
+    cli::cli_alert_info("Moving barcode probe {rownames(TapestriExperiment)[probe.index]} to {.var altExp} slot {.q barcodeCounts}.")
   }
 
   probe.index <- which(rowData(TapestriExperiment)$chr == "Y")
@@ -51,12 +51,12 @@ moveNonGenomeProbes <- function(TapestriExperiment) {
     cli::cli_alert_info("ChrY probe ID(s) not found in TapestriExperiment object.")
   } else {
     feature.type[probe.index] <- "chrYCounts"
-    cli::cli_alert_info(paste("Moving chrY probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'chrYCounts'."))
+    cli::cli_alert_info("Moving chrY probe(s) {rownames(TapestriExperiment)[probe.index]} to {.var altExp} slot {.q chrYCounts}.")
   }
 
   probe.index <- which(feature.type == "otherProbeCounts")
   if (any(feature.type == "otherProbeCounts")) {
-    cli::cli_alert_info(paste("Moving other non-genomic probe(s)", paste(rownames(TapestriExperiment)[probe.index], collapse = ", "), "to altExp slot 'otherProbeCounts'."))
+    cli::cli_alert_info("Moving other non-genomic probe(s) {rownames(TapestriExperiment)[probe.index]} to {.var altExp} slot {.q otherProbeCounts}.")
   }
 
   if (all(feature.type == "CNV")) {
