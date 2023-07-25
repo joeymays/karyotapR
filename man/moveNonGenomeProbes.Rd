@@ -29,7 +29,7 @@ Any remaining probes that are not targeting a human chromosome and are not speci
 This function is run automatically by default and with default behavior as part of \code{\link[=createTapestriExperiment]{createTapestriExperiment()}}.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment
 tap.object <- moveNonGenomeProbes(tap.object)
 }
 \seealso{

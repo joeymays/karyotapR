@@ -33,7 +33,7 @@ runUMAP(
 Analyzes matrix data by UMAP and saves results to \code{reducedDims} slot of \code{TapestriObject}.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
 tap.object <- runUMAP(tap.object, pca.dims = 1:3)
 }

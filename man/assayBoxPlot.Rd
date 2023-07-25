@@ -38,7 +38,7 @@ This is especially useful for visualizing \code{altExp} count data, such as coun
 probes on chrY or barcode probe counts.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 assayBoxPlot(tap.object, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "test.cluster")
 }
 \seealso{

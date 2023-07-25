@@ -94,7 +94,7 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' @concept plots
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' assayBoxPlot(tap.object, alt.exp = "chrYCounts", split.features = TRUE, split.x.by = "test.cluster")
 assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y = TRUE, split.features = FALSE, split.x.by = NULL, split.y.by = NULL) {
   assay <- .SelectAssay(TapestriExperiment, alt.exp = alt.exp, assay = assay)
@@ -173,17 +173,23 @@ assayBoxPlot <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, log.y
 #' @seealso \link[ComplexHeatmap]{Heatmap}
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
-#' assayHeatmap(tap.object, assay = "counts", split.row.by = "test.cluster",
-#' annotate.row.by = "test.cluster", split.col.by = "chr")
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+#' assayHeatmap(tap.object,
+#'   assay = "counts", split.row.by = "test.cluster",
+#'   annotate.row.by = "test.cluster", split.col.by = "chr"
+#' )
 assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split.col.by = NULL, split.row.by = NULL, annotate.row.by = NULL, color.preset = NULL, color.custom = NULL, ...) {
-  assay <- .SelectAssay(TapestriExperiment, alt.exp, assay) # check call validity
+  assay <- .SelectAssay(TapestriExperiment, alt.exp, assay)
 
   tidy.data <- getTidyData(TapestriExperiment, alt.exp, assay)
 
   hm.matrix <- tidy.data %>%
     dplyr::select("feature.id", "cell.barcode", {{ assay }}) %>%
-    tidyr::pivot_wider(id_cols = "feature.id", names_from = "cell.barcode", values_from = {{ assay }}) %>%
+    tidyr::pivot_wider(
+      id_cols = "feature.id",
+      names_from = "cell.barcode",
+      values_from = {{ assay }}
+    ) %>%
     tibble::column_to_rownames("feature.id")
 
   if (is.null(split.col.by)) {
@@ -234,9 +240,15 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
       hm.col <- color.custom
     }
   } else if (color.preset == "copy.number") {
-    hm.col <- circlize::colorRamp2(c(0, 1, 2, 3, 4, 8), c("#2c7bb6", "#abd9e9", "#ffffff", "#fdae61", "#d7191c", "black"))
+    hm.col <- circlize::colorRamp2(
+      c(0, 1, 2, 3, 4, 8),
+      c("#2c7bb6", "#abd9e9", "#ffffff", "#fdae61", "#d7191c", "black")
+    )
   } else if (color.preset == "copy.number.denoise") {
-    hm.col <- circlize::colorRamp2(c(0, 1, 1.5, 2, 2.5, 3, 4, 8), c("#2c7bb6", "#abd9e9", "#ffffff", "#ffffff", "#ffffff", "#fdae61", "#d7191c", "black"))
+    hm.col <- circlize::colorRamp2(
+      c(0, 1, 1.5, 2, 2.5, 3, 4, 8),
+      c("#2c7bb6", "#abd9e9", "#ffffff", "#ffffff", "#ffffff", "#fdae61", "#d7191c", "black")
+    )
   } else {
     hm.col <- color.custom
   }
@@ -251,7 +263,11 @@ assayHeatmap <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, split
     "column.split" = column.split
   )
 
-  hm <- .ComplexHeatmap.default(matrix = t(hm.matrix), hm.defaults = hm.defaults, ...)
+  hm <- .ComplexHeatmap.default(
+    matrix = t(hm.matrix),
+    hm.defaults = hm.defaults,
+    ...
+  )
 
   return(hm)
 }

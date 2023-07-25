@@ -20,9 +20,11 @@
 #' @importFrom stats median sd
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' tap.object <- calcNormCounts(tap.object)
-calcNormCounts <- function(TapestriExperiment, method = "mb", scaling.factor = NULL) {
+calcNormCounts <- function(TapestriExperiment,
+                           method = "mb",
+                           scaling.factor = NULL) {
   method <- tolower(method)
 
   raw.count.matrix <- SummarizedExperiment::assay(TapestriExperiment, "counts")
@@ -34,7 +36,9 @@ calcNormCounts <- function(TapestriExperiment, method = "mb", scaling.factor = N
   if (method == "mb") {
     read.counts.normal <- .MBNormCounts(raw.count.matrix)
   } else if (method == "libnorm") {
-    read.counts.normal <- .LibSizeNorm(raw.count.matrix, scaling.factor = scaling.factor)
+    read.counts.normal <- .LibSizeNorm(raw.count.matrix,
+      scaling.factor = scaling.factor
+    )
   } else {
     warning("Method not recognized. Set method to 'mb' or libNorm'")
   }

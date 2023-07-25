@@ -65,9 +65,15 @@
 #' \dontrun{
 #' tapExperiment <- createTapestriExperiment("myh5file.h5", "CO293")
 #' }
-createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands = TRUE, genome = "hg19", move.non.genome.probes = TRUE,
-                                     filter.variants = TRUE, verbose = TRUE) {
-  # read panel ID
+createTapestriExperiment <- function(h5.filename,
+                                     panel.id = NULL,
+                                     get.cytobands = TRUE,
+                                     genome = "hg19",
+                                     move.non.genome.probes = TRUE,
+                                     filter.variants = TRUE,
+                                     verbose = TRUE) {
+
+    # read panel ID
   panel.id.output <- .GetPanelID(panel.id = panel.id)
   barcodeProbe <- panel.id.output[["barcode.probe"]]
   grnaProbe <- panel.id.output[["grna.probe"]]
@@ -102,7 +108,8 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 
   read.counts.raw <- read.counts.raw[chr.order, ]
 
-  read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr, levels = unique(read.counts.raw.rowData$chr))
+  read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr,
+                                        levels = unique(read.counts.raw.rowData$chr))
 
   # basic metrics
   read.counts.raw.colData$total.reads <- colSums(read.counts.raw) # total reads per cell
@@ -243,7 +250,9 @@ createTapestriExperiment <- function(h5.filename, panel.id = NULL, get.cytobands
 }
 
 # create TapestriExperiment with manual counts and existing metadata for simulations
-.createTapestriExperiment.sim <- function(counts = NULL, probe.metadata = NULL, genome = "hg19") {
+.createTapestriExperiment.sim <- function(counts = NULL,
+                                          probe.metadata = NULL,
+                                          genome = "hg19") {
   if (is.null(counts)) {
     cli::cli_abort("No counts matrix supplied.")
   }

@@ -30,7 +30,7 @@ A \code{tibble} of tidy data with corresponding metadata from \code{colData} and
 Attempts are made to sort by "chr" and "start.pos" columns if they are present to simplify plotting and other downstream operations.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tidy.data <- getTidyData(tap.object, alt.exp = "alleleFrequency")
 
 }

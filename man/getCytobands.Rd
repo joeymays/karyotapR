@@ -22,7 +22,7 @@ This is run automatically as part of \code{\link[=createTapestriExperiment]{crea
 Note: Some downstream smoothing and plotting functions may fail if chromosome arms are not present in \code{rowData}.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tap.object <- getCytobands(tap.object, genome = "hg19")
 }
 \concept{build experiment}

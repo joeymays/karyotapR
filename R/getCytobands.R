@@ -14,7 +14,7 @@
 #' @concept build experiment
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' tap.object <- getCytobands(tap.object, genome = "hg19")
 getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
   genome <- tolower(genome)
@@ -31,7 +31,10 @@ getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
   }
   # only add chr label for arms to chrs 1-22, X, Y
   chr.vector <- as.character(SingleCellExperiment::rowData(TapestriExperiment)$chr)
-  chr.vector <- ifelse(chr.vector %in% c(1:22, "X", "Y"), paste0("chr", chr.vector), chr.vector)
+  chr.vector <- ifelse(chr.vector %in% c(1:22, "X", "Y"),
+    paste0("chr", chr.vector),
+    chr.vector
+  )
 
   amplicon.df <- data.frame(
     seqnames = chr.vector,
@@ -70,7 +73,10 @@ getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
     )
   )
 
-  overlap.hits <- GenomicRanges::findOverlaps(amplicon.gr, cytoband.hg19.genomicRanges)
+  overlap.hits <- GenomicRanges::findOverlaps(
+    amplicon.gr,
+    cytoband.hg19.genomicRanges
+  )
 
   cytoband.matches <- character(length = S4Vectors::queryLength(overlap.hits))
   cytoband.matches[] <- NA
@@ -78,10 +84,16 @@ getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
 
   S4Vectors::mcols(amplicon.gr)$cytoband <- cytoband.matches
 
-  chromosome.arms <- ifelse(is.na(amplicon.gr$cytoband), amplicon.gr$cytoband, paste0(S4Vectors::decode(GenomicRanges::seqnames(amplicon.gr)), substr(amplicon.gr$cytoband, 1, 1)))
+  chromosome.arms <- ifelse(is.na(amplicon.gr$cytoband),
+    amplicon.gr$cytoband,
+    paste0(S4Vectors::decode(GenomicRanges::seqnames(amplicon.gr)), substr(amplicon.gr$cytoband, 1, 1))
+  )
 
   S4Vectors::mcols(amplicon.gr)$arm <- chromosome.arms
-  S4Vectors::mcols(amplicon.gr)$arm <- factor(chromosome.arms, unique(chromosome.arms))
+  S4Vectors::mcols(amplicon.gr)$arm <- factor(
+    chromosome.arms,
+    unique(chromosome.arms)
+  )
   S4Vectors::mcols(amplicon.gr)$probe.id <- names(amplicon.gr)
 
   if (return.genomic.ranges) {

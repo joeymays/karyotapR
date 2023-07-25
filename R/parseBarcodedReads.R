@@ -191,13 +191,21 @@ countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, pro
 #' @concept barcoded reads
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
-#' colData(tap.object)$gRNA1 <- 2 #example barcode counts
-#' colData(tap.object)$gRNA2 <- 10 #example barcode counts
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+#' colData(tap.object)$gRNA1 <- 2 # example barcode counts
+#' colData(tap.object)$gRNA2 <- 10 # example barcode counts
 #' tap.object <- callSampleLables(tap.object,
-#'     input.features = c("gRNA1", "gRNA2"),
-#'     output.feature = "sample.grna")
-callSampleLables <- function(TapestriExperiment, input.features, output.feature = "sample.call", return.table = FALSE, neg.label = NA, method = "max", ties.method = "first", min.count.threshold = 1) {
+#'   input.features = c("gRNA1", "gRNA2"),
+#'   output.feature = "sample.grna"
+#' )
+callSampleLables <- function(TapestriExperiment,
+                             input.features,
+                             output.feature = "sample.call",
+                             return.table = FALSE,
+                             neg.label = NA,
+                             method = "max",
+                             ties.method = "first",
+                             min.count.threshold = 1) {
   if (method != "max") {
     cli::cli_abort("Method not recognized. Only 'max' currently supported.")
   } else {
@@ -223,9 +231,15 @@ callSampleLables <- function(TapestriExperiment, input.features, output.feature 
     }
 
     # make calls
-    sample.calls <- input.features[max.col(coldata.subset, ties.method = ties.method)]
-    sample.calls <- data.frame(cell.barcode = rownames(coldata.subset), sample.call = sample.calls)
-    sample.calls[rowSums(coldata.subset) == 0, "sample.call"] <- neg.label # set label if no call is made
+    sample.calls <- input.features[max.col(coldata.subset,
+      ties.method = ties.method
+    )]
+    sample.calls <- data.frame(
+      cell.barcode = rownames(coldata.subset),
+      sample.call = sample.calls
+    )
+    # set label if no call is made
+    sample.calls[rowSums(coldata.subset) == 0, "sample.call"] <- neg.label
     sample.calls$sample.call <- as.factor(sample.calls$sample.call)
     rownames(sample.calls) <- sample.calls$cell.barcode
     colnames(sample.calls)[2] <- output.feature
@@ -237,7 +251,12 @@ callSampleLables <- function(TapestriExperiment, input.features, output.feature 
       existing.cell.data <- existing.cell.data[, !colnames(existing.cell.data) %in% setdiff(colnames(sample.calls), "cell.barcode")]
 
       # merge result and existing colData
-      updated.cell.data <- merge(existing.cell.data, sample.calls, by = "cell.barcode", all.x = TRUE, sort = FALSE)
+      updated.cell.data <- merge(existing.cell.data,
+        sample.calls,
+        by = "cell.barcode",
+        all.x = TRUE,
+        sort = FALSE
+      )
 
       # reorder to match colData
       rownames(updated.cell.data) <- updated.cell.data$cell.barcode

@@ -22,13 +22,16 @@ Smoothed copy number and discretized smoothed copy number values are stored as \
 in \code{altExp} slots \code{smoothedCopyNumberByChr} for chromosome-level smoothing, and \code{smoothedCopyNumberByArm} for chromosome arm-level smoothing.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tap.object <- calcNormCounts(tap.object)
-control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
-  sample.feature.label = "cellline1")
+control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+  copy.number = 2,
+  sample.feature.label = "cellline1"
+)
 tap.object <- calcCopyNumber(tap.object,
   control.copy.number,
-  sample.feature = "test.cluster")
+  sample.feature = "test.cluster"
+)
 tap.object <- calcSmoothCopyNumber(tap.object)
 }
 \concept{copy number}

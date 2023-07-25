@@ -22,7 +22,7 @@ Variance explained for each PC is indicated by the line.
 Cumulative variance explained is indicated by the bars.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
 PCAKneePlot(tap.object, n.pcs = 5)
 }

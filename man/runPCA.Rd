@@ -34,7 +34,7 @@ Analyzes assay data by Principal Components Analysis (PCA) and saves results
 to \code{reducedDims} slot of \code{TapestriObject}.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment
 tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
 }
 \seealso{

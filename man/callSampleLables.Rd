@@ -44,9 +44,12 @@ Samples with 0 counts for all \code{input.features} columns are labeled accordin
 If only one feature column is used, labels are assigned to cells with counts > \code{min.count.threshold}, and \code{neg.label} otherwise.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
-colData(tap.object)$gRNA1 <- 2 #example barcode counts
-colData(tap.object)$gRNA2 <- 10 #example barcode counts
-tap.object <- callSampleLables(tap.object, input.features = c("gRNA1", "gRNA2"), output.feature = "sample.grna")
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+colData(tap.object)$gRNA1 <- 2 # example barcode counts
+colData(tap.object)$gRNA2 <- 10 # example barcode counts
+tap.object <- callSampleLables(tap.object,
+  input.features = c("gRNA1", "gRNA2"),
+  output.feature = "sample.grna"
+)
 }
 \concept{barcoded reads}

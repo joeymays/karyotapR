@@ -24,7 +24,7 @@
 #' @concept build experiment
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment
 #' tap.object <- moveNonGenomeProbes(tap.object)
 moveNonGenomeProbes <- function(TapestriExperiment) {
   feature.type <- rep("otherProbeCounts", nrow(TapestriExperiment))
@@ -64,7 +64,10 @@ moveNonGenomeProbes <- function(TapestriExperiment) {
     return(TapestriExperiment)
   }
 
-  TapestriExperiment <- SingleCellExperiment::splitAltExps(TapestriExperiment, feature.type, ref = "CNV")
+  TapestriExperiment <- SingleCellExperiment::splitAltExps(TapestriExperiment,
+    feature.type,
+    ref = "CNV"
+  )
 
   return(TapestriExperiment)
 }

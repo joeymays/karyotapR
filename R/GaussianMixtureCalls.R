@@ -28,7 +28,12 @@
 #'   model.priors = c(1, 1, 1, 1, 1)
 #' )
 #' }
-calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.number, model.components = 1:5, model.priors = NULL, ...) {
+calcGMMCopyNumber <- function(TapestriExperiment,
+                              cell.barcodes,
+                              control.copy.number,
+                              model.components = 1:5,
+                              model.priors = NULL,
+                              ...) {
   if (is.null(model.priors)) {
     model.priors <- rep(1, length(model.components))
   } else {
@@ -49,11 +54,19 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
   }
 
   # simulate probe counts
-  simulated.norm.counts <- .generateSimulatedCNVCells(TapestriExperiment = filtered.tapestri.exp, control.copy.number = control.copy.number, ...)
+  simulated.norm.counts <- .generateSimulatedCNVCells(
+    TapestriExperiment = filtered.tapestri.exp,
+    control.copy.number = control.copy.number,
+    ...
+  )
 
   # smooth counts from simulated cells into smoothed copy number values
   cli::cli_progress_step("Fitting Gaussian distributions to simulated cells...")
-  simulated.tapestri.experiment <- .smoothSimulatedCells(normalized.counts = simulated.norm.counts, probe.metadata = rowData(TapestriExperiment), ...)
+  simulated.tapestri.experiment <- .smoothSimulatedCells(
+    normalized.counts = simulated.norm.counts,
+    probe.metadata = rowData(TapestriExperiment),
+    ...
+  )
 
   # fit Gaussian distributions to simulated cells
   cn.model.params.chr <- .fitGaussianDistributions(simulated.tapestri.experiment = simulated.tapestri.experiment, chromosome.scope = "chr")
@@ -61,16 +74,20 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 
   # calculate posterior probabilities for each data point under each model component
   cli::cli_progress_step("Calculating posterior probabilities...")
-  cn.model.table.chr <- .calcClassPosteriors(TapestriExperiment = TapestriExperiment,
-                                             cn.model.params = cn.model.params.chr,
-                                             model.components = model.components,
-                                             model.priors = model.priors,
-                                             chromosome.scope = "chr")
-  cn.model.table.arm <- .calcClassPosteriors(TapestriExperiment = TapestriExperiment,
-                                             cn.model.params = cn.model.params.arm,
-                                             model.components = model.components,
-                                             model.priors = model.priors,
-                                             chromosome.scope = "arm")
+  cn.model.table.chr <- .calcClassPosteriors(
+    TapestriExperiment = TapestriExperiment,
+    cn.model.params = cn.model.params.chr,
+    model.components = model.components,
+    model.priors = model.priors,
+    chromosome.scope = "chr"
+  )
+  cn.model.table.arm <- .calcClassPosteriors(
+    TapestriExperiment = TapestriExperiment,
+    cn.model.params = cn.model.params.arm,
+    model.components = model.components,
+    model.priors = model.priors,
+    chromosome.scope = "arm"
+  )
 
   # call copy number values from posterior probabilities
   cli::cli_progress_step("Calling copy number from posterior probabilities...")
@@ -85,7 +102,10 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 
   class.labels.chr.df <- cn.model.table.chr %>%
     dplyr::pull("cn.class") %>%
-    purrr::map(\(x) tidyr::pivot_wider(x, names_from = "cell.barcode", values_from = "cn.class")) %>%
+    purrr::map(\(x) tidyr::pivot_wider(x,
+      names_from = "cell.barcode",
+      values_from = "cn.class"
+    )) %>%
     purrr::list_rbind() %>%
     as.data.frame() %>%
     magrittr::set_rownames(cn.model.table.chr$feature.id)
@@ -98,7 +118,10 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 
   class.labels.arm.df <- cn.model.table.arm %>%
     dplyr::pull("cn.class") %>%
-    purrr::map(\(x) tidyr::pivot_wider(x, names_from = "cell.barcode", values_from = "cn.class")) %>%
+    purrr::map(\(x) tidyr::pivot_wider(x,
+      names_from = "cell.barcode",
+      values_from = "cn.class"
+    )) %>%
     purrr::list_rbind() %>%
     as.data.frame() %>%
     magrittr::set_rownames(cn.model.table.arm$feature.id)
@@ -110,7 +133,9 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 }
 
 # model probes and generate simulated cells with normalized counts
-.generateSimulatedCNVCells <- function(TapestriExperiment, control.copy.number, n.simulated.cells = 500) {
+.generateSimulatedCNVCells <- function(TapestriExperiment,
+                                       control.copy.number,
+                                       n.simulated.cells = 500) {
   cli::cli_progress_step("Simulating probes for {n.simulated.cells} cells...")
 
   raw.counts <- SummarizedExperiment::assay(TapestriExperiment, "counts")
@@ -140,9 +165,17 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
   # simulate normalized counts for each parameter set
   simulated.counts <- probe.transform %>%
     tidyr::unnest("scale.transform") %>%
-    dplyr::mutate("sim.counts" = purrr::map2(.data$shape, .data$scale.transform, function(shape, scale.transform) {
-      stats::rweibull(n = n.simulated.cells, shape = shape, scale = scale.transform)
-    }))
+    dplyr::mutate("sim.counts" = purrr::map2(
+      .data$shape,
+      .data$scale.transform,
+      function(shape, scale.transform) {
+        stats::rweibull(
+          n = n.simulated.cells,
+          shape = shape, scale =
+            scale.transform
+        )
+      }
+    ))
 
   # combine counts into matrix
   simulated.counts <- simulated.counts %>% dplyr::select("probe.id", "sim.counts")
@@ -158,14 +191,20 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 }
 
 # smooth simulated counts into copy number values
-.smoothSimulatedCells <- function(normalized.counts, probe.metadata, genome = "hg19") {
-  # generate tapestri experiment object and copy normalized counts normcounts slot
-  tapestri.sim <- .createTapestriExperiment.sim(counts = normalized.counts, probe.metadata = probe.metadata, genome = genome)
+.smoothSimulatedCells <- function(normalized.counts,
+                                  probe.metadata,
+                                  genome = "hg19") {
+  # generate tapestri experiment object and copy normcounts slot
+  tapestri.sim <- .createTapestriExperiment.sim(
+    counts = normalized.counts,
+    probe.metadata = probe.metadata,
+    genome = genome
+  )
   SummarizedExperiment::assay(tapestri.sim, "normcounts") <- normalized.counts
 
   # delimit cell barcodes to get copy number classes
   cn.sim.class <- matrix(unlist(strsplit(colData(tapestri.sim)$cell.barcode, split = "_")), ncol = 3, byrow = TRUE)
-  cn.sim.class <- paste(cn.sim.class[,1], cn.sim.class[,2], sep = "_")
+  cn.sim.class <- paste(cn.sim.class[, 1], cn.sim.class[, 2], sep = "_")
 
   SummarizedExperiment::colData(tapestri.sim)$cn.sim.class <- as.factor(cn.sim.class)
 
@@ -175,11 +214,18 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
 }
 
 # fit Gaussian distributions to simulated cells
-.fitGaussianDistributions <- function(simulated.tapestri.experiment, chromosome.scope) {
+.fitGaussianDistributions <- function(simulated.tapestri.experiment,
+                                      chromosome.scope) {
   if (chromosome.scope == "chr" | chromosome.scope == "chromosome") {
-    sim.data.tidy <- getTidyData(simulated.tapestri.experiment, alt.exp = "smoothedCopyNumberByChr", assay = "smoothedCopyNumber")
+    sim.data.tidy <- getTidyData(simulated.tapestri.experiment,
+      alt.exp = "smoothedCopyNumberByChr",
+      assay = "smoothedCopyNumber"
+    )
   } else if (chromosome.scope == "arm") {
-    sim.data.tidy <- getTidyData(simulated.tapestri.experiment, alt.exp = "smoothedCopyNumberByArm", assay = "smoothedCopyNumber")
+    sim.data.tidy <- getTidyData(simulated.tapestri.experiment,
+      alt.exp = "smoothedCopyNumberByArm",
+      assay = "smoothedCopyNumber"
+    )
   } else {
     cli::cli_abort("chromosome.scope should be 'chr or 'arm'")
   }
@@ -200,9 +246,15 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
   components.filtered <- paste0("sim_cn", model.components)
 
   if (chromosome.scope == "chr" | chromosome.scope == "chromosome") {
-    sim.data.tidy <- getTidyData(TapestriExperiment, alt.exp = "smoothedCopyNumberByChr", assay = "smoothedCopyNumber")
+    sim.data.tidy <- getTidyData(TapestriExperiment,
+      alt.exp = "smoothedCopyNumberByChr",
+      assay = "smoothedCopyNumber"
+    )
   } else if (chromosome.scope == "arm") {
-    sim.data.tidy <- getTidyData(TapestriExperiment, alt.exp = "smoothedCopyNumberByArm", assay = "smoothedCopyNumber")
+    sim.data.tidy <- getTidyData(TapestriExperiment,
+      alt.exp = "smoothedCopyNumberByArm",
+      assay = "smoothedCopyNumber"
+    )
   } else {
     cli::cli_abort("chromosome.scope should be 'chr or 'arm'")
   }
@@ -228,9 +280,10 @@ calcGMMCopyNumber <- function(TapestriExperiment, cell.barcodes, control.copy.nu
   }))
 
   # get Bayes theorem denominator for each GMM (aka evidence or marginal likelihood)
-  gmm.table <- gmm.table %>% dplyr::mutate("model.evidence" = purrr::map(.data$pdf, function(pdf) {
-    as.matrix(pdf) %*% model.priors %>% drop()
-  }))
+  gmm.table <- gmm.table %>%
+    dplyr::mutate("model.evidence" = purrr::map(.data$pdf, function(pdf) {
+      as.matrix(pdf) %*% model.priors %>% drop()
+    }))
 
   # calculate probability of a data point belonging to each copy number class (i.e. copy number class given a data point)
   gmm.table <- gmm.table %>% dplyr::mutate("cn.probability" = purrr::map2(.data$pdf, .data$model.evidence, function(pdf, model.evidence) {
@@ -352,7 +405,10 @@ getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr") {
 #'   draw.boundaries = TRUE
 #' )
 #' }
-plotCopyNumberGMM <- function(TapestriExperiment, feature.id = 1, chromosome.scope = "chr", draw.boundaries = FALSE) {
+plotCopyNumberGMM <- function(TapestriExperiment,
+                              feature.id = 1,
+                              chromosome.scope = "chr",
+                              draw.boundaries = FALSE) {
   if (S4Vectors::isEmpty(S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr)) {
     cli::cli_abort("GMM metadata not found. Did you run `calcGMMCopyNumber()` yet?")
   }

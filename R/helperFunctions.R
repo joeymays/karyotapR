@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' corner(assay(tap.object, "counts"))
 corner <- function(input.mat) {
   if (nrow(input.mat) > 4) {
@@ -44,10 +44,13 @@ corner <- function(input.mat) {
 #' @export
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' tidy.data <- getTidyData(tap.object, alt.exp = "alleleFrequency")
 #'
-getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, feature.id.as.factor = TRUE) {
+getTidyData <- function(TapestriExperiment,
+                        alt.exp = NULL,
+                        assay = NULL,
+                        feature.id.as.factor = TRUE) {
   if (is.null(alt.exp)) {
     target.exp <- TapestriExperiment
   } else {
@@ -65,12 +68,18 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
   tidy.data <- as.data.frame(tidy.data) %>%
     tibble::rownames_to_column("feature.id") %>%
     dplyr::as_tibble() %>%
-    tidyr::pivot_longer(cols = !tidyr::matches("feature.id"), names_to = "cell.barcode", values_to = assay)
+    tidyr::pivot_longer(
+      cols = !tidyr::matches("feature.id"),
+      names_to = "cell.barcode",
+      values_to = assay
+    )
 
-  tidy.data <- tidy.data %>% dplyr::left_join(as.data.frame(SummarizedExperiment::colData(TapestriExperiment)), by = "cell.barcode")
+  tidy.data <- tidy.data %>%
+    dplyr::left_join(as.data.frame(SummarizedExperiment::colData(TapestriExperiment)), by = "cell.barcode")
 
   # get rowdata and add rownames as a column to target for join with feature.id
-  rowdata.to.join <- as.data.frame(SummarizedExperiment::rowData(target.exp)) %>% tibble::rownames_to_column("feature.id")
+  rowdata.to.join <- as.data.frame(SummarizedExperiment::rowData(target.exp)) %>%
+    tibble::rownames_to_column("feature.id")
 
   tidy.data <- tidy.data %>% dplyr::left_join(rowdata.to.join,
     by = "feature.id",
@@ -86,7 +95,9 @@ getTidyData <- function(TapestriExperiment, alt.exp = NULL, assay = NULL, featur
 
   # make feature.id a factor to enable sorting in visualization
   if (feature.id.as.factor) {
-    tidy.data$feature.id <- factor(tidy.data$feature.id, levels = unique(tidy.data$feature.id))
+    tidy.data$feature.id <- factor(tidy.data$feature.id,
+      levels = unique(tidy.data$feature.id)
+    )
   }
 
   return(tidy.data)

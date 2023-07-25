@@ -9,10 +9,14 @@
 #' @order 2
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
-#' control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
-#'   sample.feature.label = "cellline1")
-generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 2, sample.feature.label = NA) {
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+#'   copy.number = 2,
+#'   sample.feature.label = "cellline1"
+#' )
+generateControlCopyNumberTemplate <- function(TapestriExperiment,
+                                              copy.number = 2,
+                                              sample.feature.label = NA) {
   if (any(is.na(unique(SummarizedExperiment::rowData(TapestriExperiment)$arm)))) {
     cli::cli_abort("Non-genomic probe found in rowData(<TapestriExperiment>)$arm column. Please remove before calculating copy number.")
   }
@@ -62,15 +66,20 @@ generateControlCopyNumberTemplate <- function(TapestriExperiment, copy.number = 
 #' @concept copy number
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' tap.object <- calcNormCounts(tap.object)
-#' control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
-#'   sample.feature.label = "cellline1")
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+#'   copy.number = 2,
+#'   sample.feature.label = "cellline1"
+#' )
 #' tap.object <- calcCopyNumber(tap.object,
 #'   control.copy.number,
 #'   sample.feature = "test.cluster"
 #' )
-calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.feature = "cluster", remove.bad.probes = FALSE) {
+calcCopyNumber <- function(TapestriExperiment,
+                           control.copy.number,
+                           sample.feature = "cluster",
+                           remove.bad.probes = FALSE) {
   sample.feature <- tolower(sample.feature)
 
   # error checks
@@ -147,13 +156,16 @@ calcCopyNumber <- function(TapestriExperiment, control.copy.number, sample.featu
 #' @concept copy number
 #'
 #' @examples
-#' tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' tap.object <- calcNormCounts(tap.object)
-#' control.copy.number <- generateControlCopyNumberTemplate(tap.object, copy.number = 2,
-#'   sample.feature.label = "cellline1")
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+#'   copy.number = 2,
+#'   sample.feature.label = "cellline1"
+#' )
 #' tap.object <- calcCopyNumber(tap.object,
 #'   control.copy.number,
-#'   sample.feature = "test.cluster")
+#'   sample.feature = "test.cluster"
+#' )
 #' tap.object <- calcSmoothCopyNumber(tap.object)
 calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
   method <- tolower(method)
@@ -173,24 +185,44 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
   ploidy.tidy <- ploidy.counts %>%
     as.data.frame() %>%
     tibble::rownames_to_column("probe.id") %>%
-    tidyr::pivot_longer(cols = !tidyr::matches("probe.id"), names_to = "cell.barcode", values_to = "ploidy") %>%
+    tidyr::pivot_longer(
+      cols = !tidyr::matches("probe.id"),
+      names_to = "cell.barcode",
+      values_to = "ploidy"
+    ) %>%
     dplyr::left_join(as.data.frame(SummarizedExperiment::rowData(TapestriExperiment)[, c("probe.id", "chr", "arm")]), by = "probe.id")
 
   smoothed.ploidy.chr <- ploidy.tidy %>%
     dplyr::group_by(.data$cell.barcode, .data$chr) %>%
-    dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
-    tidyr::pivot_wider(id_cols = dplyr::all_of("chr"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
+    dplyr::summarize(
+      smooth.ploidy = smooth.func(.data$ploidy),
+      .groups = "drop"
+    ) %>%
+    tidyr::pivot_wider(
+      id_cols = dplyr::all_of("chr"),
+      values_from = dplyr::all_of("smooth.ploidy"),
+      names_from = dplyr::all_of("cell.barcode")
+    ) %>%
     tibble::column_to_rownames("chr")
 
-  smoothed.ploidy.chr <- smoothed.ploidy.chr[, colnames(ploidy.counts)] # reorder to match input matrix
+  # reorder to match input matrix
+  smoothed.ploidy.chr <- smoothed.ploidy.chr[, colnames(ploidy.counts)]
 
   smoothed.ploidy.arm <- ploidy.tidy %>%
     dplyr::group_by(.data$cell.barcode, .data$arm) %>%
-    dplyr::summarize(smooth.ploidy = smooth.func(.data$ploidy), .groups = "drop") %>%
-    tidyr::pivot_wider(id_cols = dplyr::all_of("arm"), values_from = dplyr::all_of("smooth.ploidy"), names_from = dplyr::all_of("cell.barcode")) %>%
+    dplyr::summarize(
+      smooth.ploidy = smooth.func(.data$ploidy),
+      .groups = "drop"
+    ) %>%
+    tidyr::pivot_wider(
+      id_cols = dplyr::all_of("arm"),
+      values_from = dplyr::all_of("smooth.ploidy"),
+      names_from = dplyr::all_of("cell.barcode")
+    ) %>%
     tibble::column_to_rownames("arm")
 
-  smoothed.ploidy.arm <- smoothed.ploidy.arm[, colnames(ploidy.counts)] # reorder to match input matrix
+  # reorder to match input matrix
+  smoothed.ploidy.arm <- smoothed.ploidy.arm[, colnames(ploidy.counts)]
 
   discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
   discrete.ploidy.arm <- round(smoothed.ploidy.arm, 0)

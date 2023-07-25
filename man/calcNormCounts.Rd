@@ -27,7 +27,7 @@ Counts for each barcode are normalized relative to their barcode's mean and prob
 The proportion is multiplied by \code{scaling.factor} if provided.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tap.object <- calcNormCounts(tap.object)
 }
 \concept{copy number}

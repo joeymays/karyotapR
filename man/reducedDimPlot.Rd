@@ -33,7 +33,7 @@ ggplot2 object, scatter plot
 Plots a scatter plot of the indicated dimensional reduction results.
 }
 \examples{
-tap.object <- newTapestriExperimentExample() #example TapestriExperiment object
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tap.object <- runPCA(tap.object, alt.exp = "alleleFrequency")
 reducedDimPlot(tap.object, dim.reduction = "pca")
 }
