@@ -49,7 +49,7 @@ calcGMMCopyNumber <- function(TapestriExperiment,
   if (length(cell.barcodes) == 0) {
     cli::cli_abort("cell.barcodes is empty.")
   } else {
-    cli::cli_alert_info("Calculating GMMs using {length(cell.barcodes)} cells.")
+    cli::cli_alert_info("Calculating GMMs using {length(cell.barcodes)} input cells.")
     filtered.tapestri.exp <- TapestriExperiment[, cell.barcodes]
   }
 
@@ -93,12 +93,13 @@ calcGMMCopyNumber <- function(TapestriExperiment,
   cli::cli_progress_step("Calling copy number from posterior probabilities...")
   cn.model.table.chr <- .callCopyNumberClasses(cn.model.table.chr)
   cn.model.table.arm <- .callCopyNumberClasses(cn.model.table.arm)
+  cli::cli_progress_done()
 
   # transform copy number calls to matrix
   # add copy number calls and model metadata to TapestriExperiment
 
   # whole chromosome
-  cli::cli_progress_step("Saving whole chromosome copy number calls to altExp: smoothedCopyNumberByChr, assay: gmmCopyNumber...")
+  cli::cli_bullets(c("v" = "Saving whole chromosome copy number calls to altExp: smoothedCopyNumberByChr, assay: gmmCopyNumber..."))
 
   class.labels.chr.df <- cn.model.table.chr %>%
     dplyr::pull("cn.class") %>%
@@ -111,10 +112,9 @@ calcGMMCopyNumber <- function(TapestriExperiment,
     magrittr::set_rownames(cn.model.table.chr$feature.id)
 
   SummarizedExperiment::assay(altExp(TapestriExperiment, "smoothedCopyNumberByChr"), "gmmCopyNumber") <- class.labels.chr.df
-  S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr <- cn.model.table.chr
 
   # arms
-  cli::cli_progress_step("Saving chromosome arm copy number calls to altExp: smoothedCopyNumberByArm, assay: gmmCopyNumber...")
+  cli::cli_bullets(c("v" = "Saving chromosome arm copy number calls to altExp: smoothedCopyNumberByArm, assay: gmmCopyNumber..."))
 
   class.labels.arm.df <- cn.model.table.arm %>%
     dplyr::pull("cn.class") %>%
@@ -127,7 +127,10 @@ calcGMMCopyNumber <- function(TapestriExperiment,
     magrittr::set_rownames(cn.model.table.arm$feature.id)
 
   SummarizedExperiment::assay(altExp(TapestriExperiment, "smoothedCopyNumberByArm"), "gmmCopyNumber") <- class.labels.arm.df
-  S4Vectors::metadata(TapestriExperiment)$gmmParametersByArm <- cn.model.table.arm
+
+  TapestriExperiment@gmmParams <- list("chr" = cn.model.table.chr, "arm" = cn.model.table.arm)
+  cli::cli_bullets(c("v" = "Saving GMM models and metadata to {.var gmmParams} slot..."))
+  cli::cli_progress_done()
 
   return(TapestriExperiment)
 }
@@ -136,7 +139,7 @@ calcGMMCopyNumber <- function(TapestriExperiment,
 .generateSimulatedCNVCells <- function(TapestriExperiment,
                                        control.copy.number,
                                        n.simulated.cells = 500) {
-  cli::cli_progress_step("Simulating probes for {n.simulated.cells} cells...")
+  cli::cli_progress_step("Generating probe values for {n.simulated.cells} simulated cells...")
 
   raw.counts <- SummarizedExperiment::assay(TapestriExperiment, "counts")
   norm.counts <- .MBNormCounts(raw.counts)

@@ -15,7 +15,8 @@
   contains = "SingleCellExperiment",
   slots = c(
     barcodeProbe = "character",
-    grnaProbe = "character"
+    grnaProbe = "character",
+    gmmParams = "list"
   )
 )
 
@@ -29,12 +30,13 @@
 #' @export
 #' @importMethodsFrom SingleCellExperiment show
 setMethod("show", "TapestriExperiment", function(object) {
-  callNextMethod()
-  cat(
-    "barcodeProbe: ", object@barcodeProbe, "\n",
-    "grnaProbe: ", object@grnaProbe, "\n",
-    sep = ""
-  )
+    callNextMethod()
+    cat(
+        "barcodeProbe: ", object@barcodeProbe, "\n",
+        "grnaProbe: ", object@grnaProbe, "\n",
+        sep = ""
+    )
+    S4Vectors::coolcat("gmmParams(%d): %s\n", names(object@gmmParams))
 })
 
 
