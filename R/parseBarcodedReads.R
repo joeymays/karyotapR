@@ -20,6 +20,9 @@
 #' counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")
 #' }
 countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = FALSE) {
+  
+  cli::cli_progress_step("Reading .bam file...")
+  
   # set bam parameters
   which <- GenomicRanges::GRanges(contig, IRanges::IRanges(1, 536870912))
   what <- c("qname", "rname", "isize", "seq")
@@ -39,6 +42,8 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
       cli::cli_abort(e$message)
     }
   )
+  
+  cli::cli_progress_done()
 
   # filter bam by cell barcode tag
   bam.filter <- data.frame(qname = bam[[1]]$qname, rname = bam[[1]]$rname, tlen = bam[[1]]$isize, seq = bam[[1]]$seq, tag = bam[[1]]$tag[[cell.barcode.tag]])
@@ -52,7 +57,9 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
   # progress bar
   sequence.matches <- purrr::map(barcode.set, function(x) {
     as.logical(Biostrings::vcountPattern(pattern = x, subject = bam.filter$seq, max.mismatch = max.mismatch, with.indels = with.indels))
-  }, .progress = "Matching barcodes...")
+  }, .progress = list(name = "Matching barcodes...", show_after = 0))
+  
+  cli::cli_alert_success("Matching barcodes...")
 
   # match barcoded reads to cell barcodes and count. Returns NULL if no matches.
   sequence.match.ids <- names(sequence.matches)
@@ -69,7 +76,7 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
     counts <- as.data.frame(table(bam.matches))
     counts$bam.matches <- as.character(counts$bam.matches)
     colnames(counts) <- c("cell.barcode", x)
-    cli::cli_alert_info("{sum(counts[,2])} read matches found for ID {.q {x}}.")
+    cli::cli_bullets(c(">" = "{formatC(sum(counts[,2]), big.mark = ',', format = 'f', digits = 0)} read matches found for ID {x}."))
     return(counts)
   })
 
