@@ -331,14 +331,14 @@ calcGMMCopyNumber <- function(TapestriExperiment,
 #' )
 #' }
 getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr") {
-  if (S4Vectors::isEmpty(S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr)) {
+  if (S4Vectors::isEmpty(TapestriExperiment@gmmParams)) {
     cli::cli_abort("GMM metadata not found. Did you run `calcGMMCopyNumber()` yet?")
   }
 
   if (chromosome.scope == "chr" | chromosome.scope == "chromosome") {
-    model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr
+    model.metadata <- TapestriExperiment@gmmParams$chr
   } else if (chromosome.scope == "arm") {
-    model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByArm
+    model.metadata <- TapestriExperiment@gmmParams$arm
   } else {
     cli::cli_abort("chromosome.scope should be 'chr or 'arm'")
   }
@@ -412,14 +412,14 @@ plotCopyNumberGMM <- function(TapestriExperiment,
                               feature.id = 1,
                               chromosome.scope = "chr",
                               draw.boundaries = FALSE) {
-  if (S4Vectors::isEmpty(S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr)) {
+  if (S4Vectors::isEmpty(TapestriExperiment@gmmParams)) {
     cli::cli_abort("GMM metadata not found. Did you run `calcGMMCopyNumber()` yet?")
   }
 
   if (chromosome.scope == "chr" | chromosome.scope == "chromosome") {
-    model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByChr
+    model.metadata <- TapestriExperiment@gmmParams$chr
   } else if (chromosome.scope == "arm") {
-    model.metadata <- S4Vectors::metadata(TapestriExperiment)$gmmParametersByArm
+    model.metadata <- TapestriExperiment@gmmParams$arm
   } else {
     cli::cli_abort("chromosome.scope should be 'chr or 'arm'")
   }
