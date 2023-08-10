@@ -314,7 +314,7 @@ calcGMMCopyNumber <- function(TapestriExperiment,
 }
 
 #' Calculate decision boundaries between components of copy number GMMs
-#' #'
+#'
 #' @param TapestriExperiment `TapestriExperiment` object.
 #' @param chromosome.scope "chr" or "arm", for using models for either whole chromosomes or chromosome arms. Default "chr".
 #'

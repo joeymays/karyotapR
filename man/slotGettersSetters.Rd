@@ -10,6 +10,8 @@
 \alias{grnaProbe,TapestriExperiment-method}
 \alias{grnaProbe<-}
 \alias{grnaProbe<-,TapestriExperiment-method}
+\alias{gmmParams}
+\alias{gmmParams,TapestriExperiment-method}
 \title{Getter and Setter functions for \code{TapestriExperiment} slots}
 \usage{
 barcodeProbe(x)
@@ -27,6 +29,10 @@ grnaProbe(x)
 grnaProbe(x) <- value
 
 \S4method{grnaProbe}{TapestriExperiment}(x) <- value
+
+gmmParams(x)
+
+\S4method{gmmParams}{TapestriExperiment}(x)
 }
 \arguments{
 \item{x}{A \code{TapestriExperiment} object}
@@ -36,10 +42,11 @@ grnaProbe(x) <- value
 \item{TapestriExperiment}{A \code{TapestriExperiment} object}
 }
 \description{
-Get and set custom slots in \code{TapestriExperiment}. Currently supported slots
-are \code{barcodeProbe} for a sample barcode probe ID
+Get and set custom slots in \code{TapestriExperiment}. Slots include
+\code{barcodeProbe} for a sample barcode probe ID
 and \code{grnaProbe} for a gRNA-associated probe ID. These are used as shortcuts for
 \code{\link[=moveNonGenomeProbes]{moveNonGenomeProbes()}} and \code{\link[=countBarcodedReads]{countBarcodedReads()}}.
+\code{gmmParams} holds parameters and metadata for GMM copy number calling models.
 }
 \section{Functions}{
 \itemize{
@@ -50,6 +57,8 @@ and \code{grnaProbe} for a gRNA-associated probe ID. These are used as shortcuts
 \item \code{grnaProbe(TapestriExperiment)}: grnaProbe getter
 
 \item \code{grnaProbe(TapestriExperiment) <- value}: grnaProbe setter
+
+\item \code{gmmParams(TapestriExperiment)}: gmmParams getter
 
 }}
 \concept{build experiment}

@@ -31,6 +31,8 @@ TapestriExperiment Class Definition
 \item{\code{barcodeProbe}}{character.}
 
 \item{\code{grnaProbe}}{character.}
+
+\item{\code{gmmParams}}{list.}
 }}
 
 \examples{

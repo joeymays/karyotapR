@@ -2,6 +2,7 @@
 #'
 #' @slot barcodeProbe character.
 #' @slot grnaProbe character.
+#' @slot gmmParams list.
 #'
 #' @return TapestriExperiment
 #' @export
@@ -44,10 +45,11 @@ setMethod("show", "TapestriExperiment", function(object) {
 #'
 #' @title Getter and Setter functions for `TapestriExperiment` slots
 #'
-#' @description Get and set custom slots in `TapestriExperiment`. Currently supported slots
-#' are `barcodeProbe` for a sample barcode probe ID
+#' @description Get and set custom slots in `TapestriExperiment`. Slots include
+#' `barcodeProbe` for a sample barcode probe ID
 #' and `grnaProbe` for a gRNA-associated probe ID. These are used as shortcuts for
 #' [moveNonGenomeProbes()] and [countBarcodedReads()].
+#' `gmmParams` holds parameters and metadata for GMM copy number calling models.
 #'
 #' @param x A `TapestriExperiment` object
 #'
@@ -112,6 +114,21 @@ setMethod("grnaProbe<-", "TapestriExperiment", function(x, value) {
   validObject(x)
   x
 })
+
+
+#' @param x A `TapestriExperiment` object
+#'
+#' @export
+#' @rdname slotGettersSetters
+setGeneric("gmmParams", function(x) standardGeneric("gmmParams"))
+
+#' @param TapestriExperiment A `TapestriExperiment` object
+#'
+#' @export
+#' @describeIn slotGettersSetters gmmParams getter
+setMethod("gmmParams", "TapestriExperiment", function(x) x@gmmParams)
+
+
 
 
 S4Vectors::setValidity2("TapestriExperiment", function(object) {

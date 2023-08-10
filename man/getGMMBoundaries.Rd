@@ -2,8 +2,7 @@
 % Please edit documentation in R/GaussianMixtureCalls.R
 \name{getGMMBoundaries}
 \alias{getGMMBoundaries}
-\title{Calculate decision boundaries between components of copy number GMMs
-#'}
+\title{Calculate decision boundaries between components of copy number GMMs}
 \usage{
 getGMMBoundaries(TapestriExperiment, chromosome.scope = "chr")
 }
@@ -17,7 +16,6 @@ tibble containing boundary values of GMMs for each \code{feature.id}.
 }
 \description{
 Calculate decision boundaries between components of copy number GMMs
-#'
 }
 \examples{
 \dontrun{
