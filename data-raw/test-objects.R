@@ -71,7 +71,7 @@ summary(rowData(exp3.subset)$median.reads > 0)
 exp3.subset <- exp3.subset[rowData(exp3.subset)$median.reads > 0,] #1 probe filtered for exp 3
 exp3.subset <- calcNormCounts(exp3.subset)
 control.copy.number <- generateControlCopyNumberTemplate(exp3.subset, sample.feature.label = "RPE1")
-control.copy.number["chr10q", "copy.number"] <- 3
+control.copy.number["10q", "copy.number"] <- 3
 exp3.subset <- calcCopyNumber(exp3.subset, control.copy.number = control.copy.number, sample.feature = "cluster", remove.bad.probes = T)
 exp3.subset <- calcSmoothCopyNumber(exp3.subset)
 exp3.subset <- calcGMMCopyNumber(exp3.subset, cell.barcodes = colnames(exp3.subset), control.copy.number = control.copy.number, model.components = 1:4)

@@ -179,6 +179,10 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
     cli::cli_abort("{.var method} {.q {method}}, not recognized. Please use {.q mean} or {.q median}.")
   }
 
+  if(!"copyNumber" %in% assayNames(TapestriExperiment)){
+      cli::cli_abort("{.q copyNumber} assay not found in {.code TapestriExperiment} object. Did you run {.fn CNweaveR::calcCopyNumber} first?")
+  }
+
   cli::cli_progress_step("Smoothing copy number by {method}...", )
 
   ploidy.counts <- SummarizedExperiment::assay(TapestriExperiment, "copyNumber")

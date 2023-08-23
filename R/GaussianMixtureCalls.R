@@ -46,6 +46,10 @@ calcGMMCopyNumber <- function(TapestriExperiment,
     cli::cli_abort("{.arg control.copy.number} has not been set. Use {.fun CNweaveR::generateControlCopyNumberTemplate}.")
   }
 
+  if (!"smoothedCopyNumberByChr" %in% altExpNames(TapestriExperiment)) {
+    cli::cli_abort("{.q smoothedCopyNumberByChr} altExp not found in {.code TapestriExperiment} object. Did you run {.fn CNweaveR::calcSmoothCopyNumber} first?")
+  }
+
   if (length(cell.barcodes) == 0) {
     cli::cli_abort("cell.barcodes is empty.")
   } else {
