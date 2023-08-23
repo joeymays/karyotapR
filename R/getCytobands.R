@@ -51,6 +51,12 @@ getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
   # reorder cytoband data
   cytoband.data <- cytoband.data[rownames(existing.amplicon.data), ]
 
+  # remove chr prefix from arms
+  arm.labels <- strsplit(as.character(cytoband.data$arm), split = "chr", fixed = TRUE)
+  arm.labels <- unlist(lapply(arm.labels, function(x) x[length(x)]))
+  arm.labels <- unlist(arm.labels)
+  cytoband.data$arm <- factor(arm.labels, levels = unique(arm.labels))
+
   # add to row data
   SummarizedExperiment::rowData(TapestriExperiment)$cytoband <- cytoband.data$cytoband
   SummarizedExperiment::rowData(TapestriExperiment)$arm <- cytoband.data$arm
