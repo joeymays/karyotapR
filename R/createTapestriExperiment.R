@@ -215,6 +215,10 @@ createTapestriExperiment <- function(h5.filename,
   # close h5
   rhdf5::H5Fclose(tapestri.h5)
 
+  if(verbose){
+      cli::cli_h2("Notes")
+  }
+
   # get cytobands
   if (get.cytobands) {
     tapestri.object <- getCytobands(tapestri.object, verbose = verbose)

@@ -20,9 +20,9 @@
 #' counts <- countBarcodedReadsFromContig(bam.file, barcode.lookup, "virus_ref2")
 #' }
 countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.barcode.tag = "RG", max.mismatch = 2, with.indels = FALSE) {
-  
+
   cli::cli_progress_step("Reading .bam file...")
-  
+
   # set bam parameters
   which <- GenomicRanges::GRanges(contig, IRanges::IRanges(1, 536870912))
   what <- c("qname", "rname", "isize", "seq")
@@ -42,7 +42,7 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
       cli::cli_abort(e$message)
     }
   )
-  
+
   cli::cli_progress_done()
 
   # filter bam by cell barcode tag
@@ -58,7 +58,7 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
   sequence.matches <- purrr::map(barcode.set, function(x) {
     as.logical(Biostrings::vcountPattern(pattern = x, subject = bam.filter$seq, max.mismatch = max.mismatch, with.indels = with.indels))
   }, .progress = list(name = "Matching barcodes...", show_after = 0))
-  
+
   cli::cli_alert_success("Matching barcodes...")
 
   # match barcoded reads to cell barcodes and count. Returns NULL if no matches.
@@ -106,6 +106,7 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' to use the `grnaCounts` or `barcodeCounts` `altExp` slots.
 #' The entries in the `barcode.lookup` table do not have to be present in the sample,
 #' allowing users to keep one master table/file of available barcode sequences for use in all experiments.
+#' The `Rsamtools` and `Biostrings` packages must be installed to use these functions.
 #'
 #' @param bam.file File path of BAM file. `.bai` BAM index file must be in the same location (can be generated using [Rsamtools::indexBam()]).
 #' @param barcode.lookup `data.frame`, first column is the barcode identifier/name and the second column is the DNA sequence. Headers are ignored.
@@ -135,6 +136,9 @@ countBarcodedReadsFromContig <- function(bam.file, barcode.lookup, contig, cell.
 #' }
 countBarcodedReads <- function(TapestriExperiment, bam.file, barcode.lookup, probe, return.table = FALSE, max.mismatch = 2, with.indels = FALSE, ...) {
   probe <- tolower(probe)
+
+  rlang::check_installed("Biostrings", reason = "must be installed to run `countBarcodedReads()`.")
+  rlang::check_installed("Rsamtools", reason = "must be installed to run `countBarcodedReads()`.")
 
   # get contig
   if (probe == "grna") {

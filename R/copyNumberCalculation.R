@@ -88,7 +88,8 @@ calcCopyNumber <- function(TapestriExperiment,
   }
 
   if (any(!unique(control.copy.number$sample.label) %in% unique(SummarizedExperiment::colData(TapestriExperiment)[, sample.feature]))) {
-    cli::cli_abort("{.var control.copy.number} {.q sample.label} elements not found in {colData.} Check {.var control.copy.number.}")
+    cli::cli_abort("{.var control.copy.number} {.q sample.label} values not found in {.var colData}. Verify that {.var control.copy.number}
+                   has the correct values.")
   }
 
   counts.mat <- SummarizedExperiment::assay(TapestriExperiment, "normcounts")
@@ -116,7 +117,7 @@ calcCopyNumber <- function(TapestriExperiment,
   bad.probes <- NULL
   if (any(probe.medians == 0)) {
     if (remove.bad.probes == FALSE) {
-      cli::cli_abort("{names(probe.medians[probe.medians == 0])} control cell median equal to 0. Filter out prior to proceeding.")
+      cli::cli_abort("{names(probe.medians[probe.medians == 0])} control cell median equal to 0. This will cause a division-by-zero error. Filter out prior to proceeding.")
     } else {
       bad.probes <- names(probe.medians)[which(probe.medians == 0)]
     }
