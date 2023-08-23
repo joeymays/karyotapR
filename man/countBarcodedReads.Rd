@@ -58,6 +58,7 @@ cell barcodes and saves them to the \code{colData} (cell barcode metadata) of \c
 to use the \code{grnaCounts} or \code{barcodeCounts} \code{altExp} slots.
 The entries in the \code{barcode.lookup} table do not have to be present in the sample,
 allowing users to keep one master table/file of available barcode sequences for use in all experiments.
+The \code{Rsamtools} and \code{Biostrings} packages must be installed to use these functions.
 }
 \examples{
 \dontrun{

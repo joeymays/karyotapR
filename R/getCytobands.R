@@ -25,7 +25,6 @@ getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
 
   if (verbose) {
     if (genome == "hg19") {
-      cli::cli_h2("Notes")
       cli::cli_alert_info("Adding cytobands from hg19.")
     }
   }
@@ -68,7 +67,7 @@ getCytobands <- function(TapestriExperiment, genome = "hg19", verbose = TRUE) {
       names = input.df$id
     ),
     strand = S4Vectors::Rle(
-      values = BiocGenerics::strand("*"),
+      values = GenomicRanges::strand("*"),
       lengths = nrow(input.df)
     )
   )
