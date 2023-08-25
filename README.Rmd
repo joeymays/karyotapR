@@ -109,7 +109,7 @@ example.exp <- calcSmoothCopyNumber(example.exp)
 
 Visualize copy number. Visualization reveals that cell line 1 has 1 copy of chromosome arm 1p, and cell line 2 has three copies of chromosome 7.
 
-```{r heatmaps1, dpi=300}
+```{r heatmaps1, dpi=400}
 assayHeatmap(example.exp, assay = "copyNumber", split.col.by = "arm", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "copy.number")
 assayHeatmap(example.exp, alt.exp = "smoothedCopyNumberByArm", assay = "discreteCopyNumber", split.row.by = "cluster", annotate.row.by = "cluster", color.preset = "copy.number")
 ```

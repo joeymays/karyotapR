@@ -42,9 +42,9 @@ We’ll use a toy dataset for this example.
 
 ``` r
 example.exp <- newTapestriExperimentExample()
-#> ℹ Moving gRNA probe  to altExp slot 'grnaCounts'.
-#> ℹ Moving barcode probe  to altExp slot 'barcodeCounts'.
-#> ℹ Moving chrY probe(s) probe_231, probe_232, probe_233, probe_234, probe_235, probe_236, probe_237, probe_238, probe_239, probe_240 to altExp slot 'chrYCounts'.
+#> ℹ Moving gRNA probe  to `altExp` slot "grnaCounts".
+#> ℹ Moving barcode probe  to `altExp` slot "barcodeCounts".
+#> ℹ Moving chrY probe(s) probe_231, probe_232, probe_233, probe_234, probe_235, probe_236, probe_237, probe_238, probe_239, and probe_240 to `altExp` slot "chrYCounts".
 ```
 
 Calling the `TapestriExperiment` will print a summary of the contained
@@ -58,7 +58,7 @@ example.exp
 #>   mean.reads.per.cell.per.probe
 #> assays(1): counts
 #> rownames(230): probe_1 probe_2 ... probe_229 probe_230
-#> rowData names(5): probe.id chr arm total.reads median.reads
+#> rowData names(7): probe.id chr ... total.reads median.reads
 #> colnames(300): cell_1 cell_2 ... cell_299 cell_300
 #> colData names(3): cell.barcode test.cluster total.reads
 #> reducedDimNames(0):
@@ -66,6 +66,7 @@ example.exp
 #> altExpNames(2): chrYCounts alleleFrequency
 #> barcodeProbe: dummyBCprobe
 #> grnaProbe: dummyGRNAprobe
+#> gmmParams(0):
 ```
 
 ### Clustering

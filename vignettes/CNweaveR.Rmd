@@ -1,0 +1,37 @@
+---
+title: "CNweaveR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CNweaveR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`CNweaveR` simplifies the analysis of single-cell DNA sequencing data from Tapestri custom panels.
+
+```{r setup}
+library(CNweaveR)
+```
+
+# Installation
+
+# Loading data from the Tapestri Pipeline
+
+# Exploring a `TapestriExperiment`
+
+# Subsetting a `TapestriExperiment`
+
+# Sample Clustering
+
+# Copy Number Analysis
+
+# Plotting
+
+# Extracting Data
