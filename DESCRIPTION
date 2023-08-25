@@ -1,6 +1,6 @@
 Package: CNweaveR
 Title: DNA Copy Number Analysis for Genome-wide Tapestri Panels
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R:
     person("Joseph", "Mays", , "josephcmays@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4903-938X"))
