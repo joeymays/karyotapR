@@ -43,7 +43,7 @@ calcGMMCopyNumber <- function(TapestriExperiment,
   }
 
   if (rlang::is_missing(control.copy.number)) {
-    cli::cli_abort("{.arg control.copy.number} has not been set. Use {.fun CNweaveR::generateControlCopyNumberTemplate}.")
+    cli::cli_abort("{.arg control.copy.number} has not been set. Use {.fun karyotapR::generateControlCopyNumberTemplate}.")
   }
 
   if (length(cell.barcodes) == 0) {
