@@ -1,96 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/404.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/404.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/LICENSE-text.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/LICENSE.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/LICENSE.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/authors.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/authors.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/index.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/index.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/CNweaveR-package.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/CreateTapestriExperiment.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/CreateTapestriExperiment.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/PCAKneePlot.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/PCAKneePlot.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/TapestriExperiment-class.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/TapestriExperiment-class.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/assayBoxPlot.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/assayBoxPlot.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/assayHeatmap.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/assayHeatmap.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/calcCopyNumber.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/calcCopyNumber.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/calcGMMCopyNumber.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/calcGMMCopyNumber.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/calcNormCounts.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/calcNormCounts.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/calcSmoothCopyNumber.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/calcSmoothCopyNumber.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/callSampleLables.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/callSampleLables.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/corner.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/corner.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/countBarcodedReads.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/countBarcodedReads.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/getChrOrder.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/getChrOrder.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/getCytobands.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/getCytobands.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/getGMMBoundaries.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/getGMMBoundaries.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/getTidyData.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/getTidyData.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/index.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/index.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/karyotapR-package.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/moveNonGenomeProbes.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/moveNonGenomeProbes.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/newTapestriExperimentExample.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/newTapestriExperimentExample.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/plotCopyNumberGMM.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/plotCopyNumberGMM.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/reducedDimPlot.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/reducedDimPlot.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/runClustering.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/runClustering.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/runPCA.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/runPCA.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/runUMAP.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/runUMAP.html</loc>
   </url>
   <url>
-    <loc>http://joeymays.xyz/CNweaveR/reference/slotGettersSetters.html</loc>
+    <loc>http://joeymays.xyz/karyotapR/reference/slotGettersSetters.html</loc>
   </url>
 </urlset>
