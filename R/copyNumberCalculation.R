@@ -180,7 +180,7 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
   }
 
   if(!"copyNumber" %in% assayNames(TapestriExperiment)){
-      cli::cli_abort("{.q copyNumber} assay not found in {.code TapestriExperiment} object. Did you run {.fn CNweaveR::calcCopyNumber} first?")
+      cli::cli_abort("{.q copyNumber} assay not found in {.code TapestriExperiment} object. Did you run {.fn karyotapR::calcCopyNumber} first?")
   }
 
   cli::cli_progress_step("Smoothing copy number by {method}...", )

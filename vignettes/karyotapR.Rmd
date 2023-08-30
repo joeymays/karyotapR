@@ -1,8 +1,8 @@
 ---
-title: "CNweaveR"
+title: "karyotapR"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{CNweaveR}
+  %\VignetteIndexEntry{karyotapR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,10 +14,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-`CNweaveR` simplifies the analysis of single-cell DNA sequencing data from Tapestri custom panels.
+`karyotapR` simplifies the analysis of single-cell DNA sequencing data from Tapestri custom panels.
 
 ```{r setup}
-library(CNweaveR)
+library(karyotapR)
 ```
 
 # Installation

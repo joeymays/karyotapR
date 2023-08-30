@@ -47,7 +47,7 @@ calcGMMCopyNumber <- function(TapestriExperiment,
   }
 
   if (!"smoothedCopyNumberByChr" %in% altExpNames(TapestriExperiment)) {
-    cli::cli_abort("{.q smoothedCopyNumberByChr} altExp not found in {.code TapestriExperiment} object. Did you run {.fn CNweaveR::calcSmoothCopyNumber} first?")
+    cli::cli_abort("{.q smoothedCopyNumberByChr} altExp not found in {.code TapestriExperiment} object. Did you run {.fn karyotapR::calcSmoothCopyNumber} first?")
   }
 
   if (length(cell.barcodes) == 0) {
