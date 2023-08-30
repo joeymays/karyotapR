@@ -5,5 +5,4 @@
 .DS_Store
 */.DS_Store
 docs
-CNweaveR.Rproj
-inst/doc
+*.Rproj

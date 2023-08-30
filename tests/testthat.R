@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(CNweaveR)
+library(karyotapR)
 
-test_check("CNweaveR")
+test_check("karyotapR")
