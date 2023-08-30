@@ -179,7 +179,7 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
     cli::cli_abort("{.var method} {.q {method}}, not recognized. Please use {.q mean} or {.q median}.")
   }
 
-  if(!"copyNumber" %in% assayNames(TapestriExperiment)){
+  if(!"copyNumber" %in% SummarizedExperiment::assayNames(TapestriExperiment)){
       cli::cli_abort("{.q copyNumber} assay not found in {.code TapestriExperiment} object. Did you run {.fn karyotapR::calcCopyNumber} first?")
   }
 
