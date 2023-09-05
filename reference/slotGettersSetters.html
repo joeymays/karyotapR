@@ -104,6 +104,14 @@ and <code>grnaProbe</code> for a gRNA-associated probe ID. These are used as sho
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>For the getter methods <code>barcodeProbe</code>, <code>grnaProbe</code>, and <code>gmmParams</code>, the value
+of the given slot is returned. For the setter methods <code>barcodeProbe</code> and <code>grnaProbe</code>,
+a <code>TapestriExperiment</code> object is returned with modifications made to the given slot.</p>
+    </div>
+    <div class="section level2">
     <h2 id="functions">Functions<a class="anchor" aria-label="anchor" href="#functions"></a></h2>
     
 <ul><li><p><code>barcodeProbe(TapestriExperiment)</code>: barcodeProbe getter</p></li>
@@ -113,6 +121,24 @@ and <code>grnaProbe</code> for a gRNA-associated probe ID. These are used as sho
 <li><p><code>gmmParams(TapestriExperiment)</code>: gmmParams getter</p></li>
 </ul></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tap.object</span> <span class="op">&lt;-</span> <span class="fu"><a href="newTapestriExperimentExample.html">newTapestriExperimentExample</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># example TapestriExperiment object</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Moving gRNA probe  to `altExp` slot "grnaCounts".</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Moving barcode probe  to `altExp` slot "barcodeCounts".</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Moving chrY probe(s) probe_231, probe_232, probe_233, probe_234, probe_235, probe_236, probe_237, probe_238, probe_239, and probe_240 to `altExp` slot "chrYCounts".</span>
+<span class="r-in"><span><span class="fu">barcodeProbe</span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Probe01"</span></span></span>
+<span class="r-in"><span><span class="fu">barcodeProbe</span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Probe01"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">grnaProbe</span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"Probe02"</span></span></span>
+<span class="r-in"><span><span class="fu">grnaProbe</span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Probe02"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">gmmParams</span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
