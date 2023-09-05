@@ -8,7 +8,7 @@ Authors@R:
 Description: Analysis of DNA copy number in single cells using 
     custom genome-wide targeted DNA sequencing panels for the Mission Bio 
     Tapestri platform. Users can easily parse, manipulate, and visualize 
-    datasets produced from the automated Tapestri Pipeline, with support for 
+    datasets produced from the automated 'Tapestri Pipeline', with support for 
     normalization, clustering, and copy number calling. Functions are also 
     available to deconvolute multiplexed samples by genotype and parsing 
     barcoded reads from exogenous lentiviral constructs.
@@ -53,4 +53,3 @@ Suggests:
     Rsamtools,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-VignetteBuilder: knitr

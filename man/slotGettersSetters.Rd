@@ -41,6 +41,11 @@ gmmParams(x)
 
 \item{TapestriExperiment}{A \code{TapestriExperiment} object}
 }
+\value{
+For the getter methods \code{barcodeProbe}, \code{grnaProbe}, and \code{gmmParams}, the value
+of the given slot is returned. For the setter methods \code{barcodeProbe} and \code{grnaProbe},
+a \code{TapestriExperiment} object is returned with modifications made to the given slot.
+}
 \description{
 Get and set custom slots in \code{TapestriExperiment}. Slots include
 \code{barcodeProbe} for a sample barcode probe ID
@@ -61,4 +66,14 @@ and \code{grnaProbe} for a gRNA-associated probe ID. These are used as shortcuts
 \item \code{gmmParams(TapestriExperiment)}: gmmParams getter
 
 }}
+\examples{
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+barcodeProbe(tap.object) <- "Probe01"
+barcodeProbe(tap.object)
+
+grnaProbe(tap.object) <- "Probe02"
+grnaProbe(tap.object)
+
+gmmParams(tap.object)
+}
 \concept{build experiment}

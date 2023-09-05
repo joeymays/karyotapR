@@ -84,7 +84,7 @@ simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = ""
 #' @param split.x.by Character, `colData` column to use for X-axis categories. Default `NULL`.
 #' @param split.y.by Character, `colData` column to use for Y-axis splitting/faceting. Default `NULL`.
 #'
-#' @return ggplot object
+#' @return ggplot object, box plot
 #' @export
 #'
 #' @seealso [ggplot2::geom_boxplot()]

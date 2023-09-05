@@ -32,6 +32,5 @@ Attempts are made to sort by "chr" and "start.pos" columns if they are present t
 \examples{
 tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 tidy.data <- getTidyData(tap.object, alt.exp = "alleleFrequency")
-
 }
 \concept{copy number}

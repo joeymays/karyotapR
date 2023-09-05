@@ -46,7 +46,6 @@ corner <- function(input.mat) {
 #' @examples
 #' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
 #' tidy.data <- getTidyData(tap.object, alt.exp = "alleleFrequency")
-#'
 getTidyData <- function(TapestriExperiment,
                         alt.exp = NULL,
                         assay = NULL,

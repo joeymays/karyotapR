@@ -15,7 +15,7 @@
 \item{TapestriExperiment}{A \code{TapestriExperiment} object}
 }
 \value{
-TapestriExperiment
+TapestriExperiment object
 }
 \description{
 TapestriExperiment Class Definition

@@ -559,7 +559,7 @@ newDummyTapestriExperiment <- function() {
 #'
 #' @concept misc
 #'
-#' @return `TapestriExperiment` object.
+#' @return `TapestriExperiment` object with demo data.
 #' @export
 #'
 #' @examples

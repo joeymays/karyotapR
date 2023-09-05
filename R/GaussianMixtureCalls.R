@@ -396,7 +396,7 @@ getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr") {
 #' @param draw.boundaries logical, if `TRUE`, draw decision boundaries between each Gaussian component.
 #' @param chromosome.scope "chr" or "arm", for plotting models for either whole chromosomes or chromosome arms.
 #'
-#' @return `ggplot` object
+#' @return `ggplot` object, density plot
 #' @export
 #'
 #' @import ggplot2

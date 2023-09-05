@@ -30,7 +30,7 @@ assayBoxPlot(
 \item{split.y.by}{Character, \code{colData} column to use for Y-axis splitting/faceting. Default \code{NULL}.}
 }
 \value{
-ggplot object
+ggplot object, box plot
 }
 \description{
 Draws box plot of data from indicated \code{TapestriExperiment} \code{assay} slot.

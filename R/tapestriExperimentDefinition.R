@@ -4,7 +4,7 @@
 #' @slot grnaProbe character.
 #' @slot gmmParams list.
 #'
-#' @return TapestriExperiment
+#' @return TapestriExperiment object
 #' @export
 #' @import methods
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
@@ -58,6 +58,20 @@ setMethod("show", "TapestriExperiment", function(object) {
 #' @export
 #' @rdname slotGettersSetters
 #' @aliases barcodeProbe
+#' 
+#' @return For the getter methods `barcodeProbe`, `grnaProbe`, and `gmmParams`, the value
+#' of the given slot is returned. For the setter methods `barcodeProbe` and `grnaProbe`,
+#' a `TapestriExperiment` object is returned with modifications made to the given slot.
+#' 
+#' @examples
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+#' barcodeProbe(tap.object) <- "Probe01"
+#' barcodeProbe(tap.object)
+#' 
+#' grnaProbe(tap.object) <- "Probe02"
+#' grnaProbe(tap.object)
+#' 
+#' gmmParams(tap.object)
 setGeneric("barcodeProbe", function(x) standardGeneric("barcodeProbe"))
 
 #' @param TapestriExperiment A `TapestriExperiment` object

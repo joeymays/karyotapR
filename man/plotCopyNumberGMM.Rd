@@ -21,7 +21,7 @@ plotCopyNumberGMM(
 \item{draw.boundaries}{logical, if \code{TRUE}, draw decision boundaries between each Gaussian component.}
 }
 \value{
-\code{ggplot} object
+\code{ggplot} object, density plot
 }
 \description{
 Plots the probability densities of GMM components for given chromosome or chromosome arm, store in a \code{TapestriExperiment}.
