@@ -4,11 +4,11 @@
 \name{karyotapR-package}
 \alias{karyotapR}
 \alias{karyotapR-package}
-\title{karyotapR: DNA Copy Number Analysis for Genome-wide Tapestri Panels}
+\title{karyotapR: DNA Copy Number Analysis for Genome-Wide Tapestri Panels}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-karyotapR enables analysis of DNA copy number variants (CNVs) in thousands of single cells, using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri platform. This package allows users to easily parse, manipulate, and visualize datasets produced from the automated Tapestri Pipeline, with support for normalization, clustering, and copy number calling. Functions are also available to deconvolute multiplexed samples by genotype and parsing barcoded reads from exogenous lentiviral constructs.
+Analysis of DNA copy number in thousands of single cells using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri platform. Users can easily parse, manipulate, and visualize datasets produced from the automated Tapestri Pipeline, with support for normalization, clustering, and copy number calling. Functions are also available to deconvolute multiplexed samples by genotype and parsing barcoded reads from exogenous lentiviral constructs.
 }
 \seealso{
 Useful links:
