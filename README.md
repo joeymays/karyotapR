@@ -13,6 +13,12 @@ targeted DNA sequencing panels for the Mission Bio Tapestri system.
 
 ## Installation
 
+You can install the current stable version of karyotapR from CRAN with:
+
+``` r
+install.packages('karyotapR')
+```
+
 You can install the development version of karyotapR from
 [GitHub](https://github.com/joeymays/karyotapR) with:
 
@@ -128,9 +134,7 @@ example.exp <- calcNormCounts(example.exp)
 control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.feature.label = "cellline3", copy.number = 2)
 example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.feature = "cluster")
 example.exp <- calcSmoothCopyNumber(example.exp)
-#> ℹ Smoothing copy number by median...
-#> ✔ Smoothing copy number by median... [1.6s]
-#> 
+#> ℹ Smoothing copy number by median...✔ Smoothing copy number by median... [1.2s]
 ```
 
 Visualize copy number. Visualization reveals that cell line 1 has 1 copy

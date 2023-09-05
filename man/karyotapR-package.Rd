@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Joseph Mays \email{josephcmays@gmail.com} (\href{https://orcid.org/0000-0003-4903-938X}{ORCID})
+\strong{Maintainer}: Joseph Mays \email{josephcmays@gmail.com} (\href{https://orcid.org/0000-0003-4903-938X}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}

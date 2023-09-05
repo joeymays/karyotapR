@@ -23,6 +23,13 @@ karyotapR enables basic analysis of CNVs using custom genome-wide targeted DNA s
 
 ## Installation
 
+You can install the current stable version of karyotapR from
+CRAN with:
+
+```r
+install.packages('karyotapR')
+```
+
 You can install the development version of karyotapR from [GitHub](https://github.com/joeymays/karyotapR) with:
 
 ``` r
