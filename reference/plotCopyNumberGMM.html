@@ -12,7 +12,7 @@ calcGMMCopyNumber() must be run first."><meta property="og:image" content="http:
     
     <a class="navbar-brand me-2" href="../index.html">karyotapR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,13 +89,54 @@ calcGMMCopyNumber() must be run first."><meta property="og:image" content="http:
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">TapestriExperiment</span> <span class="op">&lt;-</span> <span class="fu">plotCopyNumberGMM</span><span class="op">(</span><span class="va">TapestriExperiment</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">tap.object</span> <span class="op">&lt;-</span> <span class="fu"><a href="newTapestriExperimentExample.html">newTapestriExperimentExample</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># example TapestriExperiment object</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Moving gRNA probe  to `altExp` slot "grnaCounts".</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Moving barcode probe  to `altExp` slot "barcodeCounts".</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Moving chrY probe(s) probe_231, probe_232, probe_233, probe_234, probe_235, probe_236, probe_237, probe_238, probe_239, and probe_240 to `altExp` slot "chrYCounts".</span>
+<span class="r-in"><span><span class="va">tap.object</span> <span class="op">&lt;-</span> <span class="fu"><a href="calcNormCounts.html">calcNormCounts</a></span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">control.copy.number</span> <span class="op">&lt;-</span> <span class="fu"><a href="calcCopyNumber.html">generateControlCopyNumberTemplate</a></span><span class="op">(</span><span class="va">tap.object</span>,</span></span>
+<span class="r-in"><span>  copy.number <span class="op">=</span> <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>  sample.feature.label <span class="op">=</span> <span class="st">"cellline1"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tap.object</span> <span class="op">&lt;-</span> <span class="fu"><a href="calcCopyNumber.html">calcCopyNumber</a></span><span class="op">(</span><span class="va">tap.object</span>,</span></span>
+<span class="r-in"><span>  <span class="va">control.copy.number</span>,</span></span>
+<span class="r-in"><span>  sample.feature <span class="op">=</span> <span class="st">"test.cluster"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tap.object</span> <span class="op">&lt;-</span> <span class="fu"><a href="calcSmoothCopyNumber.html">calcSmoothCopyNumber</a></span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Smoothing copy number by median...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Smoothing copy number by median... <span style="color: #B2B2B2;">[1.2s]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">tap.object</span> <span class="op">&lt;-</span> <span class="fu"><a href="calcGMMCopyNumber.html">calcGMMCopyNumber</a></span><span class="op">(</span><span class="va">tap.object</span>,</span></span>
+<span class="r-in"><span>  cell.barcodes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tap.object</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  control.copy.number <span class="op">=</span> <span class="va">control.copy.number</span>,</span></span>
+<span class="r-in"><span>  model.components <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Calculating GMMs using 300 input cells.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Generating probe values for 500 simulated cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Generating probe values for 500 simulated cells... <span style="color: #B2B2B2;">[1.3s]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Fitting Gaussian distributions to simulated cells...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[12.6s]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Calculating posterior probabilities...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[449ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Calling copy number from posterior probabilities...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[67ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Saving whole chromosome copy number calls to altExp: smoothedCopyNumberByChr,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   assay: gmmCopyNumber...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Saving chromosome arm copy number calls to altExp: smoothedCopyNumberByArm,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   assay: gmmCopyNumber...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Saving GMM models and metadata to `gmmParams` slot...</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tap.object</span> <span class="op">&lt;-</span> <span class="fu">plotCopyNumberGMM</span><span class="op">(</span><span class="va">tap.object</span>,</span></span>
 <span class="r-in"><span>  feature.id <span class="op">=</span> <span class="fl">7</span>,</span></span>
 <span class="r-in"><span>  chromosome.scope <span class="op">=</span> <span class="st">"chr"</span>,</span></span>
 <span class="r-in"><span>  draw.boundaries <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
