@@ -28,8 +28,25 @@ Plots the probability densities of GMM components for given chromosome or chromo
 \code{\link[=calcGMMCopyNumber]{calcGMMCopyNumber()}} must be run first.
 }
 \examples{
-\dontrun{
-TapestriExperiment <- plotCopyNumberGMM(TapestriExperiment,
+\donttest{
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+tap.object <- calcNormCounts(tap.object)
+control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+  copy.number = 2,
+  sample.feature.label = "cellline1"
+)
+tap.object <- calcCopyNumber(tap.object,
+  control.copy.number,
+  sample.feature = "test.cluster"
+)
+tap.object <- calcSmoothCopyNumber(tap.object)
+tap.object <- calcGMMCopyNumber(tap.object,
+  cell.barcodes = colnames(tap.object),
+  control.copy.number = control.copy.number,
+  model.components = 1:5
+)
+
+tap.object <- plotCopyNumberGMM(tap.object,
   feature.id = 7,
   chromosome.scope = "chr",
   draw.boundaries = TRUE

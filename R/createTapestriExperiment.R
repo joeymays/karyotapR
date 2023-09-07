@@ -569,16 +569,31 @@ newTapestriExperimentExample <- function() {
   barcodeProbe <- "dummyBCprobe"
   grnaProbe <- "dummyGRNAprobe"
 
+  cyto.start.pos <- c(1, 125000001, 1, 93300001, 1, 91000001, 1, 50400001, 1, 
+                      48400001, 1, 61000001, 1, 59900001, 1, 45600001, 1, 
+                      49000001, 1, 40200001, 1, 53700001, 1, 35800001, 1, 
+                      17900001, 1, 17600001, 1, 19000001, 1, 36600001, 1, 
+                      24000001, 1, 17200001, 1, 26500001, 1, 27500001, 1, 
+                      13200001, 1, 14700001, 1, 60600001, 1, 12500001)
+  
+  
+  cyto.end.pos = c(101, 125000101, 101, 93300101, 101, 91000101, 101, 50400101, 
+                   101, 48400101, 101, 61000101, 101, 59900101, 101, 45600101, 
+                   101, 49000101, 101, 40200101, 101, 53700101, 101, 35800101, 
+                   101, 17900101, 101, 17600101, 101, 19000101, 101, 36600101, 
+                   101, 24000101, 101, 17200101, 101, 26500101, 101, 27500101, 
+                   101, 13200101, 101, 14700101, 101, 60600101, 101, 12500101)
+
   # probe metadata
   read.counts.raw.rowData <- S4Vectors::DataFrame(
     probe.id = paste0("probe_", 1:240),
     chr = rep(c(1:22, "X", "Y"), each = 10),
     arm = paste0(gtools::mixedsort(c(rep(paste0(c(1:22, "X", "Y"), "p"), each = 5), rep(paste0(c(1:22, "X", "Y"), "q"), each = 5)))),
-    start.pos = rep(1, 240),
-    end.pos = rep(1, 240),
+    start.pos = rep(cyto.start.pos, each = 5),
+    end.pos = rep(cyto.end.pos, each = 5),
     row.names = paste0("probe_", 1:240)
   )
-
+  
   read.counts.raw.rowData$chr <- factor(read.counts.raw.rowData$chr, levels = unique(read.counts.raw.rowData$chr))
   read.counts.raw.rowData$arm <- factor(read.counts.raw.rowData$arm, levels = unique(read.counts.raw.rowData$arm))
 

@@ -19,13 +19,22 @@
 #' @concept copy number
 #'
 #' @examples
-#' \dontrun{
-#' control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
-#' TapestriExperiment <- calcGMMCopyNumber(TapestriExperiment,
-#'   cell.barcodes = colnames(TapestriExperiment),
+#' \donttest{
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+#' tap.object <- calcNormCounts(tap.object)
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+#'   copy.number = 2,
+#'   sample.feature.label = "cellline1"
+#' )
+#' tap.object <- calcCopyNumber(tap.object,
+#'   control.copy.number,
+#'   sample.feature = "test.cluster"
+#' )
+#' tap.object <- calcSmoothCopyNumber(tap.object)
+#' tap.object <- calcGMMCopyNumber(tap.object,
+#'   cell.barcodes = colnames(tap.object),
 #'   control.copy.number = control.copy.number,
-#'   model.components = 1:5,
-#'   model.priors = c(1, 1, 1, 1, 1)
+#'   model.components = 1:5
 #' )
 #' }
 calcGMMCopyNumber <- function(TapestriExperiment,
@@ -328,9 +337,25 @@ calcGMMCopyNumber <- function(TapestriExperiment,
 #' @concept copy number
 #'
 #' @examples
-#' \dontrun{
-#' control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
-#' boundaries <- getGMMBoundaries(TapestriExperiment,
+#' \donttest{
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+#' tap.object <- calcNormCounts(tap.object)
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+#'   copy.number = 2,
+#'   sample.feature.label = "cellline1"
+#' )
+#' tap.object <- calcCopyNumber(tap.object,
+#'   control.copy.number,
+#'   sample.feature = "test.cluster"
+#' )
+#' tap.object <- calcSmoothCopyNumber(tap.object)
+#' tap.object <- calcGMMCopyNumber(tap.object,
+#'   cell.barcodes = colnames(tap.object),
+#'   control.copy.number = control.copy.number,
+#'   model.components = 1:5
+#' )
+#'
+#' boundaries <- getGMMBoundaries(tap.object,
 #'   chromosome.scope = "chr"
 #' )
 #' }
@@ -405,8 +430,25 @@ getGMMBoundaries <- function(TapestriExperiment, chromosome.scope = "chr") {
 #' @concept plots
 #'
 #' @examples
-#' \dontrun{
-#' TapestriExperiment <- plotCopyNumberGMM(TapestriExperiment,
+#' \donttest{
+#' tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+#' tap.object <- calcNormCounts(tap.object)
+#' control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+#'   copy.number = 2,
+#'   sample.feature.label = "cellline1"
+#' )
+#' tap.object <- calcCopyNumber(tap.object,
+#'   control.copy.number,
+#'   sample.feature = "test.cluster"
+#' )
+#' tap.object <- calcSmoothCopyNumber(tap.object)
+#' tap.object <- calcGMMCopyNumber(tap.object,
+#'   cell.barcodes = colnames(tap.object),
+#'   control.copy.number = control.copy.number,
+#'   model.components = 1:5
+#' )
+#' 
+#' tap.object <- plotCopyNumberGMM(tap.object,
 #'   feature.id = 7,
 #'   chromosome.scope = "chr",
 #'   draw.boundaries = TRUE

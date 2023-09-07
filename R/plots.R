@@ -16,9 +16,9 @@
 #' @import ggplot2
 #'
 #' @examples
-#' \dontrun{
-#' simpleLinePlot(x, y)
-#' }
+#' x <- seq(1, 10, 1)
+#' y <- seq(32, 50, 2)
+#' karyotapR:::simpleLinePlot(x, y, xlim = c(0,10), ylim = c(32, 50))
 simpleLinePlot <- function(x, y, labs.x = "", labs.y = "", labs.title = "", xlim, ylim) {
   input.data <- data.frame(x = x, y = y)
 
@@ -49,9 +49,9 @@ simpleLinePlot <- function(x, y, labs.x = "", labs.y = "", labs.title = "", xlim
 #' @import ggplot2
 #'
 #' @examples
-#' \dontrun{
-#' simpleScatterPlot(x, y)
-#' }
+#' x <- seq(1, 10, 1)
+#' y <- seq(32, 50, 2)
+#' karyotapR:::simpleScatterPlot(x, y)
 simpleScatterPlot <- function(x, y, group.label = NULL, labs.x = "", labs.y = "", labs.title = "", group.label.legend = "") {
   input.data <- data.frame(x = x, y = y)
 

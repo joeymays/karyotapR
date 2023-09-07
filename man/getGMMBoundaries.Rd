@@ -18,9 +18,25 @@ tibble containing boundary values of GMMs for each \code{feature.id}.
 Calculate decision boundaries between components of copy number GMMs
 }
 \examples{
-\dontrun{
-control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
-boundaries <- getGMMBoundaries(TapestriExperiment,
+\donttest{
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+tap.object <- calcNormCounts(tap.object)
+control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+  copy.number = 2,
+  sample.feature.label = "cellline1"
+)
+tap.object <- calcCopyNumber(tap.object,
+  control.copy.number,
+  sample.feature = "test.cluster"
+)
+tap.object <- calcSmoothCopyNumber(tap.object)
+tap.object <- calcGMMCopyNumber(tap.object,
+  cell.barcodes = colnames(tap.object),
+  control.copy.number = control.copy.number,
+  model.components = 1:5
+)
+
+boundaries <- getGMMBoundaries(tap.object,
   chromosome.scope = "chr"
 )
 }

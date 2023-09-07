@@ -37,13 +37,22 @@ Each cell-chromosome is assigned the copy number value for which its posterior p
 This is done for both whole chromosomes and chromosome arms.
 }
 \examples{
-\dontrun{
-control.copy.number <- generateControlCopyNumberTemplate(TapestriExperiment, 2)
-TapestriExperiment <- calcGMMCopyNumber(TapestriExperiment,
-  cell.barcodes = colnames(TapestriExperiment),
+\donttest{
+tap.object <- newTapestriExperimentExample() # example TapestriExperiment object
+tap.object <- calcNormCounts(tap.object)
+control.copy.number <- generateControlCopyNumberTemplate(tap.object,
+  copy.number = 2,
+  sample.feature.label = "cellline1"
+)
+tap.object <- calcCopyNumber(tap.object,
+  control.copy.number,
+  sample.feature = "test.cluster"
+)
+tap.object <- calcSmoothCopyNumber(tap.object)
+tap.object <- calcGMMCopyNumber(tap.object,
+  cell.barcodes = colnames(tap.object),
   control.copy.number = control.copy.number,
-  model.components = 1:5,
-  model.priors = c(1, 1, 1, 1, 1)
+  model.components = 1:5
 )
 }
 }
