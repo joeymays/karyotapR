@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/joeymays/karyotapR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joeymays/karyotapR/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/karyotapR)](https://CRAN.R-project.org/package=karyotapR)
 <!-- badges: end -->
 
 karyotapR enables analysis of DNA copy number (aneuploidy) using custom genome-wide targeted DNA sequencing panels for the Mission Bio Tapestri system.
@@ -24,7 +25,7 @@ karyotapR enables analysis of DNA copy number (aneuploidy) using custom genome-w
 ## Installation
 
 You can install the current stable version of karyotapR from
-CRAN with:
+[CRAN](https://cran.r-project.org/package=karyotapR) with:
 
 ```r
 install.packages('karyotapR')

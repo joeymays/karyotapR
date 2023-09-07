@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/joeymays/karyotapR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joeymays/karyotapR/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/karyotapR)](https://CRAN.R-project.org/package=karyotapR)
 <!-- badges: end -->
 
 karyotapR enables analysis of DNA copy number (aneuploidy) using custom
@@ -14,7 +16,8 @@ system.
 
 ## Installation
 
-You can install the current stable version of karyotapR from CRAN with:
+You can install the current stable version of karyotapR from
+[CRAN](https://cran.r-project.org/package=karyotapR) with:
 
 ``` r
 install.packages('karyotapR')
@@ -137,7 +140,7 @@ control.copy.number <- generateControlCopyNumberTemplate(example.exp, sample.fea
 example.exp <- calcCopyNumber(example.exp, control.copy.number = control.copy.number, sample.feature = "cluster")
 example.exp <- calcSmoothCopyNumber(example.exp)
 #> ℹ Smoothing copy number by median...
-#> ✔ Smoothing copy number by median... [1.3s]
+#> ✔ Smoothing copy number by median... [1.2s]
 #> 
 ```
 
