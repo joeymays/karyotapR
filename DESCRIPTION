@@ -1,6 +1,6 @@
 Package: karyotapR
 Title: DNA Copy Number Analysis for Genome-Wide Tapestri Panels
-Version: 1.0.1
+Version: 1.0.1.9000
 Authors@R:
     person("Joseph", "Mays", email = "josephcmays@gmail.com", 
     role = c("aut", "cre", "cph"),
