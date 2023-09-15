@@ -1,0 +1,23 @@
+---
+title: "karyotapR"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(karyotapR)
+```
+
+This guide uses the 
+
+```{r}
+curl::curl_download(url = "https://zenodo.org/record/8305841/files/tapestri-experiment01-panelv1.h5?download=1", 
+                    destfile = "./tapexp1.h5", 
+                    quiet = F)
+```
+
