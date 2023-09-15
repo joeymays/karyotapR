@@ -48,5 +48,4 @@ devtools::install_github("joeymays/karyotapR")
 
 For details on the workflow, see the [Getting Started](https://joeymays.xyz/karyotapR/articles/karyotapR.html) guide, articles on this site, and the package reference/documentation.
 
-<img src="vignettes/articles/workflow.png" width="100%" />
-
+![](https://joeymays.xyz/workflow.png)
