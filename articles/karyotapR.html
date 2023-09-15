@@ -91,8 +91,6 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/joeymays/karyotapR" class="external-link">karyotapR</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'S4Arrays::makeNindexFromArrayViewport' by</span></span>
-<span><span class="co">#&gt; 'DelayedArray::makeNindexFromArrayViewport' when loading 'SummarizedExperiment'</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org/" class="external-link">forcats</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span>  <span class="co"># seed is set to ensure tutorial is reproducible</span></span></code></pre></div>
 <div class="section level3">
@@ -133,13 +131,29 @@ moved to their appropriate slots.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cellmix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CreateTapestriExperiment.html">createTapestriExperiment</a></span><span class="op">(</span><span class="st">"./tap-cellmixture.h5"</span>, panel.id <span class="op">=</span> <span class="st">"CO261"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># ── Loading Tapestri Experiment</span></span>
-<span><span class="co"># ────────────────────────────────────────────────────────── • Sample Name:</span></span>
-<span><span class="co"># Teresa_s_cell_line_mix • Pipeline Panel Name: CO261_NYU_Davoli_03102021_hg19</span></span>
-<span><span class="co"># • Pipeline Version: 2.0.2 • Date Created: 2021-09-15 ── Metrics ── • Number</span></span>
-<span><span class="co"># of Cells: 3555 • Number of Probes: 330 • Mean Reads per Cell per Probe: 89.22</span></span>
-<span><span class="co"># ── Notes ── ℹ Adding cytobands from hg19.  ℹ ChrY probe ID(s) not found in</span></span>
-<span><span class="co"># TapestriExperiment object.  ℹ No non-genomic probe IDs found.</span></span></code></pre></div>
+<span><span class="co"># ── Loading Tapestri Experiment ──────────────────</span></span>
+<span></span>
+<span><span class="co"># • Sample Name: Teresa_s_cell_line_mix</span></span>
+<span></span>
+<span><span class="co"># • Pipeline Panel Name: CO261_NYU_Davoli_03102021_hg19</span></span>
+<span></span>
+<span><span class="co"># • Pipeline Version: 2.0.2</span></span>
+<span></span>
+<span><span class="co"># • Date Created: 2021-09-15</span></span>
+<span></span>
+<span><span class="co"># ── Metrics ──</span></span>
+<span></span>
+<span><span class="co"># • Number of Cells: 3555</span></span>
+<span></span>
+<span><span class="co"># • Number of Probes: 330</span></span>
+<span></span>
+<span><span class="co"># • Mean Reads per Cell per Probe: 89.22</span></span>
+<span></span>
+<span><span class="co"># ── Notes ── ℹ Adding cytobands from hg19.</span></span>
+<span></span>
+<span><span class="co"># ℹ ChrY probe ID(s) not found in TapestriExperiment object.</span></span>
+<span></span>
+<span><span class="co"># ℹ No non-genomic probe IDs found.</span></span></code></pre></div>
 <p>Calling the object will print a summary of the contained data. The
 <code>TapestriExperiment</code> class is built on top of the <a href="https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html" class="external-link"><code>SingleCellExperiment</code></a>
 and <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html" class="external-link"><code>SummarizedExperiment</code></a>
@@ -262,8 +276,8 @@ plot, and count the number of cells in each cluster.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> cellline1   987</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> cellline2   591</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> cellline3   575</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> cellline4   484</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> cellline5   397</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> cellline4   450</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> cellline5   398</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 6             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 7             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 8             0</span></span>
@@ -335,7 +349,7 @@ vs. chromosomes).</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cellmix.subset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcSmoothCopyNumber.html">calcSmoothCopyNumber</a></span><span class="op">(</span><span class="va">cellmix.subset</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Smoothing copy number by median...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Smoothing copy number by median... <span style="color: #B2B2B2;">[14.1s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Smoothing copy number by median... <span style="color: #B2B2B2;">[9.8s]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 <p>Visualization of the copy number scores reveals the heterogeneity.
 Here we’re showing the copy number scores by probe, and the smoothed
@@ -375,13 +389,13 @@ chromosome arms.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating probe values for 500 simulated cells... <span style="color: #B2B2B2;">[2.3s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fitting Gaussian distributions to simulated cells...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[17.9s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[12.9s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating posterior probabilities...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[755ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[662ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calling copy number from posterior probabilities...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[220ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[213ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Saving whole chromosome copy number calls to altExp: smoothedCopyNumberByChr,</span></span>
 <span><span class="co">#&gt;   assay: gmmCopyNumber...</span></span>
