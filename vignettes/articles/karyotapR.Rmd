@@ -60,7 +60,7 @@ cellmix <- createTapestriExperiment("./tap-cellmixture.h5", panel.id = "CO261")
 ```
 
 ```{r, include=FALSE}
-cellmix <- readRDS(file = "vignettes/articles/data/exp1.new.RDS")
+cellmix <- readRDS(file = "./data/exp1.new.RDS")
 ```
 
 
