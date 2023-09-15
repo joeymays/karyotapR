@@ -262,8 +262,8 @@ plot, and count the number of cells in each cluster.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> cellline1   987</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> cellline2   591</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> cellline3   575</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> cellline4   450</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> cellline5   398</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> cellline4   484</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> cellline5   397</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 6             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 7             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 8             0</span></span>
@@ -335,7 +335,7 @@ vs. chromosomes).</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cellmix.subset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcSmoothCopyNumber.html">calcSmoothCopyNumber</a></span><span class="op">(</span><span class="va">cellmix.subset</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Smoothing copy number by median...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Smoothing copy number by median... <span style="color: #B2B2B2;">[9.1s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Smoothing copy number by median... <span style="color: #B2B2B2;">[14.1s]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 <p>Visualization of the copy number scores reveals the heterogeneity.
 Here we’re showing the copy number scores by probe, and the smoothed
@@ -372,16 +372,16 @@ chromosome arms.</p>
 <span>    control.copy.number <span class="op">=</span> <span class="va">control.copy.number</span>, model.components <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating GMMs using 591 input cells.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Generating probe values for 500 simulated cells...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating probe values for 500 simulated cells... <span style="color: #B2B2B2;">[2.1s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating probe values for 500 simulated cells... <span style="color: #B2B2B2;">[2.3s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fitting Gaussian distributions to simulated cells...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[11.9s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[17.9s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating posterior probabilities...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[558ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[755ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calling copy number from posterior probabilities...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[188ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[220ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Saving whole chromosome copy number calls to altExp: smoothedCopyNumberByChr,</span></span>
 <span><span class="co">#&gt;   assay: gmmCopyNumber...</span></span>
