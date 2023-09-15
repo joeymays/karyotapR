@@ -51,4 +51,4 @@ For details on the workflow, see the [Getting
 Started](https://joeymays.xyz/karyotapR/articles/karyotapR.html) guide,
 articles on this site, and the package reference/documentation.
 
-![](./vignettes/articles/workflow.png)
+<img src="vignettes/articles/workflow.png" width="100%" />
