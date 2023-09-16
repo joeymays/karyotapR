@@ -12,8 +12,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   tidy = TRUE,
-  tidy.opts = list(width.cutoff = 80)
-)
+  tidy.opts = list(width.cutoff = 80), 
+  out.height = "60%",
+  out.width = "100%",
+  dpi = 300,
+  fig.cap = ""
+  )
 ```
 
 ```{r setup, message=FALSE}
@@ -103,6 +107,7 @@ Visualizing the smoothed copy number values for the simulated cells confirms we 
 ```{r heatmap 1, message=FALSE}
 assayHeatmap(simulated.tapestri.experiment, alt.exp = "smoothedCopyNumberByChr", assay = "smoothedCopyNumber", split.col.by = "feature.id", split.row.by = "cn.sim.class", annotate.row.by = "cn.sim.class", color.preset = "copy.number")
 ```
+
 For a given chromosome, the simulated values are roughly normally distributed, 
 representing the distribution of the expected copy number values that would be measured by our probe panel for cells with true copy number values of 1-6.
 Notice that for copy numbers > 2, the spread of the distributions are such that a cell with true copy number = 4, for example, could have a smoothed 
@@ -127,6 +132,7 @@ tidy.data %>% filter(feature.id == 19) %>%
     scale_x_continuous(breaks = 0:10) +
     ggtitle("Chromosome 19")
 ```
+
 To build the Gaussian Mixture Model (GMM) for assigning copy number labels to each cell-chromosome unit, we first
 fit Gaussian (normal) distributions to the smoothed copy number values of each chromosome and copy number level.
 Each chromosome and copy number level is now represented by the mean and standard deviation parameters of a normal distribution.
