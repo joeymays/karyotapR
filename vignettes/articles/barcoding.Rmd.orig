@@ -1,0 +1,121 @@
+---
+title: "Barcoding and gRNA Probes"
+date: 'Compiled on `r format(Sys.Date(), "%B %d, %Y")`'
+---
+
+This tutorial will demonstrate how to use `karyotapR` to parse and count
+barcoded and gRNA reads using the specialty probes in the KaryoTap Tapestri
+panels. These barcodes and gRNAs are integrated into the cell's genome using
+lentivirus and are amplified by specially designed probes specific to the
+vectors. Details on the probe design can be found in the KaryoTap publication, 
+and details on the usage of the functions here can be found in the package
+documentation and reference on this site.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+    tidy = TRUE,
+  tidy.opts = list(width.cutoff = 80), 
+  fig.asp = .60,
+  out.width = "100%",
+  dpi = 300,
+  fig.cap = ""
+  )
+```
+
+```{r setup, warning=FALSE, message=FALSE}
+library(karyotapR)
+```
+
+The procedures for counting barcoded reads and gRNA reads are largely identical,
+except for pointing the function to the correct probe. Since gRNAs sequences
+essentially act as barcodes, we're going to refer to both barcodes and gRNAs as
+barcodes here.
+
+Barcode sequences are extracted from the aligned reads stored in the `.bam` file
+that is output as part of the Tapestri Pipeline. We'll use a dataset (experiment 4) from the 
+KaryoTap paper as an example. The `.bam` file used in this tutorial 
+can be downloaded from the [SRA repository](https://www.ncbi.nlm.nih.gov/sra/SRX20233247). 
+The file needs a corresponding `.bai` index file as well. If you did not retrieve it from the
+Pipeline output, you can generate a new one (see the `countBarcodedReads()`
+documentation).
+
+```{r, include=FALSE}
+tapexp <- readRDS("~/Documents/data-and-analyses/tapestri/karyotap-publication/datasets/exp04.tapestriexperiment.RDS")
+```
+
+To identify the barcoded sequences within the reads, we need a lookup table
+containing the barcode ID (whatever you want the name to appear as in the result) 
+and the corresponding nucleotide sequences for the barcode.
+
+```{r}
+grna.lookup <- data.frame(ids = c("gRNA1", "gRNA2"),
+                             sequences = c("ACGGAGGCTAAGCGTCGCAA", "ACTCTTGCTGTGGCATTTTC"))
+```
+
+Barcoded reads are counted using `countBarcodedReads()` and then saved to
+a `colData` column named using the IDs. The `.bam` file to use is specified 
+by its filepath. Here we specify the `probe` that were interested in is 
+the "gRNA" probe, which points the function to the probe ID stored in the 
+`grnaProbe` slot of the `TapestriExperiment` object. Specifying "barcode" 
+similarly points to the probe ID `barcodeProbe` slot. 
+
+To account for PCR errors, the function by default allows for 2 base mismatches.
+This can be altered to the user's preference. Indels can be allowed as well 
+using `with.indels = TRUE` but is set to `FALSE` by default.
+
+
+```{r}
+grnaProbe(tapexp)
+barcodeProbe(tapexp)
+```
+
+```{r, eval = F}
+tapexp <- countBarcodedReads(tapexp, bam.file = "./tapexp.bam", probe = "grna", 
+                             barcode.lookup = grna.lookup, max.mismatch = 2, 
+                             with.indels = F)
+```
+
+```{r, eval = T, include= FALSE}
+tapexp <- countBarcodedReads(tapexp, bam.file = "~/Documents/data-and-analyses/tapestri/karyotap-publication/datasets/exp04.cells.bam", probe = "grna", 
+                             barcode.lookup = grna.lookup, max.mismatch = 2, 
+                             with.indels = F)
+```
+
+The counts for the two gRNA sequences in each cell are now associated with the 
+corresponding cell barcode.
+
+```{r}
+colData(tapexp)
+```
+
+To quickly assign sample labels to the cells, 
+you can use `callSampleLabels()` to assign a label based on the gRNA counts.
+This creates a colData entry specified by `output.feature` and labels the cell
+with whichever of the `input.feature`s has the highest number of counts.
+If there are no counts for any input feature, the return value is `NA`. See
+the documentation for ways to customize the parameters of this process. 
+
+```{r}
+tapexp <- callSampleLables(tapexp, input.features = c("gRNA1", "gRNA2"), 
+                           output.feature = "sample.id")
+
+colData(tapexp)
+```
+
+You can visualize the results a few different ways, including as the annotations
+on a UMAP or heatmap. Here we show that each of the gRNAs were transduced in
+a specific cell line from the experiment. 
+
+```{r barcode plots}
+reducedDimPlot(tapexp, dim.reduction = "umap", group.label = "sample.id")
+assayHeatmap(tapexp, alt.exp = "smoothedCopyNumberByChr", 
+             assay = "gmmCopyNumber", split.row.by = "cluster", 
+             annotate.row.by = "sample.id", color.preset = "copy.number")
+```
+
+
+```{r session info}
+sessioninfo::session_info()
+```

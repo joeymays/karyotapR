@@ -1,5 +1,6 @@
 ---
 title: "GMMs for Copy Number Calling"
+date: 'Compiled on `r format(Sys.Date(), "%B %d, %Y")`'
 ---
 
 The objective of using Gaussian Mixture Models (GMMs) is to assign discrete copy number values to each chromosome in each cell in a Tapestri experiment in a probabilistic manner, 
@@ -13,7 +14,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   tidy = TRUE,
   tidy.opts = list(width.cutoff = 80), 
-  out.height = "60%",
+  fig.asp = .60,
   out.width = "100%",
   dpi = 300,
   fig.cap = ""
