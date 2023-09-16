@@ -48,6 +48,12 @@
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/GMMs-for-Copy-Number-Calling.html">GMMs for Copy Number Calling</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
@@ -77,7 +83,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>karyotapR Basic Workflow</h1>
             
-            <h4 data-toc-skip class="date">Compiled on September 15,
+            <h4 data-toc-skip class="date">Compiled on September 16,
 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/joeymays/karyotapR/blob/HEAD/vignettes/articles/karyotapR.Rmd" class="external-link"><code>vignettes/articles/karyotapR.Rmd</code></a></small>
@@ -389,10 +395,10 @@ chromosome arms.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating probe values for 500 simulated cells... <span style="color: #B2B2B2;">[2.1s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fitting Gaussian distributions to simulated cells...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[12.5s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[12.6s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating posterior probabilities...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[623ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[634ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calling copy number from posterior probabilities...</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[210ms]</span></span></span>
@@ -427,7 +433,7 @@ chromosome arms.</p>
 <span><span class="co">#&gt;  collate  C.UTF-8</span></span>
 <span><span class="co">#&gt;  ctype    C.UTF-8</span></span>
 <span><span class="co">#&gt;  tz       UTC</span></span>
-<span><span class="co">#&gt;  date     2023-09-15</span></span>
+<span><span class="co">#&gt;  date     2023-09-16</span></span>
 <span><span class="co">#&gt;  pandoc   2.19.2 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
@@ -476,7 +482,7 @@ chromosome arms.</p>
 <span><span class="co">#&gt;  iterators              1.0.14     <span style="color: #555555;">2022-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  jquerylib              0.1.4      <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  jsonlite               1.8.7      <span style="color: #555555;">2023-06-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
-<span><span class="co">#&gt;  karyotapR            * <span style="color: #BB00BB; font-weight: bold;">1.0.1.9000</span> <span style="color: #555555;">2023-09-15</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
+<span><span class="co">#&gt;  karyotapR            * <span style="color: #BB00BB; font-weight: bold;">1.0.1.9000</span> <span style="color: #555555;">2023-09-16</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
 <span><span class="co">#&gt;  knitr                  1.44       <span style="color: #555555;">2023-09-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  labeling               0.4.3      <span style="color: #555555;">2023-08-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  lattice                0.21-8     <span style="color: #555555;">2023-04-05</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
