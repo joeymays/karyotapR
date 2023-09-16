@@ -139,19 +139,19 @@ representative sample of probes.</p>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">probe.sample</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/fitdistrplus/man/graphcomp.html" class="external-link">denscomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">wfit.ft</span><span class="op">[[</span><span class="va">.x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">.x</span>,</span>
 <span>    plotstyle <span class="op">=</span> <span class="st">"ggplot"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>, axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/fit%20plots-1.png"></p>
+<p><img src="figure/fit%20plots-1.png" width="100%" height="60%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">probe.sample</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/fitdistrplus/man/graphcomp.html" class="external-link">qqcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">wfit.ft</span><span class="op">[[</span><span class="va">.x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">.x</span>,</span>
 <span>    plotstyle <span class="op">=</span> <span class="st">"ggplot"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>, axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/fit%20plots-2.png"></p>
+<p><img src="figure/fit%20plots-2.png" width="100%" height="60%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">probe.sample</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/fitdistrplus/man/graphcomp.html" class="external-link">cdfcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">wfit.ft</span><span class="op">[[</span><span class="va">.x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">.x</span>,</span>
 <span>    plotstyle <span class="op">=</span> <span class="st">"ggplot"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>, axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/fit%20plots-3.png"></p>
+<p><img src="figure/fit%20plots-3.png" width="100%" height="60%"></p>
 <p>The fitted parameters correspond to count values expected to be
 measured by probes for samples that are have copy number = 2 (diploid).
 The exceptions are probes targeted to chr10q which have copy number =
@@ -175,7 +175,7 @@ simulated cells with a count value for each probe.</p>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>ℹ Generating probe values <span class="cf">for</span> <span class="dv">500</span> simulated cells...</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>✔ Generating probe values <span class="cf">for</span> <span class="dv">500</span> simulated cells... [<span class="fl">2.8</span>s]</span></code></pre></div>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>✔ Generating probe values <span class="cf">for</span> <span class="dv">500</span> simulated cells... [<span class="fl">2.6</span>s]</span></code></pre></div>
 <p>The number of simulated cells is 500 cells per copy number * number
 of copy number levels = 500 x 6 = 3000</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -202,14 +202,15 @@ level across all chromosomes.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/assayHeatmap.html">assayHeatmap</a></span><span class="op">(</span><span class="va">simulated.tapestri.experiment</span>, alt.exp <span class="op">=</span> <span class="st">"smoothedCopyNumberByChr"</span>,</span>
 <span>    assay <span class="op">=</span> <span class="st">"smoothedCopyNumber"</span>, split.col.by <span class="op">=</span> <span class="st">"feature.id"</span>, split.row.by <span class="op">=</span> <span class="st">"cn.sim.class"</span>,</span>
 <span>    annotate.row.by <span class="op">=</span> <span class="st">"cn.sim.class"</span>, color.preset <span class="op">=</span> <span class="st">"copy.number"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/heatmap%201-1.png"> For a given chromosome, the
-simulated values are roughly normally distributed, representing the
-distribution of the expected copy number values that would be measured
-by our probe panel for cells with true copy number values of 1-6. Notice
-that for copy numbers &gt; 2, the spread of the distributions are such
-that a cell with true copy number = 4, for example, could have a
-smoothed copy number value between ~2.5 and ~5.5, making rounding the
-value to an integer a problematic way to assign copy number values.</p>
+<p><img src="figure/heatmap%201-1.png" width="100%" height="60%"></p>
+<p>For a given chromosome, the simulated values are roughly normally
+distributed, representing the distribution of the expected copy number
+values that would be measured by our probe panel for cells with true
+copy number values of 1-6. Notice that for copy numbers &gt; 2, the
+spread of the distributions are such that a cell with true copy number =
+4, for example, could have a smoothed copy number value between ~2.5 and
+~5.5, making rounding the value to an integer a problematic way to
+assign copy number values.</p>
 <p>The overlaped regions become larger with fewer probes, as in Chr 19,
 making the assignment of copy number values less straightforward.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -220,19 +221,20 @@ making the assignment of copy number values less straightforward.</p>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">feature.id</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">smoothedCopyNumber</span>, fill <span class="op">=</span> <span class="va">cn.sim.class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Chromosome 1"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20chr1chr19-1.png"></p>
+<p><img src="figure/GMM%20chr1chr19-1.png" width="100%" height="60%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">tidy.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">feature.id</span> <span class="op">==</span> <span class="fl">19</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">smoothedCopyNumber</span>, fill <span class="op">=</span> <span class="va">cn.sim.class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Chromosome 19"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20chr1chr19-2.png"> To build the Gaussian
-Mixture Model (GMM) for assigning copy number labels to each
-cell-chromosome unit, we first fit Gaussian (normal) distributions to
-the smoothed copy number values of each chromosome and copy number
-level. Each chromosome and copy number level is now represented by the
-mean and standard deviation parameters of a normal distribution.</p>
+<p><img src="figure/GMM%20chr1chr19-2.png" width="100%" height="60%"></p>
+<p>To build the Gaussian Mixture Model (GMM) for assigning copy number
+labels to each cell-chromosome unit, we first fit Gaussian (normal)
+distributions to the smoothed copy number values of each chromosome and
+copy number level. Each chromosome and copy number level is now
+represented by the mean and standard deviation parameters of a normal
+distribution.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cn.model.params.chr</span> <span class="op">&lt;-</span> <span class="fu">karyotapR</span><span class="fu">:::</span><span class="fu">.fitGaussianDistributions</span><span class="op">(</span>simulated.tapestri.experiment <span class="op">=</span> <span class="va">simulated.tapestri.experiment</span>,</span>
 <span>    chromosome.scope <span class="op">=</span> <span class="st">"chr"</span><span class="op">)</span></span>
@@ -325,7 +327,7 @@ whose boundaries the value falls within.</p>
 <span><span class="co">#&gt; 10 10               1.38       2.48       3.57       4.61       5.65</span></span>
 <span><span class="co">#&gt; # ℹ 13 more rows</span></span>
 <span><span class="fu"><a href="../reference/plotCopyNumberGMM.html">plotCopyNumberGMM</a></span><span class="op">(</span><span class="va">cellmix</span>, feature.id <span class="op">=</span> <span class="fl">1</span>, draw.boundaries <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20boundaries-1.png"></p>
+<p><img src="figure/GMM%20boundaries-1.png" width="100%" height="60%"></p>
 <p>To get a sense of how accurate the model is, we can calculate the
 theoretical true positive rate for each component, i.e. the proportion
 of the component for which it’s values fall within it’s boundaries. Put
@@ -351,7 +353,7 @@ that they would be assigned copy number = 2.</p>
 <span>        alpha <span class="op">=</span> <span class="fl">0.5</span>, inherit.aes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.37</span>, <span class="fl">2.46</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey75"</span>, <span class="st">"lightgreen"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"True Positive"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Copy Number"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20plot-1.png"></p>
+<p><img src="figure/GMM%20plot-1.png" width="100%" height="60%"></p>
 <p>To calculate the theoretical true positive rate for copy number = 2,
 we calculate the proportion of the area under the curve of the grey
 sections and subtract them from 1 to get the proportion of the area in
@@ -386,7 +388,7 @@ is significantly less than for chromosome 2.</p>
 <span>        alpha <span class="op">=</span> <span class="fl">0.5</span>, inherit.aes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.56</span>, <span class="fl">2.81</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey75"</span>, <span class="st">"lightgreen"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"True Positive"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Copy Number"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/chr%2019%20plot-1.png"></p>
+<p><img src="figure/chr%2019%20plot-1.png" width="100%" height="60%"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">lower.p</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fl">1.56</span>, <span class="fl">2.000435</span>, <span class="fl">0.6301878</span>, lower.tail <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
