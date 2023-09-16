@@ -63,7 +63,7 @@ cowplot::plot_grid(plotlist = map(probe.sample, ~denscomp(list(wfit.ft[[.x]]), m
     axis.title = element_blank())), nrow = 2)
 ```
 
-![plot of chunk fit plots](figure/fit plots-1.png)
+![](figure/fit plots-1.png)
 
 ```r
 
@@ -72,7 +72,7 @@ cowplot::plot_grid(plotlist = map(probe.sample, ~qqcomp(list(wfit.ft[[.x]]), mai
     axis.title = element_blank())), nrow = 2)
 ```
 
-![plot of chunk fit plots](figure/fit plots-2.png)
+![](figure/fit plots-2.png)
 
 ```r
 
@@ -81,7 +81,7 @@ cowplot::plot_grid(plotlist = map(probe.sample, ~cdfcomp(list(wfit.ft[[.x]]), ma
     axis.title = element_blank())), nrow = 2)
 ```
 
-![plot of chunk fit plots](figure/fit plots-3.png)
+![](figure/fit plots-3.png)
 
 The fitted parameters correspond to count values expected to be measured by probes for samples that are have copy number = 2 (diploid).
 The exceptions are probes targeted to chr10q which have copy number = 3.
@@ -102,7 +102,10 @@ control.cn["chr10q", "copy.number"] <- 3
 
 simulated.cells <- karyotapR:::.generateSimulatedCNVCells(cellmix.rpe1, control.copy.number = control.cn,
     n.simulated.cells = 500)
-#> ℹ Generating probe values for 500 simulated cells...✔ Generating probe values for 500 simulated cells... [2.8s]
+#> 
+ℹ Generating probe values for 500 simulated cells...
+
+✔ Generating probe values for 500 simulated cells... [2.8s]
 ```
 
 The number of simulated cells is 500 cells per copy number * number of copy number levels = 500 x 6 = 3000
@@ -138,7 +141,7 @@ assayHeatmap(simulated.tapestri.experiment, alt.exp = "smoothedCopyNumberByChr",
     annotate.row.by = "cn.sim.class", color.preset = "copy.number")
 ```
 
-![plot of chunk heatmap 1](figure/heatmap 1-1.png)
+![](figure/heatmap 1-1.png)
 For a given chromosome, the simulated values are roughly normally distributed, 
 representing the distribution of the expected copy number values that would be measured by our probe panel for cells with true copy number values of 1-6.
 Notice that for copy numbers > 2, the spread of the distributions are such that a cell with true copy number = 4, for example, could have a smoothed 
@@ -157,7 +160,7 @@ tidy.data %>%
     theme_bw() + scale_x_continuous(breaks = 0:10) + ggtitle("Chromosome 1")
 ```
 
-![plot of chunk GMM chr1chr19](figure/GMM chr1chr19-1.png)
+![](figure/GMM chr1chr19-1.png)
 
 ```r
 
@@ -167,7 +170,7 @@ tidy.data %>%
     theme_bw() + scale_x_continuous(breaks = 0:10) + ggtitle("Chromosome 19")
 ```
 
-![plot of chunk GMM chr1chr19](figure/GMM chr1chr19-2.png)
+![](figure/GMM chr1chr19-2.png)
 To build the Gaussian Mixture Model (GMM) for assigning copy number labels to each cell-chromosome unit, we first
 fit Gaussian (normal) distributions to the smoothed copy number values of each chromosome and copy number level.
 Each chromosome and copy number level is now represented by the mean and standard deviation parameters of a normal distribution.
@@ -267,7 +270,7 @@ getGMMBoundaries(cellmix)
 plotCopyNumberGMM(cellmix, feature.id = 1, draw.boundaries = T)
 ```
 
-![plot of chunk GMM boundaries](figure/GMM boundaries-1.png)
+![](figure/GMM boundaries-1.png)
 
 To get a sense of how accurate the model is, we can calculate the theoretical true positive rate for each component, 
 i.e. the proportion of the component for which it's values fall within it's boundaries.
@@ -296,7 +299,7 @@ ggplot(chr1.data) + ggdist::geom_slab(data = chr1.data, mapping = aes(x = x, thi
     color = "Copy Number")
 ```
 
-![plot of chunk GMM plot](figure/GMM plot-1.png)
+![](figure/GMM plot-1.png)
 
 To calculate the theoretical true positive rate for copy number = 2, 
 we calculate the proportion of the area under the curve of the grey sections and subtract them from 1 to get 
@@ -338,7 +341,7 @@ ggplot(chr19.data) + ggdist::geom_slab(data = chr19.data, mapping = aes(x = x, t
     color = "Copy Number")
 ```
 
-![plot of chunk chr 19 plot](figure/chr 19 plot-1.png)
+![](figure/chr 19 plot-1.png)
 
 ```r
 
