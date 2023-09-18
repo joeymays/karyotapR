@@ -1,0 +1,168 @@
+---
+title: "Navigating the TapestriExperiment Class"
+date: 'Compiled on `r format(Sys.Date(), "%B %d, %Y")`'
+---
+
+# Introduction
+
+The `TapestriExperiment` object class is the container that holds all
+data and metadata related to a KaryoTap experiment. The `TapestriExperiment` 
+class is built on top of the[`SingleCellExperiment`](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) and [`SummarizedExperiment`](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) classes, and they inherit their basic functionality and interface.
+More information can be found in their respective documentations. 
+This tutorial will cover the basics to the structure and navigation of the `TapestriExperiment` class.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  tidy = TRUE,
+  tidy.opts = list(width.cutoff = 80), 
+  fig.asp = .60,
+  out.width = "100%",
+  dpi = 300,
+  fig.cap = ""
+  )
+```
+
+# TapestriExperiment
+
+We'll use the cell mixture experiment from the KaryoTap publication as an example.
+
+```{r setup, warning=F, message=F}
+library(karyotapR)
+```
+
+```{r, include=FALSE}
+cellmix <- readRDS("./data/exp01.tapestriexperiment.RDS")
+```
+
+Calling the object will print a summary of the contained data.
+
+```{r}
+cellmix
+```
+
+The centerpiece of the object is the `assay` slot. This is organized as a matrix, 
+and calling `dim()` on the object will accordingly return the dimensions. For
+`TapestriExperiment`, the rows represent probes (i.e., features) and the columns 
+represent cells (i.e., samples). Calling `colData()` and `rowData()` will return the metadata for the cells and probes respectively. 
+
+```{r}
+dim(cellmix)
+```
+
+```{r}
+colData(cellmix)
+```
+
+```{r}
+rowData(cellmix)
+```
+
+Metadata columns can be added to either `rowData` or `colData` by assignment
+
+```{r}
+rowData(cellmix)$example.name <- "example.value"
+```
+
+The entire object can be subset using bracket notation, either by index or with a
+vector of probe and/or cell names.
+
+```{r}
+cellmix[1:5, 1:5]
+```
+
+Additional metadata generated automatically when the object is created can be
+retrieved using `metadata()`.
+
+```{r}
+metadata(cellmix)
+```
+
+# Assays
+
+The basic unit of the `TapestriExperiment` is the "assay" which can be found
+in the `assays` slot. Each `assay` holds values of the probe x cell matrix.
+There can be multiple assays in the slot, each representing some value corresponding 
+to the same probes and cells. Here we use assays to store raw count values from
+sequencing, the values of those counts after normalization, and the copy number
+score for each cell and probe unit. Calling `assay()` will return the matrix of 
+the first-indexed `assay` by default; others can be called by specifying their name.
+
+```{r}
+#list assays
+assays(cellmix)
+```
+
+```{r}
+#get counts assay
+corner(assay(cellmix))
+```
+
+```{r}
+#get copyNumber assay
+corner(assay(cellmix, "copyNumber"))
+```
+
+Like any matrix, assays can also be subset using bracket notation.
+
+```{r}
+assay(cellmix)[1:5, 1:5]
+```
+
+# Alternate Experiments
+
+Alternate Experiments (`altExps`) allow the use to store values from the same
+samples with different features. In other words, cells in the data have associated 
+read counts for probes and allele frequencies for variants. The `altExp` framework
+allows us to store both datasets for the same columns/cells, one where the rows are probes
+and one where the rows are variants. We use this to store the smoothed chromosome scores
+and copy number calls as well, where the features/rows are chromosomes or chromosome arms.
+Each `altExp` can have its own set of features and several `assay`s. The `assay`s contained
+within an `altExp` must have the same set of features.
+
+```{r}
+#list alternate experiments
+altExps(cellmix)
+```
+
+```{r}
+#retrieve alternate experiment
+altExp(cellmix, "smoothedCopyNumberByChr")
+```
+
+```{r}
+#list assays in altExp
+assays(altExp(cellmix, "smoothedCopyNumberByChr"))
+```
+
+```{r}
+#retrieve assay in altExp
+corner(assay(altExp(cellmix, "smoothedCopyNumberByChr"), "gmmCopyNumber"))
+```
+
+# Other Slots
+
+The `barcodeProbe` and `grnaProbe` slots are set automatically by the `panel.id` parameter of `createTapestriExperiment()`.
+They are used as shortcuts for the [barcoded read parsing](https://joeymays.xyz/karyotapR/articles/barcoding.html) functions of the package.
+The values for these slots can be retrieved and set manually as well.
+
+```{r}
+barcodeProbe(cellmix)
+grnaProbe(cellmix)
+
+#setting manually
+grnaProbe(cellmix) <- "probe_id_123"
+```
+
+The `gmmParams` slot stores information for the [GMM models](https://joeymays.xyz/karyotapR/articles/GMMs-for-Copy-Number-Calling.html) generated for copy number calling in the form of two nested matrices one for whole chromosome calls and one for chromosome arm calls. The data include the 
+Gaussian model parameters fit for each chromosome or arm, the probability density functions for those models, the probabilities of each cell
+belonging to a copy number class, and the classification results.
+
+```{r}
+gmmParams(cellmix)
+```
+
+```{r}
+sessioninfo::session_info()
+```

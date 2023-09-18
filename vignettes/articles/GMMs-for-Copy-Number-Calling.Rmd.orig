@@ -114,7 +114,7 @@ representing the distribution of the expected copy number values that would be m
 Notice that for copy numbers > 2, the spread of the distributions are such that a cell with true copy number = 4, for example, could have a smoothed 
 copy number value between ~2.5 and ~5.5, making rounding the value to an integer a problematic way to assign copy number values.
 
-The overlaped regions become larger with fewer probes, as in Chr 19, making the assignment of copy number values less straightforward.
+The overlapped regions become larger with fewer probes, as in Chr 19, making the assignment of copy number values less straightforward.
 
 ```{r GMM chr1chr19}
 tidy.data <- getTidyData(simulated.tapestri.experiment, alt.exp = "smoothedCopyNumberByChr", assay = "smoothedCopyNumber")

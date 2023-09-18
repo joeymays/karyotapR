@@ -1,0 +1,485 @@
+---
+title: "Navigating the TapestriExperiment Class"
+date: 'Compiled on September 18, 2023'
+---
+
+# Introduction
+
+The `TapestriExperiment` object class is the container that holds all
+data and metadata related to a KaryoTap experiment. The `TapestriExperiment` 
+class is built on top of the[`SingleCellExperiment`](https://bioconductor.org/packages/release/bioc/html/SingleCellExperiment.html) and [`SummarizedExperiment`](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html) classes, and they inherit their basic functionality and interface.
+More information can be found in their respective documentations. 
+This tutorial will cover the basics to the structure and navigation of the `TapestriExperiment` class.
+
+
+
+# TapestriExperiment
+
+We'll use the cell mixture experiment from the KaryoTap publication as an example.
+
+
+```r
+library(karyotapR)
+```
+
+
+
+Calling the object will print a summary of the contained data.
+
+
+```r
+cellmix
+#> class: TapestriExperiment 
+#> dim: 317 2987 
+#> metadata(7): sample.name pipeline.panel.name ... date.h5.created mean.reads.per.cell.per.probe
+#> assays(3): counts normcounts copyNumber
+#> rownames(317): AMPL158802 AMPL146998 ... AMPL162086 AMPL161738
+#> rowData names(9): probe.id chr ... arm norm.count.sd
+#> colnames(2987): AACAACCTAATAGTGGTT-1 AACAACCTAGTCCTAGTT-1 ... TTGTAATGCTCGTACCTT-1
+#>   TTGTATCACACTTGATCT-1
+#> colData names(3): cell.barcode total.reads cluster
+#> reducedDimNames(0):
+#> mainExpName: CNV
+#> altExpNames(3): alleleFrequency smoothedCopyNumberByChr smoothedCopyNumberByArm
+#> barcodeProbe: not specified
+#> grnaProbe: not specified
+#> gmmParams(2): chr arm
+```
+
+The centerpiece of the object is the `assay` slot. This is organized as a matrix, 
+and calling `dim()` on the object will accordingly return the dimensions. For
+`TapestriExperiment`, the rows represent probes (i.e., features) and the columns 
+represent cells (i.e., samples). Calling `colData()` and `rowData()` will return the metadata for the cells and probes respectively. 
+
+
+```r
+dim(cellmix)
+#> [1]  317 2987
+```
+
+
+```r
+colData(cellmix)
+#> DataFrame with 2987 rows and 3 columns
+#>                              cell.barcode total.reads  cluster
+#>                               <character>   <numeric> <factor>
+#> AACAACCTAATAGTGGTT-1 AACAACCTAATAGTGGTT-1       60264    LS513
+#> AACAACCTAGTCCTAGTT-1 AACAACCTAGTCCTAGTT-1       22455    LS513
+#> AACAACCTATGGACGAGA-1 AACAACCTATGGACGAGA-1       51206    LS513
+#> AACAACTGGGACATAACG-1 AACAACTGGGACATAACG-1       17998    CL11 
+#> AACAACTGGGGAACCTAG-1 AACAACTGGGGAACCTAG-1       14202    LoVo 
+#> ...                                   ...         ...      ...
+#> TTGGAGAACTGGTAGCAG-1 TTGGAGAACTGGTAGCAG-1       26435     RPE1
+#> TTGGTAACTCCATATCTT-1 TTGGTAACTCCATATCTT-1       44154     SW48
+#> TTGTAATGCCTATAGCTC-1 TTGTAATGCCTATAGCTC-1       24469     RPE1
+#> TTGTAATGCTCGTACCTT-1 TTGTAATGCTCGTACCTT-1       16216     SW48
+#> TTGTATCACACTTGATCT-1 TTGTATCACACTTGATCT-1       18831     SW48
+```
+
+
+```r
+rowData(cellmix)
+#> DataFrame with 317 rows and 9 columns
+#>               probe.id      chr start.pos   end.pos total.reads median.reads    cytoband      arm norm.count.sd
+#>            <character> <factor> <numeric> <numeric>   <numeric>    <integer> <character> <factor>     <numeric>
+#> AMPL158802  AMPL158802        1   1479191   1479385      202832           49      p36.33    chr1p      1.365966
+#> AMPL146998  AMPL146998        1   6196653   6196900      112408           24      p36.31    chr1p      1.264583
+#> AMPL158817  AMPL158817        1  11832076  11832330       99472           22      p36.22    chr1p      1.093818
+#> AMPL158827  AMPL158827        1  17087135  17087388     1162986          304      p36.13    chr1p      0.665911
+#> AMPL147006  AMPL147006        1  34285091  34285360      248023           53       p35.1    chr1p      1.181844
+#> ...                ...      ...       ...       ...         ...          ...         ...      ...           ...
+#> AMPL161732  AMPL161732        X 128880366 128880635      568729          133       q26.1    chrXq       1.14576
+#> AMPL161734  AMPL161734        X 130415574 130415843      231144           49       q26.2    chrXq       1.34813
+#> AMPL161735  AMPL161735        X 135429800 135430069      156462           33       q26.3    chrXq       1.80859
+#> AMPL162086  AMPL162086        X 140993717 140993974      195494           47       q27.2    chrXq       1.24238
+#> AMPL161738  AMPL161738        X 142794979 142795248      400235           93       q27.3    chrXq       1.33365
+```
+
+Metadata columns can be added to either `rowData` or `colData` by assignment
+
+
+```r
+rowData(cellmix)$example.name <- "example.value"
+```
+
+The entire object can be subset using bracket notation, either by index or with a
+vector of probe and/or cell names.
+
+
+```r
+cellmix[1:5, 1:5]
+#> class: TapestriExperiment 
+#> dim: 5 5 
+#> metadata(7): sample.name pipeline.panel.name ... date.h5.created mean.reads.per.cell.per.probe
+#> assays(3): counts normcounts copyNumber
+#> rownames(5): AMPL158802 AMPL146998 AMPL158817 AMPL158827 AMPL147006
+#> rowData names(10): probe.id chr ... norm.count.sd example.name
+#> colnames(5): AACAACCTAATAGTGGTT-1 AACAACCTAGTCCTAGTT-1 AACAACCTATGGACGAGA-1 AACAACTGGGACATAACG-1
+#>   AACAACTGGGGAACCTAG-1
+#> colData names(3): cell.barcode total.reads cluster
+#> reducedDimNames(0):
+#> mainExpName: CNV
+#> altExpNames(3): alleleFrequency smoothedCopyNumberByChr smoothedCopyNumberByArm
+#> barcodeProbe: not specified
+#> grnaProbe: not specified
+#> gmmParams(2): chr arm
+```
+
+Additional metadata generated automatically when the object is created can be
+retrieved using `metadata()`.
+
+
+```r
+metadata(cellmix)
+#> $sample.name
+#> [1] "Teresa_s_cell_line_mix"
+#> 
+#> $pipeline.panel.name
+#> [1] "CO261_NYU_Davoli_03102021_hg19"
+#> 
+#> $pipeline.version
+#> [1] "2.0.2"
+#> 
+#> $number.of.cells
+#> [1] "3555"
+#> 
+#> $number.of.probes
+#> [1] "330"
+#> 
+#> $date.h5.created
+#> [1] "2021-09-15"
+#> 
+#> $mean.reads.per.cell.per.probe
+#> [1] "89.22"
+```
+
+# Assays
+
+The basic unit of the `TapestriExperiment` is the "assay" which can be found
+in the `assays` slot. Each `assay` holds values of the probe x cell matrix.
+There can be multiple assays in the slot, each representing some value corresponding 
+to the same probes and cells. Here we use assays to store raw count values from
+sequencing, the values of those counts after normalization, and the copy number
+score for each cell and probe unit. Calling `assay()` will return the matrix of 
+the first-indexed `assay` by default; others can be called by specifying their name.
+
+
+```r
+# list assays
+assays(cellmix)
+#> List of length 3
+#> names(3): counts normcounts copyNumber
+```
+
+
+```r
+# get counts assay
+corner(assay(cellmix))
+#>            AACAACCTAATAGTGGTT-1 AACAACCTAGTCCTAGTT-1 AACAACCTATGGACGAGA-1 AACAACTGGGACATAACG-1
+#> AMPL158802                   97                  129                   63                   66
+#> AMPL146998                   36                   18                   94                   10
+#> AMPL158817                   71                   17                   62                    1
+#> AMPL158827                  495                  330                  489                  192
+#> AMPL147006                  142                   26                   95                   37
+#>            AACAACTGGGGAACCTAG-1
+#> AMPL158802                   15
+#> AMPL146998                   21
+#> AMPL158817                    5
+#> AMPL158827                  149
+#> AMPL147006                   15
+```
+
+
+```r
+# get copyNumber assay
+corner(assay(cellmix, "copyNumber"))
+#>            AACAACCTAATAGTGGTT-1 AACAACCTAGTCCTAGTT-1 AACAACCTATGGACGAGA-1 AACAACTGGGACATAACG-1
+#> AMPL158802             1.706083            6.0371189             1.302930            3.8389024
+#> AMPL146998             1.163343            1.5477091             3.571785            1.0686610
+#> AMPL158817             2.765227            1.7617041             2.839333            0.1287974
+#> AMPL158827             1.239042            2.1978910             1.439268            1.5893391
+#> AMPL147006             1.944232            0.9472066             1.529451            1.6753140
+#>            AACAACTGGGGAACCTAG-1
+#> AMPL158802            1.1006006
+#> AMPL146998            2.8309654
+#> AMPL158817            0.8123674
+#> AMPL158827            1.5558830
+#> AMPL147006            0.8567637
+```
+
+Like any matrix, assays can also be subset using bracket notation.
+
+
+```r
+assay(cellmix)[1:5, 1:5]
+#>            AACAACCTAATAGTGGTT-1 AACAACCTAGTCCTAGTT-1 AACAACCTATGGACGAGA-1 AACAACTGGGACATAACG-1
+#> AMPL158802                   97                  129                   63                   66
+#> AMPL146998                   36                   18                   94                   10
+#> AMPL158817                   71                   17                   62                    1
+#> AMPL158827                  495                  330                  489                  192
+#> AMPL147006                  142                   26                   95                   37
+#>            AACAACTGGGGAACCTAG-1
+#> AMPL158802                   15
+#> AMPL146998                   21
+#> AMPL158817                    5
+#> AMPL158827                  149
+#> AMPL147006                   15
+```
+
+# Alternate Experiments
+
+Alternate Experiments (`altExps`) allow the use to store values from the same
+samples with different features. In other words, cells in the data have associated 
+read counts for probes and allele frequencies for variants. The `altExp` framework
+allows us to store both datasets for the same columns/cells, one where the rows are probes
+and one where the rows are variants. We use this to store the smoothed chromosome scores
+and copy number calls as well, where the features/rows are chromosomes or chromosome arms.
+Each `altExp` can have its own set of features and several `assay`s. The `assay`s contained
+within an `altExp` must have the same set of features.
+
+
+```r
+# list alternate experiments
+altExps(cellmix)
+#> List of length 3
+#> names(3): alleleFrequency smoothedCopyNumberByChr smoothedCopyNumberByArm
+```
+
+
+```r
+# retrieve alternate experiment
+altExp(cellmix, "smoothedCopyNumberByChr")
+#> class: TapestriExperiment 
+#> dim: 23 2987 
+#> metadata(0):
+#> assays(3): smoothedCopyNumber discreteCopyNumber gmmCopyNumber
+#> rownames(23): 1 2 ... 22 X
+#> rowData names(0):
+#> colnames(2987): AACAACCTAATAGTGGTT-1 AACAACCTAGTCCTAGTT-1 ... TTGTAATGCTCGTACCTT-1
+#>   TTGTATCACACTTGATCT-1
+#> colData names(0):
+#> reducedDimNames(0):
+#> mainExpName: NULL
+#> altExpNames(0):
+#> barcodeProbe: 
+#> grnaProbe: 
+#> gmmParams(0):
+```
+
+
+```r
+# list assays in altExp
+assays(altExp(cellmix, "smoothedCopyNumberByChr"))
+#> List of length 3
+#> names(3): smoothedCopyNumber discreteCopyNumber gmmCopyNumber
+```
+
+
+```r
+# retrieve assay in altExp
+corner(assay(altExp(cellmix, "smoothedCopyNumberByChr"), "gmmCopyNumber"))
+#>   AACAACCTAATAGTGGTT-1 AACAACCTAGTCCTAGTT-1 AACAACCTATGGACGAGA-1 AACAACTGGGACATAACG-1 AACAACTGGGGAACCTAG-1
+#> 1                    2                    2                    2                    3                    2
+#> 2                    2                    2                    2                    2                    3
+#> 3                    2                    2                    2                    3                    2
+#> 4                    2                    2                    3                    2                    2
+#> 5                    3                    3                    2                    2                    2
+```
+
+# Other Slots
+
+The `barcodeProbe` and `grnaProbe` slots are set automatically by the `panel.id` parameter of `createTapestriExperiment()`.
+They are used as shortcuts for the [barcoded read parsing](https://joeymays.xyz/karyotapR/articles/barcoding.html) functions of the package.
+The values for these slots can be retrieved and set manually as well.
+
+
+```r
+barcodeProbe(cellmix)
+#> [1] "not specified"
+grnaProbe(cellmix)
+#> [1] "not specified"
+
+# setting manually
+grnaProbe(cellmix) <- "probe_id_123"
+```
+
+The `gmmParams` slot stores information for the [GMM models](https://joeymays.xyz/karyotapR/articles/GMMs-for-Copy-Number-Calling.html) generated for copy number calling in the form of two nested matrices one for whole chromosome calls and one for chromosome arm calls. The data include the 
+Gaussian model parameters fit for each chromosome or arm, the probability density functions for those models, the probabilities of each cell
+belonging to a copy number class, and the classification results.
+
+
+```r
+gmmParams(cellmix)
+#> $chr
+#> # A tibble: 23 × 7
+#>    feature.id smoothed.cn          model            pdf                  model.evidence cn.probability cn.class
+#>    <fct>      <list>               <list>           <list>               <list>         <list>         <list>  
+#>  1 1          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  2 2          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  3 3          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  4 4          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  5 5          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  6 6          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  7 7          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  8 8          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  9 9          <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#> 10 10         <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#> # ℹ 13 more rows
+#> 
+#> $arm
+#> # A tibble: 41 × 7
+#>    feature.id smoothed.cn          model            pdf                  model.evidence cn.probability cn.class
+#>    <fct>      <list>               <list>           <list>               <list>         <list>         <list>  
+#>  1 chr1p      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  2 chr1q      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  3 chr2p      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  4 chr2q      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  5 chr3p      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  6 chr3q      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  7 chr4p      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  8 chr4q      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#>  9 chr5p      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#> 10 chr5q      <tibble [2,987 × 2]> <tibble [6 × 3]> <tibble [2,987 × 6]> <dbl [2,987]>  <tibble>       <tibble>
+#> # ℹ 31 more rows
+```
+
+
+```r
+sessioninfo::session_info()
+#> ─ Session info ────────────────────────────────────────────────────────────────────────────────────────────────
+#>  setting  value
+#>  version  R version 4.3.1 (2023-06-16)
+#>  os       macOS Ventura 13.5.2
+#>  system   x86_64, darwin20
+#>  ui       RStudio
+#>  language (EN)
+#>  collate  en_US.UTF-8
+#>  ctype    en_US.UTF-8
+#>  tz       America/New_York
+#>  date     2023-09-18
+#>  rstudio  2023.06.0+421 Mountain Hydrangea (desktop)
+#>  pandoc   3.1.1 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+#> 
+#> ─ Packages ────────────────────────────────────────────────────────────────────────────────────────────────────
+#>  package              * version   date (UTC) lib source
+#>  abind                  1.4-5     2016-07-21 [1] CRAN (R 4.3.0)
+#>  Biobase              * 2.60.0    2023-05-11 [1] Bioconductor
+#>  BiocGenerics         * 0.46.0    2023-05-11 [1] Bioconductor
+#>  bitops                 1.0-7     2021-04-24 [1] CRAN (R 4.3.0)
+#>  cachem                 1.0.8     2023-05-01 [1] CRAN (R 4.3.0)
+#>  Cairo                  1.6-0     2022-07-05 [1] CRAN (R 4.3.0)
+#>  callr                  3.7.3     2022-11-02 [1] CRAN (R 4.3.0)
+#>  circlize               0.4.15    2022-05-10 [1] CRAN (R 4.3.0)
+#>  cli                    3.6.1     2023-03-23 [1] CRAN (R 4.3.0)
+#>  clue                   0.3-64    2023-01-31 [1] CRAN (R 4.3.0)
+#>  cluster                2.1.4     2022-08-22 [1] CRAN (R 4.3.1)
+#>  codetools              0.2-19    2023-02-01 [1] CRAN (R 4.3.1)
+#>  colorspace             2.1-0     2023-01-23 [1] CRAN (R 4.3.0)
+#>  commonmark             1.9.0     2023-03-17 [1] CRAN (R 4.3.0)
+#>  ComplexHeatmap         2.16.0    2023-05-11 [1] Bioconductor
+#>  cowplot                1.1.1     2020-12-30 [1] CRAN (R 4.3.0)
+#>  crayon                 1.5.2     2022-09-29 [1] CRAN (R 4.3.0)
+#>  DelayedArray           0.26.7    2023-07-28 [1] Bioconductor
+#>  desc                   1.4.2     2022-09-08 [1] CRAN (R 4.3.0)
+#>  devtools             * 2.4.5     2022-10-11 [1] CRAN (R 4.3.0)
+#>  digest                 0.6.33    2023-07-07 [1] CRAN (R 4.3.0)
+#>  distributional         0.3.2     2023-03-22 [1] CRAN (R 4.3.0)
+#>  doParallel             1.0.17    2022-02-07 [1] CRAN (R 4.3.0)
+#>  dplyr                * 1.1.3     2023-09-03 [1] CRAN (R 4.3.0)
+#>  ellipsis               0.3.2     2021-04-29 [1] CRAN (R 4.3.0)
+#>  evaluate               0.21      2023-05-05 [1] CRAN (R 4.3.0)
+#>  fansi                  1.0.4     2023-01-22 [1] CRAN (R 4.3.0)
+#>  farver                 2.1.1     2022-07-06 [1] CRAN (R 4.3.0)
+#>  fastmap                1.1.1     2023-02-24 [1] CRAN (R 4.3.0)
+#>  fitdistrplus         * 1.1-11    2023-04-25 [1] CRAN (R 4.3.0)
+#>  forcats              * 1.0.0     2023-01-29 [1] CRAN (R 4.3.0)
+#>  foreach                1.5.2     2022-02-02 [1] CRAN (R 4.3.0)
+#>  formatR                1.14      2023-01-17 [1] CRAN (R 4.3.0)
+#>  fs                     1.6.3     2023-07-20 [1] CRAN (R 4.3.0)
+#>  generics               0.1.3     2022-07-05 [1] CRAN (R 4.3.0)
+#>  GenomeInfoDb         * 1.36.2    2023-08-25 [1] Bioconductor
+#>  GenomeInfoDbData       1.2.10    2023-07-09 [1] Bioconductor
+#>  GenomicRanges        * 1.52.0    2023-05-11 [1] Bioconductor
+#>  GetoptLong             1.0.5     2020-12-15 [1] CRAN (R 4.3.0)
+#>  ggdist               * 3.3.0     2023-05-13 [1] CRAN (R 4.3.0)
+#>  ggplot2              * 3.4.3     2023-08-14 [1] CRAN (R 4.3.0)
+#>  GlobalOptions          0.1.2     2020-06-10 [1] CRAN (R 4.3.0)
+#>  glue                   1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
+#>  gtable                 0.3.4     2023-08-21 [1] CRAN (R 4.3.0)
+#>  highr                  0.10      2022-12-22 [1] CRAN (R 4.3.0)
+#>  htmltools              0.5.5     2023-03-23 [1] CRAN (R 4.3.0)
+#>  htmlwidgets            1.6.2     2023-03-17 [1] CRAN (R 4.3.0)
+#>  httpuv                 1.6.11    2023-05-11 [1] CRAN (R 4.3.0)
+#>  hunspell               3.0.2     2022-09-04 [1] CRAN (R 4.3.0)
+#>  IRanges              * 2.34.1    2023-06-22 [1] Bioconductor
+#>  iterators              1.0.14    2022-02-05 [1] CRAN (R 4.3.0)
+#>  karyotapR            * 1.0.1     2023-09-07 [1] CRAN (R 4.3.1)
+#>  knitr                  1.43      2023-05-25 [1] CRAN (R 4.3.0)
+#>  labeling               0.4.3     2023-08-29 [1] CRAN (R 4.3.0)
+#>  later                  1.3.1     2023-05-02 [1] CRAN (R 4.3.0)
+#>  lattice                0.21-8    2023-04-05 [1] CRAN (R 4.3.1)
+#>  lifecycle              1.0.3     2022-10-07 [1] CRAN (R 4.3.0)
+#>  magick                 2.7.4     2023-03-09 [1] CRAN (R 4.3.0)
+#>  magrittr               2.0.3     2022-03-30 [1] CRAN (R 4.3.0)
+#>  MASS                 * 7.3-60    2023-05-04 [1] CRAN (R 4.3.1)
+#>  Matrix                 1.6-0     2023-07-08 [1] CRAN (R 4.3.0)
+#>  MatrixGenerics       * 1.12.3    2023-07-31 [1] Bioconductor
+#>  matrixStats          * 1.0.0     2023-06-02 [1] CRAN (R 4.3.0)
+#>  memoise                2.0.1     2021-11-26 [1] CRAN (R 4.3.0)
+#>  mime                   0.12      2021-09-28 [1] CRAN (R 4.3.0)
+#>  miniUI                 0.1.1.1   2018-05-18 [1] CRAN (R 4.3.0)
+#>  munsell                0.5.0     2018-06-12 [1] CRAN (R 4.3.0)
+#>  pillar                 1.9.0     2023-03-22 [1] CRAN (R 4.3.0)
+#>  pkgbuild               1.4.2     2023-06-26 [1] CRAN (R 4.3.0)
+#>  pkgconfig              2.0.3     2019-09-22 [1] CRAN (R 4.3.0)
+#>  pkgload                1.3.2.1   2023-07-08 [1] CRAN (R 4.3.0)
+#>  png                    0.1-8     2022-11-29 [1] CRAN (R 4.3.0)
+#>  prettyunits            1.1.1     2020-01-24 [1] CRAN (R 4.3.0)
+#>  processx               3.8.2     2023-06-30 [1] CRAN (R 4.3.0)
+#>  profvis                0.3.8     2023-05-02 [1] CRAN (R 4.3.0)
+#>  promises               1.2.0.1   2021-02-11 [1] CRAN (R 4.3.0)
+#>  ps                     1.7.5     2023-04-18 [1] CRAN (R 4.3.0)
+#>  purrr                * 1.0.2     2023-08-10 [1] CRAN (R 4.3.0)
+#>  R6                     2.5.1     2021-08-19 [1] CRAN (R 4.3.0)
+#>  RColorBrewer           1.1-3     2022-04-03 [1] CRAN (R 4.3.0)
+#>  Rcpp                   1.0.11    2023-07-06 [1] CRAN (R 4.3.0)
+#>  RCurl                  1.98-1.12 2023-03-27 [1] CRAN (R 4.3.0)
+#>  remotes                2.4.2.1   2023-07-18 [1] CRAN (R 4.3.0)
+#>  rjson                  0.2.21    2022-01-09 [1] CRAN (R 4.3.0)
+#>  rlang                  1.1.1     2023-04-28 [1] CRAN (R 4.3.0)
+#>  rmarkdown              2.23      2023-07-01 [1] CRAN (R 4.3.0)
+#>  rprojroot              2.0.3     2022-04-02 [1] CRAN (R 4.3.0)
+#>  rstudioapi             0.15.0    2023-07-07 [1] CRAN (R 4.3.0)
+#>  S4Arrays               1.0.6     2023-08-30 [1] Bioconductor
+#>  S4Vectors            * 0.38.1    2023-05-11 [1] Bioconductor
+#>  scales                 1.2.1     2022-08-20 [1] CRAN (R 4.3.0)
+#>  sessioninfo            1.2.2     2021-12-06 [1] CRAN (R 4.3.0)
+#>  shape                  1.4.6     2021-05-19 [1] CRAN (R 4.3.0)
+#>  shiny                  1.7.4.1   2023-07-06 [1] CRAN (R 4.3.0)
+#>  SingleCellExperiment * 1.22.0    2023-05-11 [1] Bioconductor
+#>  spelling               2.2.1     2023-03-22 [1] CRAN (R 4.3.0)
+#>  stringi                1.7.12    2023-01-11 [1] CRAN (R 4.3.0)
+#>  stringr                1.5.0     2022-12-02 [1] CRAN (R 4.3.0)
+#>  SummarizedExperiment * 1.30.2    2023-06-06 [1] Bioconductor
+#>  survival             * 3.5-5     2023-03-12 [1] CRAN (R 4.3.1)
+#>  tibble                 3.2.1     2023-03-20 [1] CRAN (R 4.3.0)
+#>  tidyr                  1.3.0     2023-01-24 [1] CRAN (R 4.3.0)
+#>  tidyselect             1.2.0     2022-10-10 [1] CRAN (R 4.3.0)
+#>  urlchecker             1.0.1     2021-11-30 [1] CRAN (R 4.3.0)
+#>  usethis              * 2.2.2     2023-07-06 [1] CRAN (R 4.3.0)
+#>  utf8                   1.2.3     2023-01-31 [1] CRAN (R 4.3.0)
+#>  vctrs                  0.6.3     2023-06-14 [1] CRAN (R 4.3.0)
+#>  viridisLite            0.4.2     2023-05-02 [1] CRAN (R 4.3.0)
+#>  whisker                0.4.1     2022-12-05 [1] CRAN (R 4.3.0)
+#>  withr                  2.5.0     2022-03-03 [1] CRAN (R 4.3.0)
+#>  xfun                   0.39      2023-04-20 [1] CRAN (R 4.3.0)
+#>  xml2                   1.3.5     2023-07-06 [1] CRAN (R 4.3.0)
+#>  xtable                 1.8-4     2019-04-21 [1] CRAN (R 4.3.0)
+#>  XVector                0.40.0    2023-05-11 [1] Bioconductor
+#>  yaml                   2.3.7     2023-01-23 [1] CRAN (R 4.3.0)
+#>  zlibbioc               1.46.0    2023-05-11 [1] Bioconductor
+#> 
+#>  [1] /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library
+#> 
+#> ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
