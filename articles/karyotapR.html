@@ -52,6 +52,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/GMMs-for-Copy-Number-Calling.html">GMMs for Copy Number Calling</a>
+    <a class="dropdown-item" href="../articles/TapExp-navigation.html">Navigating the TapestriExperiment Class</a>
     <a class="dropdown-item" href="../articles/barcoding.html">Barcoding and gRNA Probes</a>
   </div>
 </li>
@@ -84,7 +85,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>karyotapR Basic Workflow</h1>
             
-            <h4 data-toc-skip class="date">Compiled on September 16,
+            <h4 data-toc-skip class="date">Compiled on September 18,
 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/joeymays/karyotapR/blob/HEAD/vignettes/articles/karyotapR.Rmd" class="external-link"><code>vignettes/articles/karyotapR.Rmd</code></a></small>
@@ -283,8 +284,8 @@ plot, and count the number of cells in each cluster.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> cellline1   987</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> cellline2   591</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> cellline3   575</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> cellline4   450</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> cellline5   398</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> cellline4   484</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> cellline5   397</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 6             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 7             0</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 8             0</span></span>
@@ -356,7 +357,7 @@ vs. chromosomes).</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cellmix.subset</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calcSmoothCopyNumber.html">calcSmoothCopyNumber</a></span><span class="op">(</span><span class="va">cellmix.subset</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Smoothing copy number by median...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Smoothing copy number by median... <span style="color: #B2B2B2;">[9.2s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Smoothing copy number by median... <span style="color: #B2B2B2;">[18.5s]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 <p>Visualization of the copy number scores reveals the heterogeneity.
 Here we’re showing the copy number scores by probe, and the smoothed
@@ -393,16 +394,16 @@ chromosome arms.</p>
 <span>    control.copy.number <span class="op">=</span> <span class="va">control.copy.number</span>, model.components <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating GMMs using 591 input cells.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Generating probe values for 500 simulated cells...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating probe values for 500 simulated cells... <span style="color: #B2B2B2;">[2s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Generating probe values for 500 simulated cells... <span style="color: #B2B2B2;">[3s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Fitting Gaussian distributions to simulated cells...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[12.3s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Fitting Gaussian distributions to simulated cells... <span style="color: #B2B2B2;">[23.8s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating posterior probabilities...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[556ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating posterior probabilities... <span style="color: #B2B2B2;">[901ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calling copy number from posterior probabilities...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[183ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calling copy number from posterior probabilities... <span style="color: #B2B2B2;">[269ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Saving whole chromosome copy number calls to altExp: smoothedCopyNumberByChr,</span></span>
 <span><span class="co">#&gt;   assay: gmmCopyNumber...</span></span>
@@ -434,7 +435,7 @@ chromosome arms.</p>
 <span><span class="co">#&gt;  collate  C.UTF-8</span></span>
 <span><span class="co">#&gt;  ctype    C.UTF-8</span></span>
 <span><span class="co">#&gt;  tz       UTC</span></span>
-<span><span class="co">#&gt;  date     2023-09-16</span></span>
+<span><span class="co">#&gt;  date     2023-09-18</span></span>
 <span><span class="co">#&gt;  pandoc   2.19.2 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
@@ -483,7 +484,7 @@ chromosome arms.</p>
 <span><span class="co">#&gt;  iterators              1.0.14     <span style="color: #555555;">2022-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  jquerylib              0.1.4      <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  jsonlite               1.8.7      <span style="color: #555555;">2023-06-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
-<span><span class="co">#&gt;  karyotapR            * <span style="color: #BB00BB; font-weight: bold;">1.0.1.9000</span> <span style="color: #555555;">2023-09-16</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
+<span><span class="co">#&gt;  karyotapR            * <span style="color: #BB00BB; font-weight: bold;">1.0.1.9000</span> <span style="color: #555555;">2023-09-18</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
 <span><span class="co">#&gt;  knitr                  1.44       <span style="color: #555555;">2023-09-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  labeling               0.4.3      <span style="color: #555555;">2023-08-29</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  lattice                0.21-8     <span style="color: #555555;">2023-04-05</span> <span style="color: #555555;">[3]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
@@ -509,7 +510,7 @@ chromosome arms.</p>
 <span><span class="co">#&gt;  reticulate             1.32.0     <span style="color: #555555;">2023-09-11</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  rjson                  0.2.21     <span style="color: #555555;">2022-01-09</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  rlang                  1.1.1      <span style="color: #555555;">2023-04-28</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
-<span><span class="co">#&gt;  rmarkdown              2.24       <span style="color: #555555;">2023-08-14</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
+<span><span class="co">#&gt;  rmarkdown              2.25       <span style="color: #555555;">2023-09-18</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  rprojroot              2.0.3      <span style="color: #555555;">2022-04-02</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  RSpectra               0.16-1     <span style="color: #555555;">2022-04-24</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">CRAN (R 4.3.1)</span></span></span>
 <span><span class="co">#&gt;  S4Arrays               1.0.6      <span style="color: #555555;">2023-08-30</span> <span style="color: #555555;">[1]</span> <span style="color: #555555;">Bioconductor</span></span></span>

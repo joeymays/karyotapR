@@ -3,9 +3,10 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   GMMs-for-Copy-Number-Calling: GMMs-for-Copy-Number-Calling.html
+  TapExp-navigation: TapExp-navigation.html
   barcoding: barcoding.html
   karyotapR: karyotapR.html
-last_built: 2023-09-16T21:54Z
+last_built: 2023-09-18T22:04Z
 urls:
   reference: http://joeymays.xyz/karyotapR/reference
   article: http://joeymays.xyz/karyotapR/articles

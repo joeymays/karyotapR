@@ -52,6 +52,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/GMMs-for-Copy-Number-Calling.html">GMMs for Copy Number Calling</a>
+    <a class="dropdown-item" href="../articles/TapExp-navigation.html">Navigating the TapestriExperiment Class</a>
     <a class="dropdown-item" href="../articles/barcoding.html">Barcoding and gRNA Probes</a>
   </div>
 </li>
@@ -84,7 +85,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>GMMs for Copy Number Calling</h1>
             
-            <h4 data-toc-skip class="date">Compiled on September 16,
+            <h4 data-toc-skip class="date">Compiled on September 18,
 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/joeymays/karyotapR/blob/HEAD/vignettes/articles/GMMs-for-Copy-Number-Calling.Rmd" class="external-link"><code>vignettes/articles/GMMs-for-Copy-Number-Calling.Rmd</code></a></small>
@@ -142,19 +143,19 @@ representative sample of probes.</p>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">probe.sample</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/fitdistrplus/man/graphcomp.html" class="external-link">denscomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">wfit.ft</span><span class="op">[[</span><span class="va">.x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">.x</span>,</span>
 <span>    plotstyle <span class="op">=</span> <span class="st">"ggplot"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>, axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/fit%20plots-1.png" width="100%" height="60%"></p>
+<p><img src="figure/fit%20plots-1.png" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">probe.sample</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/fitdistrplus/man/graphcomp.html" class="external-link">qqcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">wfit.ft</span><span class="op">[[</span><span class="va">.x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">.x</span>,</span>
 <span>    plotstyle <span class="op">=</span> <span class="st">"ggplot"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>, axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/fit%20plots-2.png" width="100%" height="60%"></p>
+<p><img src="figure/fit%20plots-2.png" width="100%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu">plot_grid</span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">probe.sample</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/pkg/fitdistrplus/man/graphcomp.html" class="external-link">cdfcomp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">wfit.ft</span><span class="op">[[</span><span class="va">.x</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, main <span class="op">=</span> <span class="va">.x</span>,</span>
 <span>    plotstyle <span class="op">=</span> <span class="st">"ggplot"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>, axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/fit%20plots-3.png" width="100%" height="60%"></p>
+<p><img src="figure/fit%20plots-3.png" width="100%"></p>
 <p>The fitted parameters correspond to count values expected to be
 measured by probes for samples that are have copy number = 2 (diploid).
 The exceptions are probes targeted to chr10q which have copy number =
@@ -178,7 +179,7 @@ simulated cells with a count value for each probe.</p>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>ℹ Generating probe values <span class="cf">for</span> <span class="dv">500</span> simulated cells...</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>✔ Generating probe values <span class="cf">for</span> <span class="dv">500</span> simulated cells... [<span class="fl">2.7</span>s]</span></code></pre></div>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>✔ Generating probe values <span class="cf">for</span> <span class="dv">500</span> simulated cells... [<span class="fl">2.6</span>s]</span></code></pre></div>
 <p>The number of simulated cells is 500 cells per copy number * number
 of copy number levels = 500 x 6 = 3000</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -205,7 +206,7 @@ level across all chromosomes.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/assayHeatmap.html">assayHeatmap</a></span><span class="op">(</span><span class="va">simulated.tapestri.experiment</span>, alt.exp <span class="op">=</span> <span class="st">"smoothedCopyNumberByChr"</span>,</span>
 <span>    assay <span class="op">=</span> <span class="st">"smoothedCopyNumber"</span>, split.col.by <span class="op">=</span> <span class="st">"feature.id"</span>, split.row.by <span class="op">=</span> <span class="st">"cn.sim.class"</span>,</span>
 <span>    annotate.row.by <span class="op">=</span> <span class="st">"cn.sim.class"</span>, color.preset <span class="op">=</span> <span class="st">"copy.number"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/heatmap%201-1.png" width="100%" height="60%"></p>
+<p><img src="figure/heatmap%201-1.png" width="100%"></p>
 <p>For a given chromosome, the simulated values are roughly normally
 distributed, representing the distribution of the expected copy number
 values that would be measured by our probe panel for cells with true
@@ -214,7 +215,7 @@ spread of the distributions are such that a cell with true copy number =
 4, for example, could have a smoothed copy number value between ~2.5 and
 ~5.5, making rounding the value to an integer a problematic way to
 assign copy number values.</p>
-<p>The overlaped regions become larger with fewer probes, as in Chr 19,
+<p>The overlapped regions become larger with fewer probes, as in Chr 19,
 making the assignment of copy number values less straightforward.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tidy.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getTidyData.html">getTidyData</a></span><span class="op">(</span><span class="va">simulated.tapestri.experiment</span>, alt.exp <span class="op">=</span> <span class="st">"smoothedCopyNumberByChr"</span>,</span>
@@ -224,14 +225,14 @@ making the assignment of copy number values less straightforward.</p>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">feature.id</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">smoothedCopyNumber</span>, fill <span class="op">=</span> <span class="va">cn.sim.class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Chromosome 1"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20chr1chr19-1.png" width="100%" height="60%"></p>
+<p><img src="figure/GMM%20chr1chr19-1.png" width="100%"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">tidy.data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">feature.id</span> <span class="op">==</span> <span class="fl">19</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">smoothedCopyNumber</span>, fill <span class="op">=</span> <span class="va">cn.sim.class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Chromosome 19"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20chr1chr19-2.png" width="100%" height="60%"></p>
+<p><img src="figure/GMM%20chr1chr19-2.png" width="100%"></p>
 <p>To build the Gaussian Mixture Model (GMM) for assigning copy number
 labels to each cell-chromosome unit, we first fit Gaussian (normal)
 distributions to the smoothed copy number values of each chromosome and
@@ -319,7 +320,7 @@ whose boundaries the value falls within.</p>
 <span><span class="co">#&gt; 10 10               1.38       2.48       3.57       4.61       5.65</span></span>
 <span><span class="co">#&gt; # ℹ 13 more rows</span></span>
 <span><span class="fu"><a href="../reference/plotCopyNumberGMM.html">plotCopyNumberGMM</a></span><span class="op">(</span><span class="va">cellmix</span>, feature.id <span class="op">=</span> <span class="fl">1</span>, draw.boundaries <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20boundaries-1.png" width="100%" height="60%"></p>
+<p><img src="figure/GMM%20boundaries-1.png" width="100%"></p>
 <p>To get a sense of how accurate the model is, we can calculate the
 theoretical true positive rate for each component, i.e. the proportion
 of the component for which it’s values fall within it’s boundaries. Put
@@ -345,7 +346,7 @@ that they would be assigned copy number = 2.</p>
 <span>        alpha <span class="op">=</span> <span class="fl">0.5</span>, inherit.aes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.37</span>, <span class="fl">2.46</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey75"</span>, <span class="st">"lightgreen"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"True Positive"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Copy Number"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/GMM%20plot-1.png" width="100%" height="60%"></p>
+<p><img src="figure/GMM%20plot-1.png" width="100%"></p>
 <p>To calculate the theoretical true positive rate for copy number = 2,
 we calculate the proportion of the area under the curve of the grey
 sections and subtract them from 1 to get the proportion of the area in
@@ -380,7 +381,7 @@ is significantly less than for chromosome 2.</p>
 <span>        alpha <span class="op">=</span> <span class="fl">0.5</span>, inherit.aes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.56</span>, <span class="fl">2.81</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey75"</span>, <span class="st">"lightgreen"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"True Positive"</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"Copy Number"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="figure/chr%2019%20plot-1.png" width="100%" height="60%"></p>
+<p><img src="figure/chr%2019%20plot-1.png" width="100%"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">lower.p</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fl">1.56</span>, <span class="fl">2.000435</span>, <span class="fl">0.6301878</span>, lower.tail <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
@@ -389,183 +390,142 @@ is significantly less than for chromosome 2.</p>
 <span><span class="co">#&gt; [1] 0.6582322</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ─ Session info ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ─ Session info ────────────────────────────────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt;  setting  value</span></span>
 <span><span class="co">#&gt;  version  R version 4.3.1 (2023-06-16)</span></span>
-<span><span class="co">#&gt;  os       macOS Ventura 13.5</span></span>
+<span><span class="co">#&gt;  os       macOS Ventura 13.5.2</span></span>
 <span><span class="co">#&gt;  system   x86_64, darwin20</span></span>
 <span><span class="co">#&gt;  ui       RStudio</span></span>
 <span><span class="co">#&gt;  language (EN)</span></span>
 <span><span class="co">#&gt;  collate  en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  ctype    en_US.UTF-8</span></span>
 <span><span class="co">#&gt;  tz       America/New_York</span></span>
-<span><span class="co">#&gt;  date     2023-09-16</span></span>
+<span><span class="co">#&gt;  date     2023-09-18</span></span>
 <span><span class="co">#&gt;  rstudio  2023.06.0+421 Mountain Hydrangea (desktop)</span></span>
 <span><span class="co">#&gt;  pandoc   3.1.1 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ─ Packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt;  !  package              * version    date (UTC) lib source</span></span>
-<span><span class="co">#&gt;     abind                  1.4-5      2016-07-21 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     askpass                1.2.0      2023-09-03 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     Biobase              * 2.60.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     BiocGenerics         * 0.46.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     BiocParallel           1.34.2     2023-05-22 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     Biostrings             2.68.1     2023-05-16 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     bitops                 1.0-7      2021-04-24 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     brio                   1.1.3      2021-11-30 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     bslib                  0.5.0      2023-06-09 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     cachem                 1.0.8      2023-05-01 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     Cairo                  1.6-0      2022-07-05 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     callr                  3.7.3      2022-11-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     circlize               0.4.15     2022-05-10 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     cli                    3.6.1      2023-03-23 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     clue                   0.3-64     2023-01-31 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     cluster                2.1.4      2022-08-22 [1] CRAN (R 4.3.1)</span></span>
-<span><span class="co">#&gt;     codetools              0.2-19     2023-02-01 [1] CRAN (R 4.3.1)</span></span>
-<span><span class="co">#&gt;     colorspace             2.1-0      2023-01-23 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     commonmark             1.9.0      2023-03-17 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     ComplexHeatmap         2.16.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     cowplot                1.1.1      2020-12-30 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     crayon                 1.5.2      2022-09-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     credentials            1.3.2      2021-11-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     curl                   5.0.2      2023-08-14 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     dbscan                 1.1-11     2022-10-27 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     DelayedArray           0.26.7     2023-07-28 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     desc                   1.4.2      2022-09-08 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     devtools             * 2.4.5      2022-10-11 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     digest                 0.6.33     2023-07-07 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     distributional         0.3.2      2023-03-22 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     doParallel             1.0.17     2022-02-07 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     downlit                0.4.3      2023-06-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     dplyr                * 1.1.3      2023-09-03 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     ellipsis               0.3.2      2021-04-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     evaluate               0.21       2023-05-05 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     fansi                  1.0.4      2023-01-22 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     farver                 2.1.1      2022-07-06 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     fastmap                1.1.1      2023-02-24 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     fitdistrplus         * 1.1-11     2023-04-25 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     forcats              * 1.0.0      2023-01-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     foreach                1.5.2      2022-02-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     formatR                1.14       2023-01-17 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     fs                     1.6.3      2023-07-20 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     generics               0.1.3      2022-07-05 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     GenomeInfoDb         * 1.36.2     2023-08-25 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     GenomeInfoDbData       1.2.10     2023-07-09 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     GenomicRanges        * 1.52.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     gert                   1.9.2      2022-12-05 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     GetoptLong             1.0.5      2020-12-15 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     ggdist               * 3.3.0      2023-05-13 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     ggplot2              * 3.4.3      2023-08-14 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     ggrepel                0.9.3      2023-02-03 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     ggridges               0.5.4      2022-09-26 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     gh                     1.4.0      2023-02-22 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     gitcreds               0.1.2      2022-09-08 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     GlobalOptions          0.1.2      2020-06-10 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     glue                   1.6.2      2022-02-24 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     gtable                 0.3.4      2023-08-21 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     gtools                 3.9.4      2022-11-27 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     here                   1.0.1      2020-12-13 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     highr                  0.10       2022-12-22 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     htmltools              0.5.5      2023-03-23 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     htmlwidgets            1.6.2      2023-03-17 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     httpuv                 1.6.11     2023-05-11 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     httr2                  0.2.3      2023-05-08 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     IRanges              * 2.34.1     2023-06-22 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     iterators              1.0.14     2022-02-05 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     janitor                2.2.0      2023-02-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     jquerylib              0.1.4      2021-04-26 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     jsonlite               1.8.7      2023-06-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;  VP karyotapR            * 1.0.1.9000 2023-09-07 [?] CRAN (R 4.3.1) (on disk 1.0.1)</span></span>
-<span><span class="co">#&gt;     knitr                  1.43       2023-05-25 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     labeling               0.4.3      2023-08-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     later                  1.3.1      2023-05-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     lattice                0.21-8     2023-04-05 [1] CRAN (R 4.3.1)</span></span>
-<span><span class="co">#&gt;     lifecycle              1.0.3      2022-10-07 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     lubridate              1.9.2      2023-02-10 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     magick                 2.7.4      2023-03-09 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     magrittr               2.0.3      2022-03-30 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     MASS                 * 7.3-60     2023-05-04 [1] CRAN (R 4.3.1)</span></span>
-<span><span class="co">#&gt;     Matrix                 1.6-0      2023-07-08 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     MatrixGenerics       * 1.12.3     2023-07-31 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     matrixStats          * 1.0.0      2023-06-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     memoise                2.0.1      2021-11-26 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     mime                   0.12       2021-09-28 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     miniUI                 0.1.1.1    2018-05-18 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     munsell                0.5.0      2018-06-12 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     openssl                2.1.0      2023-07-15 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     pillar                 1.9.0      2023-03-22 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     pkgbuild               1.4.2      2023-06-26 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     pkgconfig              2.0.3      2019-09-22 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     pkgdown                2.0.7      2022-12-14 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     pkgload                1.3.2.1    2023-07-08 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     png                    0.1-8      2022-11-29 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     prettyunits            1.1.1      2020-01-24 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     processx               3.8.2      2023-06-30 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     profvis                0.3.8      2023-05-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     promises               1.2.0.1    2021-02-11 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     ps                     1.7.5      2023-04-18 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     purrr                * 1.0.2      2023-08-10 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     R6                     2.5.1      2021-08-19 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     rappdirs               0.3.3      2021-01-31 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     rcmdcheck              1.4.0      2021-09-27 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     RColorBrewer           1.1-3      2022-04-03 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     Rcpp                   1.0.11     2023-07-06 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     RCurl                  1.98-1.12  2023-03-27 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     remotes                2.4.2.1    2023-07-18 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     reticulate             1.31       2023-08-10 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     rhdf5                  2.44.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     rhdf5filters           1.12.1     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     Rhdf5lib               1.22.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     rjson                  0.2.21     2022-01-09 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     rlang                  1.1.1      2023-04-28 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     rmarkdown              2.23       2023-07-01 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     roxygen2               7.2.3      2022-12-08 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     rprojroot              2.0.3      2022-04-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     Rsamtools              2.16.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     RSpectra               0.16-1     2022-04-24 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     rstudioapi             0.15.0     2023-07-07 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     S4Arrays               1.0.6      2023-08-30 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     S4Vectors            * 0.38.1     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     sass                   0.4.7      2023-07-15 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     scales                 1.2.1      2022-08-20 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     sessioninfo            1.2.2      2021-12-06 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     shape                  1.4.6      2021-05-19 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     shiny                  1.7.4.1    2023-07-06 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     SingleCellExperiment * 1.22.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     snakecase              0.11.0     2019-05-25 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     stringdist             0.9.10     2022-11-07 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     stringi                1.7.12     2023-01-11 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     stringr                1.5.0      2022-12-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     SummarizedExperiment * 1.30.2     2023-06-06 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     survival             * 3.5-5      2023-03-12 [1] CRAN (R 4.3.1)</span></span>
-<span><span class="co">#&gt;     sys                    3.4.2      2023-05-23 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     testthat               3.1.10     2023-07-06 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     tibble                 3.2.1      2023-03-20 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     tidyr                  1.3.0      2023-01-24 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     tidyselect             1.2.0      2022-10-10 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     timechange             0.2.0      2023-01-11 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     umap                   0.2.10.0   2023-02-01 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     urlchecker             1.0.1      2021-11-30 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     usethis              * 2.2.2      2023-07-06 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     utf8                   1.2.3      2023-01-31 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     vctrs                  0.6.3      2023-06-14 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     viridisLite            0.4.2      2023-05-02 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     whisker                0.4.1      2022-12-05 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     withr                  2.5.0      2022-03-03 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     xfun                   0.39       2023-04-20 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     xml2                   1.3.5      2023-07-06 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     xopen                  1.0.0      2018-09-17 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     xtable                 1.8-4      2019-04-21 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     XVector                0.40.0     2023-05-11 [1] Bioconductor</span></span>
-<span><span class="co">#&gt;     yaml                   2.3.7      2023-01-23 [1] CRAN (R 4.3.0)</span></span>
-<span><span class="co">#&gt;     zlibbioc               1.46.0     2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt; ─ Packages ────────────────────────────────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  package              * version   date (UTC) lib source</span></span>
+<span><span class="co">#&gt;  abind                  1.4-5     2016-07-21 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  Biobase              * 2.60.0    2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  BiocGenerics         * 0.46.0    2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  bitops                 1.0-7     2021-04-24 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  cachem                 1.0.8     2023-05-01 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  Cairo                  1.6-0     2022-07-05 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  callr                  3.7.3     2022-11-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  circlize               0.4.15    2022-05-10 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  cli                    3.6.1     2023-03-23 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  clue                   0.3-64    2023-01-31 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  cluster                2.1.4     2022-08-22 [1] CRAN (R 4.3.1)</span></span>
+<span><span class="co">#&gt;  codetools              0.2-19    2023-02-01 [1] CRAN (R 4.3.1)</span></span>
+<span><span class="co">#&gt;  colorspace             2.1-0     2023-01-23 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  commonmark             1.9.0     2023-03-17 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  ComplexHeatmap         2.16.0    2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  cowplot                1.1.1     2020-12-30 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  crayon                 1.5.2     2022-09-29 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  DelayedArray           0.26.7    2023-07-28 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  desc                   1.4.2     2022-09-08 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  devtools             * 2.4.5     2022-10-11 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  digest                 0.6.33    2023-07-07 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  distributional         0.3.2     2023-03-22 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  doParallel             1.0.17    2022-02-07 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  dplyr                * 1.1.3     2023-09-03 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  ellipsis               0.3.2     2021-04-29 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  evaluate               0.21      2023-05-05 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  fansi                  1.0.4     2023-01-22 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  farver                 2.1.1     2022-07-06 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  fastmap                1.1.1     2023-02-24 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  fitdistrplus         * 1.1-11    2023-04-25 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  forcats              * 1.0.0     2023-01-29 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  foreach                1.5.2     2022-02-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  formatR                1.14      2023-01-17 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  fs                     1.6.3     2023-07-20 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  generics               0.1.3     2022-07-05 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  GenomeInfoDb         * 1.36.2    2023-08-25 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  GenomeInfoDbData       1.2.10    2023-07-09 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  GenomicRanges        * 1.52.0    2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  GetoptLong             1.0.5     2020-12-15 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  ggdist               * 3.3.0     2023-05-13 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  ggplot2              * 3.4.3     2023-08-14 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  GlobalOptions          0.1.2     2020-06-10 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  glue                   1.6.2     2022-02-24 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  gtable                 0.3.4     2023-08-21 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  highr                  0.10      2022-12-22 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  htmltools              0.5.5     2023-03-23 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  htmlwidgets            1.6.2     2023-03-17 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  httpuv                 1.6.11    2023-05-11 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  hunspell               3.0.2     2022-09-04 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  IRanges              * 2.34.1    2023-06-22 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  iterators              1.0.14    2022-02-05 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  karyotapR            * 1.0.1     2023-09-07 [1] CRAN (R 4.3.1)</span></span>
+<span><span class="co">#&gt;  knitr                  1.43      2023-05-25 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  labeling               0.4.3     2023-08-29 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  later                  1.3.1     2023-05-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  lattice                0.21-8    2023-04-05 [1] CRAN (R 4.3.1)</span></span>
+<span><span class="co">#&gt;  lifecycle              1.0.3     2022-10-07 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  magick                 2.7.4     2023-03-09 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  magrittr               2.0.3     2022-03-30 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  MASS                 * 7.3-60    2023-05-04 [1] CRAN (R 4.3.1)</span></span>
+<span><span class="co">#&gt;  Matrix                 1.6-0     2023-07-08 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  MatrixGenerics       * 1.12.3    2023-07-31 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  matrixStats          * 1.0.0     2023-06-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  memoise                2.0.1     2021-11-26 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  mime                   0.12      2021-09-28 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  miniUI                 0.1.1.1   2018-05-18 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  munsell                0.5.0     2018-06-12 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  pillar                 1.9.0     2023-03-22 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  pkgbuild               1.4.2     2023-06-26 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  pkgconfig              2.0.3     2019-09-22 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  pkgload                1.3.2.1   2023-07-08 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  png                    0.1-8     2022-11-29 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  prettyunits            1.1.1     2020-01-24 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  processx               3.8.2     2023-06-30 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  profvis                0.3.8     2023-05-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  promises               1.2.0.1   2021-02-11 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  ps                     1.7.5     2023-04-18 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  purrr                * 1.0.2     2023-08-10 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  R6                     2.5.1     2021-08-19 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  RColorBrewer           1.1-3     2022-04-03 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  Rcpp                   1.0.11    2023-07-06 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  RCurl                  1.98-1.12 2023-03-27 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  remotes                2.4.2.1   2023-07-18 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  rjson                  0.2.21    2022-01-09 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  rlang                  1.1.1     2023-04-28 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  rmarkdown              2.23      2023-07-01 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  rprojroot              2.0.3     2022-04-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  rstudioapi             0.15.0    2023-07-07 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  S4Arrays               1.0.6     2023-08-30 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  S4Vectors            * 0.38.1    2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  scales                 1.2.1     2022-08-20 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  sessioninfo            1.2.2     2021-12-06 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  shape                  1.4.6     2021-05-19 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  shiny                  1.7.4.1   2023-07-06 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  SingleCellExperiment * 1.22.0    2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  spelling               2.2.1     2023-03-22 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  stringi                1.7.12    2023-01-11 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  stringr                1.5.0     2022-12-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  SummarizedExperiment * 1.30.2    2023-06-06 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  survival             * 3.5-5     2023-03-12 [1] CRAN (R 4.3.1)</span></span>
+<span><span class="co">#&gt;  tibble                 3.2.1     2023-03-20 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  tidyr                  1.3.0     2023-01-24 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  tidyselect             1.2.0     2022-10-10 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  urlchecker             1.0.1     2021-11-30 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  usethis              * 2.2.2     2023-07-06 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  utf8                   1.2.3     2023-01-31 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  vctrs                  0.6.3     2023-06-14 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  viridisLite            0.4.2     2023-05-02 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  whisker                0.4.1     2022-12-05 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  withr                  2.5.0     2022-03-03 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  xfun                   0.39      2023-04-20 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  xml2                   1.3.5     2023-07-06 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  xtable                 1.8-4     2019-04-21 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  XVector                0.40.0    2023-05-11 [1] Bioconductor</span></span>
+<span><span class="co">#&gt;  yaml                   2.3.7     2023-01-23 [1] CRAN (R 4.3.0)</span></span>
+<span><span class="co">#&gt;  zlibbioc               1.46.0    2023-05-11 [1] Bioconductor</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  [1] /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  V ── Loaded and on-disk version mismatch.</span></span>
-<span><span class="co">#&gt;  P ── Loaded and on-disk path mismatch.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; ───────────────────────────────────────────────────────────────────────────────────────────────────────────────</span></span></code></pre></div>
   </main>
 </div>
 
