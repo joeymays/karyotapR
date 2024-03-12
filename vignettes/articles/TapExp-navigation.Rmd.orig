@@ -112,7 +112,7 @@ assay(cellmix)[1:5, 1:5]
 
 # Alternate Experiments
 
-Alternate Experiments (`altExps`) allow the use to store values from the same
+Alternate Experiments (`altExps`) allow the user to store values from the same
 samples with different features. In other words, cells in the data have associated 
 read counts for probes and allele frequencies for variants. The `altExp` framework
 allows us to store both datasets for the same columns/cells, one where the rows are probes
