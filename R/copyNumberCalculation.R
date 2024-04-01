@@ -167,13 +167,18 @@ calcCopyNumber <- function(TapestriExperiment,
 #'   sample.feature = "test.cluster"
 #' )
 #' tap.object <- calcSmoothCopyNumber(tap.object)
-calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
+calcSmoothCopyNumber <- function(TapestriExperiment, method = "median", control.copy.number = NULL, sample.feature = "cluster") {
   method <- tolower(method)
 
   if (method == "median") {
     smooth.func <- stats::median
+    S4Vectors::metadata(TapestriExperiment)$smoothing.method <- "median"
   } else if (method == "mean") {
     smooth.func <- mean
+    S4Vectors::metadata(TapestriExperiment)$smoothing.method <- "mean"
+  } else if (method == "weighted.median") {
+      smooth.func <- NULL
+      S4Vectors::metadata(TapestriExperiment)$smoothing.method <- "weighted.median"
   } else {
     cli::cli_abort("{.var method} {.q {method}}, not recognized. Please use {.q mean} or {.q median}.")
   }
@@ -181,47 +186,107 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median") {
   cli::cli_progress_step("Smoothing copy number by {method}...", )
 
   ploidy.counts <- SummarizedExperiment::assay(TapestriExperiment, "copyNumber")
+  
+  tap.exp.row.data <- as.data.frame(SummarizedExperiment::rowData(TapestriExperiment))[, c("probe.id", "chr", "arm")]
 
+  #get weight for each probe
+  if(method == "weighted.median"){
+
+      tap.exp.row.data <- tap.exp.row.data %>% dplyr::left_join(control.copy.number, by = "arm")
+        
+      tap.exp.row.data$probe.weight <- tap.exp.row.data[, c("probe.id", "copy.number", "sample.label")] %>% 
+          purrr::pmap(function(probe.id, copy.number, sample.label){
+              barcodes <- SingleCellExperiment::colData(TapestriExperiment)[SingleCellExperiment::colData(TapestriExperiment)[,{{sample.feature}}] == sample.label,"cell.barcode"]
+              copy.number.values <- SummarizedExperiment::assay(TapestriExperiment, "copyNumber")[probe.id,barcodes]
+              lower.bound <- copy.number - 0.5
+              upper.bound <- copy.number + 0.5
+              accuracy <- round(sum(copy.number.values > lower.bound & copy.number.values < upper.bound)/length(copy.number.values), 3)
+              return(accuracy)
+          }) %>% unlist()
+      
+      S4Vectors::metadata(TapestriExperiment)$probe.weights <- tap.exp.row.data
+  }
+  
   ploidy.tidy <- ploidy.counts %>%
     as.data.frame() %>%
     tibble::rownames_to_column("probe.id") %>%
     tidyr::pivot_longer(
       cols = !tidyr::matches("probe.id"),
       names_to = "cell.barcode",
-      values_to = "ploidy"
-    ) %>%
-    dplyr::left_join(as.data.frame(SummarizedExperiment::rowData(TapestriExperiment)[, c("probe.id", "chr", "arm")]), by = "probe.id")
-
-  smoothed.ploidy.chr <- ploidy.tidy %>%
-    dplyr::group_by(.data$cell.barcode, .data$chr) %>%
-    dplyr::summarize(
-      smooth.ploidy = smooth.func(.data$ploidy),
-      .groups = "drop"
-    ) %>%
-    tidyr::pivot_wider(
-      id_cols = dplyr::all_of("chr"),
-      values_from = dplyr::all_of("smooth.ploidy"),
-      names_from = dplyr::all_of("cell.barcode")
-    ) %>%
-    tibble::column_to_rownames("chr")
+      values_to = "ploidy")
+    
+  #simple median or mean smoothing
+  if(method == "median" | method == "mean"){
+      
+      ploidy.tidy <- ploidy.tidy %>% dplyr::left_join(tap.exp.row.data[, c("probe.id", "chr", "arm")], by = "probe.id")
+      
+      # whole chromosome
+      smoothed.ploidy.chr <- ploidy.tidy %>%
+          dplyr::group_by(.data$cell.barcode, .data$chr) %>%
+          dplyr::summarize(
+              smooth.ploidy = smooth.func(.data$ploidy),
+              .groups = "drop"
+          ) %>%
+          tidyr::pivot_wider(
+              id_cols = dplyr::all_of("chr"),
+              values_from = dplyr::all_of("smooth.ploidy"),
+              names_from = dplyr::all_of("cell.barcode")
+          ) %>%
+          tibble::column_to_rownames("chr")
+      
+      # arms
+      smoothed.ploidy.arm <- ploidy.tidy %>%
+          dplyr::group_by(.data$cell.barcode, .data$arm) %>%
+          dplyr::summarize(
+              smooth.ploidy = smooth.func(.data$ploidy),
+              .groups = "drop"
+          ) %>%
+          tidyr::pivot_wider(
+              id_cols = dplyr::all_of("arm"),
+              values_from = dplyr::all_of("smooth.ploidy"),
+              names_from = dplyr::all_of("cell.barcode")
+          ) %>%
+          tibble::column_to_rownames("arm")
+  } else if(method == "weighted.median"){  #weighed median smoothing 
+      
+      ploidy.tidy <- ploidy.tidy %>% dplyr::left_join(tap.exp.row.data[, c("probe.id", "chr", "arm", "probe.weight")], by = "probe.id")
+      
+      # whole chromosome
+      smoothed.ploidy.chr <- ploidy.tidy %>% 
+          dplyr::group_split(.data$chr, .data$cell.barcode, .keep = TRUE) %>% 
+          lapply(function(x){
+              result <- round(matrixStats::weightedMedian(x = x$ploidy, w = x$probe.weight), 3)
+              return(list(x$cell.barcode[1], x$chr[1], result))
+          }) %>% 
+          purrr::list_transpose()
+      
+      smoothed.ploidy.chr <- data.frame(cell.barcode = smoothed.ploidy.chr[[1]], 
+                                        feature.id = smoothed.ploidy.chr[[2]], 
+                                        value = as.numeric(smoothed.ploidy.chr[[3]])) 
+      
+      smoothed.ploidy.chr <- tidyr::pivot_wider(smoothed.ploidy.chr, names_from = .data$cell.barcode, values_from = .data$value) %>% 
+          tibble::column_to_rownames("feature.id")
+      
+      # arms
+      smoothed.ploidy.arm <- ploidy.tidy %>% 
+          dplyr::group_split(.data$arm, .data$cell.barcode, .keep = TRUE) %>% 
+          lapply(function(x){
+              result <- round(matrixStats::weightedMedian(x = x$ploidy, w = x$probe.weight), 3)
+              return(list(x$cell.barcode[1], x$arm[1], result))
+          }) %>% 
+          purrr::list_transpose()
+      
+      smoothed.ploidy.arm <- data.frame(cell.barcode = smoothed.ploidy.arm[[1]], 
+                                        feature.id = smoothed.ploidy.arm[[2]], 
+                                        value = as.numeric(smoothed.ploidy.arm[[3]])) 
+      
+      smoothed.ploidy.arm <- tidyr::pivot_wider(smoothed.ploidy.arm, names_from = .data$cell.barcode, values_from = .data$value) %>% 
+          tibble::column_to_rownames("feature.id")
+     
+  }
 
   # reorder to match input matrix
   smoothed.ploidy.chr <- smoothed.ploidy.chr[, colnames(ploidy.counts)]
-
-  smoothed.ploidy.arm <- ploidy.tidy %>%
-    dplyr::group_by(.data$cell.barcode, .data$arm) %>%
-    dplyr::summarize(
-      smooth.ploidy = smooth.func(.data$ploidy),
-      .groups = "drop"
-    ) %>%
-    tidyr::pivot_wider(
-      id_cols = dplyr::all_of("arm"),
-      values_from = dplyr::all_of("smooth.ploidy"),
-      names_from = dplyr::all_of("cell.barcode")
-    ) %>%
-    tibble::column_to_rownames("arm")
-
-  # reorder to match input matrix
   smoothed.ploidy.arm <- smoothed.ploidy.arm[, colnames(ploidy.counts)]
 
   discrete.ploidy.chr <- round(smoothed.ploidy.chr, 0)
