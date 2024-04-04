@@ -216,6 +216,8 @@ calcGMMCopyNumber <- function(TapestriExperiment,
 
   control.cn <- generateControlCopyNumberTemplate(tapestri.sim, copy.number = 2, sample.feature.label = "sim_cn2")
   tapestri.sim <- calcCopyNumber(tapestri.sim, control.copy.number = control.cn, sample.feature = "cn.sim.class")
+  
+  cli::cli_progress_step("Smoothing copy number by {smoothing.method}...")
   tapestri.sim <- suppressMessages(calcSmoothCopyNumber(tapestri.sim, method = smoothing.method, 
                                    control.copy.number = control.cn, sample.feature = "cn.sim.class"))
 }

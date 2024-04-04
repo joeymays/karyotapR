@@ -167,7 +167,7 @@ calcCopyNumber <- function(TapestriExperiment,
 #'   sample.feature = "test.cluster"
 #' )
 #' tap.object <- calcSmoothCopyNumber(tap.object)
-calcSmoothCopyNumber <- function(TapestriExperiment, method = "median", control.copy.number = NULL, sample.feature = "cluster") {
+calcSmoothCopyNumber <- function(TapestriExperiment, method = "median", control.copy.number = NULL, sample.feature = "cluster", weight.range = c(0.5, 0.5)) {
   method <- tolower(method)
 
   if (method == "median") {
@@ -198,8 +198,8 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median", control.
           purrr::pmap(function(probe.id, copy.number, sample.label){
               barcodes <- SingleCellExperiment::colData(TapestriExperiment)[SingleCellExperiment::colData(TapestriExperiment)[,{{sample.feature}}] == sample.label,"cell.barcode"]
               copy.number.values <- SummarizedExperiment::assay(TapestriExperiment, "copyNumber")[probe.id,barcodes]
-              lower.bound <- copy.number - 0.5
-              upper.bound <- copy.number + 0.5
+              lower.bound <- copy.number - weight.range[1]
+              upper.bound <- copy.number + weight.range[2]
               accuracy <- round(sum(copy.number.values > lower.bound & copy.number.values < upper.bound)/length(copy.number.values), 3)
               return(accuracy)
           }) %>% unlist()
