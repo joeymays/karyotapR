@@ -179,6 +179,7 @@ calcSmoothCopyNumber <- function(TapestriExperiment, method = "median", control.
   } else if (method == "weighted.median") {
       smooth.func <- NULL
       S4Vectors::metadata(TapestriExperiment)$smoothing.method <- "weighted.median"
+      S4Vectors::metadata(TapestriExperiment)$smoothing.weights <- weight.range
   } else {
     cli::cli_abort("{.var method} {.q {method}}, not recognized. Please use {.q mean} or {.q median}.")
   }
