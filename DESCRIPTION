@@ -1,6 +1,6 @@
 Package: karyotapR
 Title: DNA Copy Number Analysis for Genome-Wide Tapestri Panels
-Version: 1.0.1.9000
+Version: 1.0.2
 Authors@R:
     person("Joseph", "Mays", email = "josephcmays@gmail.com", 
     role = c("aut", "cre", "cph"),
@@ -27,6 +27,7 @@ Imports:
     dbscan,
     dplyr,
     fitdistrplus,
+    GenomeInfoDb,
     GenomicRanges,
     ggplot2,
     gtools,
@@ -44,7 +45,7 @@ Imports:
     umap,
     viridisLite
 Depends:
-    R (>= 3.6),
+    R (>= 4.1),
     SingleCellExperiment
 Suggests:
     Biostrings,

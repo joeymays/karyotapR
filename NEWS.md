@@ -1,4 +1,6 @@
-# karyotapR (development version)
+# karyotapR 1.0.2
+
+Patched to handle tests failing to load GenomeInfoDb package dependency.
 
 # karyotapR 1.0.1
 
