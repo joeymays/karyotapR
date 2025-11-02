@@ -1,114 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/404.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/articles/GMMs-for-Copy-Number-Calling.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/articles/TapExp-navigation.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/articles/barcoding.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/articles/karyotapR.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/authors.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/index.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/news/index.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/CreateTapestriExperiment.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/PCAKneePlot.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/TapestriExperiment-class.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/assayBoxPlot.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/assayHeatmap.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/calcCopyNumber.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/calcGMMCopyNumber.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/calcNormCounts.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/calcSmoothCopyNumber.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/callSampleLables.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/corner.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/countBarcodedReads.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/getChrOrder.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/getCytobands.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/getGMMBoundaries.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/getTidyData.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/karyotapR-package.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/moveNonGenomeProbes.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/newTapestriExperimentExample.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/plotCopyNumberGMM.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/reducedDimPlot.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/runClustering.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/runPCA.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/runUMAP.html</loc>
-  </url>
-  <url>
-    <loc>http://joeymays.xyz/karyotapR/reference/slotGettersSetters.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://joeymays.xyz/karyotapR/404.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/LICENSE-text.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/LICENSE.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/articles/GMMs-for-Copy-Number-Calling.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/articles/TapExp-navigation.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/articles/barcoding.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/articles/index.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/articles/karyotapR.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/authors.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/index.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/news/index.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/CreateTapestriExperiment.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/PCAKneePlot.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/TapestriExperiment-class.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/assayBoxPlot.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/assayHeatmap.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/calcCopyNumber.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/calcGMMCopyNumber.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/calcNormCounts.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/calcSmoothCopyNumber.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/callSampleLables.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/corner.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/countBarcodedReads.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/getChrOrder.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/getCytobands.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/getGMMBoundaries.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/getTidyData.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/index.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/karyotapR-package.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/moveNonGenomeProbes.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/newTapestriExperimentExample.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/plotCopyNumberGMM.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/reducedDimPlot.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/runClustering.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/runPCA.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/runUMAP.html</loc></url>
+<url><loc>http://joeymays.xyz/karyotapR/reference/slotGettersSetters.html</loc></url>
 </urlset>
+
